@@ -193,7 +193,8 @@ export default function Generator() {
       toast.info("Gerando arquivo PDF...");
       
       const result = await exportPDFMutation.mutateAsync({
-        resumeData: generatedResume
+        resumeData: generatedResume,
+        template: selectedTemplate
       });
 
       if (result.success && result.url) {

@@ -152,11 +152,12 @@ export const appRouter = router({
       }),
     exportPDF: protectedProcedure
       .input(z.object({
-        resumeData: z.any() // ProcessedResumeData type
+        resumeData: z.any(), // ProcessedResumeData type
+        template: z.enum(['classic', 'modern', 'minimal', 'executive', 'creative']).optional().default('classic')
       }))
       .mutation(async ({ input, ctx }) => {
         try {
-          const pdfBuffer = await generatePDF(input.resumeData);
+          const pdfBuffer = await generatePDF(input.resumeData, input.template);
           
           // Upload to S3
           const fileName = `resume-${ctx.user.id}-${Date.now()}.pdf`;

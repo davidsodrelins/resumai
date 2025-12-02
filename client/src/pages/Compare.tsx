@@ -51,6 +51,7 @@ export default function Compare() {
 
       const result = await exportPDFMutation.mutateAsync({
         resumeData: resume.resumeData as any,
+        template: resume.template || 'classic'
       });
 
       if (result.success && result.url) {

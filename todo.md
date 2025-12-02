@@ -430,3 +430,23 @@
 - [x] Adicionar badges no README (build status, license, etc)
 - [x] Documentar instruções de instalação e desenvolvimento
 - [x] Adicionar validação de arrays em Generator.tsx, ResumePreview.tsx e Analysis.tsx
+
+
+## Bug Reportado - PDF Preto e Branco (Dezembro 2024)
+
+### Exportação de PDF sem cores
+- [x] Investigar código de exportação de PDF (routers.ts e pdfGenerator)
+- [x] Identificar por que cores dos templates não são aplicadas
+- [x] Corrigir geração de PDF para incluir cores de cabeçalho
+- [x] Corrigir cores de títulos de seção
+- [x] Corrigir cores de acentos e destaques
+- [x] Adicionar parâmetro template ao endpoint exportPDF
+- [x] Definir paletas de cores para os 5 templates
+- [x] Aplicar fillColor() em todos os elementos do PDF
+- [x] Atualizar frontend para enviar template ao exportar
+- [ ] Testar exportação com template Classic
+- [ ] Testar exportação com template Modern
+- [ ] Testar exportação com template Minimal
+- [ ] Testar exportação com template Executive
+- [ ] Testar exportação com template Creative
+- [ ] Validar que preview e PDF têm as mesmas cores

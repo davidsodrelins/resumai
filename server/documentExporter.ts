@@ -281,7 +281,7 @@ export async function generateDOCX(resumeData: ProcessedResumeData): Promise<Buf
 /**
  * Generate PDF document from resume data
  */
-export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buffer> {
+export async function generatePDF(resumeData: ProcessedResumeData, template: 'classic' | 'modern' | 'minimal' | 'executive' | 'creative' = 'classic'): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 50 });
     const chunks: Buffer[] = [];
@@ -290,9 +290,50 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
     doc.on('end', () => resolve(Buffer.concat(chunks)));
     doc.on('error', reject);
 
-    // Personal Information Header
+    // Define color palettes for each template
+    const colors = {
+      classic: {
+        header: '#334155', // slate-700
+        section: '#1e293b', // slate-800
+        accent: '#475569', // slate-600
+        text: '#000000'
+      },
+      modern: {
+        header: '#3b82f6', // blue-500
+        section: '#2563eb', // blue-600
+        accent: '#8b5cf6', // purple-500
+        text: '#000000'
+      },
+      minimal: {
+        header: '#1e293b', // slate-800
+        section: '#475569', // slate-600
+        accent: '#64748b', // slate-500
+        text: '#000000'
+      },
+      executive: {
+        header: '#1e293b', // slate-800
+        section: '#1e293b', // slate-800
+        accent: '#d97706', // amber-600
+        text: '#000000'
+      },
+      creative: {
+        header: '#ec4899', // pink-500
+        section: '#a855f7', // purple-500
+        accent: '#6366f1', // indigo-500
+        text: '#000000'
+      }
+    };
+
+    const palette = colors[template];
+
+    // Personal Information Header with colored background
     if (resumeData.personalInfo.fullName) {
-      doc.fontSize(24).font('Helvetica-Bold').text(resumeData.personalInfo.fullName, { align: 'center' });
+      // Draw colored header background
+      doc.rect(0, 0, doc.page.width, 120).fillColor(palette.header).fill();
+      
+      // Reset to white text for header
+      doc.fillColor('#ffffff');
+      doc.fontSize(24).font('Helvetica-Bold').text(resumeData.personalInfo.fullName, 50, 30, { align: 'center' });
       doc.moveDown(0.5);
     }
 
@@ -303,36 +344,38 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
     if (resumeData.personalInfo.location) contactInfo.push(resumeData.personalInfo.location);
 
     if (contactInfo.length > 0) {
-      doc.fontSize(10).font('Helvetica').text(contactInfo.join(' | '), { align: 'center' });
+      doc.fontSize(10).font('Helvetica').fillColor('#ffffff').text(contactInfo.join(' | '), { align: 'center' });
     }
 
     if (resumeData.personalInfo.linkedin || resumeData.personalInfo.website) {
       const links: string[] = [];
       if (resumeData.personalInfo.linkedin) links.push(resumeData.personalInfo.linkedin);
       if (resumeData.personalInfo.website) links.push(resumeData.personalInfo.website);
-      doc.fontSize(10).font('Helvetica').text(links.join(' | '), { align: 'center' });
+      doc.fontSize(10).font('Helvetica').fillColor('#ffffff').text(links.join(' | '), { align: 'center' });
     }
 
-    doc.moveDown(1);
+    // Reset to black text for body
+    doc.fillColor(palette.text);
+    doc.moveDown(2);
 
     // Professional Summary
     if (resumeData.personalInfo.summary) {
-      doc.fontSize(14).font('Helvetica-Bold').text('PROFESSIONAL SUMMARY');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('PROFESSIONAL SUMMARY');
       doc.moveDown(0.3);
-      doc.fontSize(10).font('Helvetica').text(resumeData.personalInfo.summary, { align: 'justify' });
+      doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(resumeData.personalInfo.summary, { align: 'justify' });
       doc.moveDown(1);
     }
 
     // Work Experience
     if (resumeData.experience.length > 0) {
-      doc.fontSize(14).font('Helvetica-Bold').text('WORK EXPERIENCE');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('WORK EXPERIENCE');
       doc.moveDown(0.5);
 
       resumeData.experience.forEach((exp, index) => {
-        doc.fontSize(12).font('Helvetica-Bold').text(`${exp.position} - ${exp.company}`);
-        doc.fontSize(10).font('Helvetica-Oblique').text(`${exp.startDate} - ${exp.endDate || 'Present'}`);
+        doc.fontSize(12).font('Helvetica-Bold').fillColor(palette.accent).text(`${exp.position} - ${exp.company}`);
+        doc.fontSize(10).font('Helvetica-Oblique').fillColor(palette.text).text(`${exp.startDate} - ${exp.endDate || 'Present'}`);
         doc.moveDown(0.3);
-        doc.fontSize(10).font('Helvetica').text(exp.description, { align: 'justify' });
+        doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(exp.description, { align: 'justify' });
 
         if (exp.achievements && exp.achievements.length > 0) {
           doc.moveDown(0.3);
@@ -351,13 +394,13 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
 
     // Education
     if (resumeData.education.length > 0) {
-      doc.fontSize(14).font('Helvetica-Bold').text('EDUCATION');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('EDUCATION');
       doc.moveDown(0.5);
 
       resumeData.education.forEach((edu) => {
         const degreeText = edu.field ? `${edu.degree} in ${edu.field}` : edu.degree;
-        doc.fontSize(12).font('Helvetica-Bold').text(degreeText);
-        doc.fontSize(10).font('Helvetica').text(edu.institution);
+        doc.fontSize(12).font('Helvetica-Bold').fillColor(palette.accent).text(degreeText);
+        doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(edu.institution);
 
         if (edu.startDate || edu.endDate) {
           doc.fontSize(10).font('Helvetica-Oblique').text(`${edu.startDate || ''} - ${edu.endDate || 'Present'}`);
@@ -376,12 +419,12 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
 
     // Skills
     if (resumeData.skills.length > 0) {
-      doc.fontSize(14).font('Helvetica-Bold').text('SKILLS');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('SKILLS');
       doc.moveDown(0.5);
 
       resumeData.skills.forEach((skillCategory) => {
-        doc.fontSize(10).font('Helvetica-Bold').text(`${skillCategory.category}: `, { continued: true });
-        doc.font('Helvetica').text(skillCategory.items.join(', '));
+        doc.fontSize(10).font('Helvetica-Bold').fillColor(palette.accent).text(`${skillCategory.category}: `, { continued: true });
+        doc.font('Helvetica').fillColor(palette.text).text(skillCategory.items.join(', '));
       });
 
       doc.moveDown(1);
@@ -389,11 +432,11 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
 
     // Languages
     if (resumeData.languages.length > 0) {
-      doc.fontSize(14).font('Helvetica-Bold').text('LANGUAGES');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('LANGUAGES');
       doc.moveDown(0.5);
 
       resumeData.languages.forEach((lang) => {
-        doc.fontSize(10).font('Helvetica').text(`${lang.language}: ${lang.proficiency}`);
+        doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(`${lang.language}: ${lang.proficiency}`);
       });
 
       doc.moveDown(1);
@@ -401,12 +444,12 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
 
     // Certifications
     if (resumeData.certifications.length > 0) {
-      doc.fontSize(14).font('Helvetica-Bold').text('CERTIFICATIONS');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('CERTIFICATIONS');
       doc.moveDown(0.5);
 
       resumeData.certifications.forEach((cert) => {
         const certText = cert.date ? `${cert.name} - ${cert.issuer} (${cert.date})` : `${cert.name} - ${cert.issuer}`;
-        doc.fontSize(10).font('Helvetica').text(certText);
+        doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(certText);
       });
 
       doc.moveDown(1);
@@ -414,15 +457,15 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
 
     // Projects
     if (resumeData.projects.length > 0) {
-      doc.fontSize(14).font('Helvetica-Bold').text('PROJECTS');
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('PROJECTS');
       doc.moveDown(0.5);
 
       resumeData.projects.forEach((project) => {
-        doc.fontSize(11).font('Helvetica-Bold').text(project.name);
-        doc.fontSize(10).font('Helvetica').text(project.description, { align: 'justify' });
+        doc.fontSize(11).font('Helvetica-Bold').fillColor(palette.accent).text(project.name);
+        doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(project.description, { align: 'justify' });
 
         if (project.technologies && project.technologies.length > 0) {
-          doc.fontSize(10).font('Helvetica-Oblique').text(`Technologies: ${project.technologies.join(', ')}`);
+          doc.fontSize(10).font('Helvetica-Oblique').fillColor(palette.text).text(`Technologies: ${project.technologies.join(', ')}`);
         }
 
         doc.moveDown(0.5);
@@ -434,9 +477,9 @@ export async function generatePDF(resumeData: ProcessedResumeData): Promise<Buff
     // Additional Sections
     if (resumeData.additionalSections.length > 0) {
       resumeData.additionalSections.forEach((section) => {
-        doc.fontSize(14).font('Helvetica-Bold').text(section.title.toUpperCase());
+        doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text(section.title.toUpperCase());
         doc.moveDown(0.5);
-        doc.fontSize(10).font('Helvetica').text(section.content, { align: 'justify' });
+        doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(section.content, { align: 'justify' });
         doc.moveDown(1);
       });
     }
