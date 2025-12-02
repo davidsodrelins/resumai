@@ -4,6 +4,35 @@ Uma plataforma web completa para geração de currículos profissionais otimizad
 
 ## ✨ Funcionalidades
 
+### 💾 Sistema de Histórico e Gerenciamento (V3.0 - NOVO!)
+- **Histórico Completo**: Visualize todos os seus currículos salvos em uma galeria organizada
+- **Gerenciamento de Rascunhos**: Salve versões em progresso e finalize quando estiver pronto
+- **Recuperação Rápida**: Carregue currículos anteriores para editar ou duplicar
+- **Organização Inteligente**: Ordenação automática por data de atualização
+- **Exclusão Segura**: Remova currículos que não precisa mais
+
+### ✉️ Geração de Cartas de Apresentação (V3.0 - NOVO!)
+- **Geração Personalizada com IA**: Crie cartas customizadas para cada vaga usando Llama AI
+- **Integração com Currículo**: Usa automaticamente os dados do seu currículo
+- **Informações da Vaga**: Adicione empresa, cargo e descrição para personalização máxima
+- **3 Idiomas**: Gere cartas em Português, Inglês ou Espanhol
+- **Otimização ATS**: Cartas com palavras-chave da descrição da vaga
+- **Exportação**: Baixe em DOCX ou PDF
+
+### 🎨 Editor Interativo (V2.0)
+- **Edição Inline**: Edite qualquer campo diretamente no preview
+- **Gerenciamento de Seções**: Adicione, remova ou reordene seções
+- **Templates Pré-definidos**: Projetos, Publicações, Voluntáriado e mais
+- **Drag-and-Drop**: Reordene seções facilmente
+- **Validação em Tempo Real**: Feedback instantâneo durante edição
+
+### 🎨 5 Templates Visuais Profissionais (V2.0)
+- **Clássico**: Design tradicional e atemporal
+- **Moderno**: Cores vibrantes para startups e tech
+- **Minimalista**: Clean e focado no conteúdo
+- **Executivo**: Formal e sofisticado para liderança
+- **Criativo**: Design ousado para profissionais criativos
+
 ### 🤖 Processamento Inteligente com IA
 - **Extração Automática**: Processa informações de currículos anteriores (PDF/DOCX) e perfis do LinkedIn
 - **Análise com Llama AI**: Utiliza inteligência artificial para estruturar e organizar dados profissionais
@@ -65,6 +94,29 @@ Uma plataforma web completa para geração de currículos profissionais otimizad
 - Visualize o currículo gerado
 - Faça ajustes se necessário
 - Exporte em DOCX ou PDF
+
+## 👨‍💻 Histórico de Versões
+
+### V3.0 (Atual) - Sistema de Histórico e Cartas
+- Sistema completo de histórico de currículos
+- Geração de cartas de apresentação com IA
+- Gerenciamento de rascunhos e versões finais
+- Integração entre currículos e cartas
+- 27 testes automatizados passando
+
+### V2.0 - Editor e Templates
+- Editor interativo com edição inline
+- 5 templates visuais profissionais
+- Gerenciamento avançado de seções
+- Preview em tempo real
+- 12 testes automatizados
+
+### V1.0 - Base
+- Geração de currículos em 3 idiomas
+- 3 modelos (Reduzido, Misto, Completo)
+- Processamento com Llama AI
+- Exportação DOCX e PDF
+- Otimização ATS
 
 ## 🛠️ Tecnologias
 

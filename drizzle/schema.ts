@@ -13,13 +13,51 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
-});
-
-export type User = typeof users.$inferSelect;
+});export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
- * Resume generation sessions - stores temporary data during generation process
+ * Saved resumes table for storing user's generated resumes
+ */
+export const savedResumes = mysqlTable("saved_resumes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  resumeData: text("resume_data").notNull(), // JSON stringified ResumeData
+  model: mysqlEnum("model", ["reduced", "mixed", "complete"]).notNull(),
+  language: mysqlEnum("language", ["pt", "en", "es"]).notNull(),
+  template: mysqlEnum("template", ["classic", "modern", "minimal", "executive", "creative"]).notNull(),
+  isDraft: int("is_draft").default(0).notNull(), // 0 = final, 1 = draft
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SavedResume = typeof savedResumes.$inferSelect;
+export type InsertSavedResume = typeof savedResumes.$inferInsert;
+
+/**
+ * Cover letters table for storing generated cover letters
+ */
+export const coverLetters = mysqlTable("cover_letters", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull(),
+  resumeId: int("resume_id"), // Optional link to resume
+  title: varchar("title", { length: 255 }).notNull(),
+  companyName: varchar("company_name", { length: 255 }),
+  jobTitle: varchar("job_title", { length: 255 }),
+  jobDescription: text("job_description"),
+  content: text("content").notNull(),
+  language: mysqlEnum("language", ["pt", "en", "es"]).notNull(),
+  template: mysqlEnum("template", ["classic", "modern", "minimal", "executive", "creative"]).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CoverLetter = typeof coverLetters.$inferSelect;
+export type InsertCoverLetter = typeof coverLetters.$inferInsert;
+
+/**
+ * Resume sessions - stores temporary data during generation process
  * Not persisted long-term as per requirements
  */
 export const resumeSessions = mysqlTable("resume_sessions", {

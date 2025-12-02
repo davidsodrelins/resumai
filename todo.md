@@ -35,6 +35,8 @@
 - [x] Verificar compatibilidade ATS dos currículos gerados
 - [x] Testar editor interativo
 - [x] Validar responsividade em diferentes dispositivos
+- [x] Testar sistema de histórico de currículos
+- [x] Testar geração de cartas de apresentação
 
 ## Documentação e Deploy
 - [x] Criar checkpoint para publicação
@@ -71,3 +73,32 @@
 - [ ] Implementar auto-save de rascunhos
 - [ ] Adicionar histórico de currículos gerados
 - [x] Melhorar mensagens de erro e validação
+
+## Novas Funcionalidades (Fase 3)
+
+### Sistema de Auto-Save e Histórico
+- [x] Criar tabela no banco de dados para armazenar rascunhos
+- [ ] Implementar auto-save a cada 30 segundos
+- [x] Criar página de histórico de currículos gerados
+- [x] Adicionar funcionalidade de recuperar versão anterior
+- [ ] Implementar comparação entre versões
+- [x] Adicionar opção de duplicar currículo existente
+
+### Geração de Cartas de Apresentação
+- [x] Criar schema para cartas de apresentação
+- [x] Implementar geração via Llama IA
+- [x] Adicionar campos para informações da vaga (empresa, cargo, descrição)
+- [x] Gerar cartas nos 3 idiomas (PT, EN, ES)
+- [ ] Aplicar templates visuais nas cartas
+- [ ] Exportar cartas em DOCX e PDF
+- [ ] Criar interface para edição de cartas
+- [x] Integrar com dados do currículo
+
+### Integração OAuth LinkedIn
+- [ ] Configurar OAuth app no LinkedIn
+- [ ] Implementar fluxo de autenticação OAuth
+- [ ] Criar endpoint para callback do LinkedIn
+- [ ] Extrair dados completos do perfil
+- [ ] Mapear dados do LinkedIn para estrutura do currículo
+- [ ] Adicionar botão "Importar do LinkedIn" na interface
+- [ ] Tratar erros de autenticação e permissões

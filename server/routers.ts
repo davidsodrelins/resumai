@@ -8,6 +8,8 @@ import { processResumeInputs, generateResume } from "./resumeProcessor";
 import { generateDOCX, generatePDF } from "./documentExporter";
 import { storagePut } from "./storage";
 import axios from "axios";
+import * as resumeHistory from "./resumeHistory";
+import { generateCoverLetter } from "./coverLetterGenerator";
 
 export const appRouter = router({
   system: systemRouter,
@@ -169,8 +171,129 @@ export const appRouter = router({
           console.error('Error updating section:', error);
           throw new Error('Failed to update resume section');
         }
-      })
-  })
+      }),
+  }),
+
+  // Resume history management
+  history: router({
+    // Get all saved resumes for current user
+    listResumes: protectedProcedure.query(async ({ ctx }) => {
+      return await resumeHistory.getUserResumes(ctx.user.id);
+    }),
+
+    // Get a specific resume
+    getResume: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        return await resumeHistory.getResumeById(input.id, ctx.user.id);
+      }),
+
+    // Save a new resume
+    saveResume: protectedProcedure
+      .input(
+        z.object({
+          title: z.string(),
+          resumeData: z.any(),
+          model: z.enum(["reduced", "mixed", "complete"]),
+          language: z.enum(["pt", "en", "es"]),
+          template: z.enum(["classic", "modern", "minimal", "executive", "creative"]),
+          isDraft: z.boolean().optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        return await resumeHistory.saveResume({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+
+    // Update an existing resume
+    updateResume: protectedProcedure
+      .input(
+        z.object({
+          id: z.number(),
+          title: z.string().optional(),
+          resumeData: z.any().optional(),
+          model: z.enum(["reduced", "mixed", "complete"]).optional(),
+          language: z.enum(["pt", "en", "es"]).optional(),
+          template: z.enum(["classic", "modern", "minimal", "executive", "creative"]).optional(),
+          isDraft: z.boolean().optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        const { id, ...data } = input;
+        await resumeHistory.updateResume(id, ctx.user.id, data);
+        return { success: true };
+      }),
+
+    // Delete a resume
+    deleteResume: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await resumeHistory.deleteResume(input.id, ctx.user.id);
+        return { success: true };
+      }),
+
+    // Get all cover letters
+    listCoverLetters: protectedProcedure.query(async ({ ctx }) => {
+      return await resumeHistory.getUserCoverLetters(ctx.user.id);
+    }),
+
+    // Get a specific cover letter
+    getCoverLetter: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        return await resumeHistory.getCoverLetterById(input.id, ctx.user.id);
+      }),
+
+    // Save a cover letter
+    saveCoverLetter: protectedProcedure
+      .input(
+        z.object({
+          resumeId: z.number().optional(),
+          title: z.string(),
+          companyName: z.string().optional(),
+          jobTitle: z.string().optional(),
+          jobDescription: z.string().optional(),
+          content: z.string(),
+          language: z.enum(["pt", "en", "es"]),
+          template: z.enum(["classic", "modern", "minimal", "executive", "creative"]),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        return await resumeHistory.saveCoverLetter({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+
+    // Delete a cover letter
+    deleteCoverLetter: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await resumeHistory.deleteCoverLetter(input.id, ctx.user.id);
+        return { success: true };
+      }),
+  }),
+
+  // Cover letter generation
+  coverLetter: router({
+    generate: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          companyName: z.string(),
+          jobTitle: z.string(),
+          jobDescription: z.string().optional(),
+          language: z.enum(["pt", "en", "es"]),
+          additionalInfo: z.string().optional(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const content = await generateCoverLetter(input);
+        return { content };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
