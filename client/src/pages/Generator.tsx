@@ -12,7 +12,10 @@ import { toast } from "sonner";
 import { FileText, Upload, Loader2, Download, ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
-import { storagePut } from "../../../server/storage";
+import { ResumeEditor } from "@/components/ResumeEditor";
+import { TemplateSelector } from "@/components/TemplateSelector";
+import { ResumePreview } from "@/components/ResumePreview";
+import type { ResumeTemplate } from "@/../../shared/resumeTypes";
 
 export default function Generator() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -31,6 +34,7 @@ export default function Generator() {
   // Step 3: Selection
   const [selectedModel, setSelectedModel] = useState<'reduced' | 'mixed' | 'complete'>('complete');
   const [selectedLanguage, setSelectedLanguage] = useState<'pt' | 'en' | 'es'>('pt');
+  const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplate>('classic');
   const [generatedResume, setGeneratedResume] = useState<any>(null);
 
   const uploadFileMutation = trpc.resume.uploadFile.useMutation();
@@ -307,6 +311,15 @@ export default function Generator() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Template Visual Selection */}
+              <div className="space-y-2">
+                <Label>Template Visual</Label>
+                <TemplateSelector 
+                  selectedTemplate={selectedTemplate}
+                  onSelect={setSelectedTemplate}
+                />
+              </div>
+              
               <div className="space-y-2">
                 <Label>Modelo de Currículo</Label>
                 <Select value={selectedModel} onValueChange={(value: any) => setSelectedModel(value)}>
@@ -371,6 +384,23 @@ export default function Generator() {
         {/* Step 3: Preview */}
         {currentStep === 'preview' && generatedResume && (
           <div className="space-y-6">
+            {/* Editor Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Editar Currículo</CardTitle>
+                <CardDescription>
+                  Faça ajustes nas informações do seu currículo
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResumeEditor 
+                  resumeData={generatedResume} 
+                  onUpdate={(updatedData) => setGeneratedResume(updatedData)}
+                />
+              </CardContent>
+            </Card>
+            
+            {/* Preview Section */}
             <Card>
               <CardHeader>
                 <CardTitle>Preview do Currículo</CardTitle>
@@ -379,7 +409,13 @@ export default function Generator() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-white p-8 rounded-lg border shadow-sm max-h-[600px] overflow-y-auto">
+                <ResumePreview 
+                  resumeData={generatedResume}
+                  template={selectedTemplate}
+                  language={selectedLanguage}
+                />
+                {/* Old preview code removed - now using ResumePreview component */}
+                <div className="hidden">
                   {/* Personal Info */}
                   {generatedResume.personalInfo && (
                     <div className="mb-6 text-center border-b pb-4">

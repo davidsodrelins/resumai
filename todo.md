@@ -33,11 +33,41 @@
 - [x] Validar tradução nos 3 idiomas
 - [x] Testar exportação DOCX e PDF
 - [x] Verificar compatibilidade ATS dos currículos gerados
-- [ ] Testar editor interativo
+- [x] Testar editor interativo
 - [x] Validar responsividade em diferentes dispositivos
 
 ## Documentação e Deploy
-- [ ] Criar checkpoint para publicação
-- [ ] Preparar README.md detalhado
+- [x] Criar checkpoint para publicação
+- [x] Preparar README.md detalhado
 - [ ] Publicar no repositório GitHub
-- [ ] Documentar API endpoints
+- [x] Documentar API endpoints
+
+## Melhorias e Novas Funcionalidades (Fase 2)
+
+### Editor Interativo
+- [x] Implementar edição inline de campos de texto
+- [x] Adicionar botões de editar/salvar em cada seção
+- [x] Criar modal para edição de experiências profissionais
+- [x] Implementar validação de campos obrigatórios
+- [x] Adicionar feedback visual durante edição
+
+### Gerenciamento de Seções
+- [x] Adicionar botão para criar nova seção customizada
+- [x] Implementar funcionalidade de remover seções
+- [x] Criar drag-and-drop para reordenar seções
+- [x] Adicionar templates de seções pré-definidas (Projetos, Publicações, Voluntariado)
+
+### Templates Visuais
+- [x] Criar template "Moderno" com cores vibrantes
+- [x] Criar template "Minimalista" clean e simples
+- [x] Criar template "Executivo" formal e tradicional
+- [x] Criar template "Criativo" com elementos visuais
+- [x] Implementar seletor de templates na interface
+- [x] Adicionar preview dos templates
+
+### Melhorias de UX
+- [x] Melhorar preview em tempo real com atualização instantânea
+- [x] Adicionar indicador de progresso durante geração
+- [ ] Implementar auto-save de rascunhos
+- [ ] Adicionar histórico de currículos gerados
+- [x] Melhorar mensagens de erro e validação
