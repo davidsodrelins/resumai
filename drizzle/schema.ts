@@ -1,17 +1,10 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
  */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -25,4 +18,43 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Resume generation sessions - stores temporary data during generation process
+ * Not persisted long-term as per requirements
+ */
+export const resumeSessions = mysqlTable("resume_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Input data
+  userPrompt: text("userPrompt"),
+  linkedinUrl: varchar("linkedinUrl", { length: 500 }),
+  uploadedFileUrls: json("uploadedFileUrls").$type<string[]>(),
+  
+  // Extracted and processed data
+  extractedData: json("extractedData").$type<{
+    personalInfo?: any;
+    experience?: any[];
+    education?: any[];
+    skills?: any[];
+    languages?: any[];
+    certifications?: any[];
+    projects?: any[];
+    additionalSections?: any[];
+  }>(),
+  
+  // Generated resumes
+  generatedResumes: json("generatedResumes").$type<{
+    reduced?: any;
+    mixed?: any;
+    complete?: any;
+  }>(),
+  
+  // Metadata
+  status: mysqlEnum("status", ["processing", "completed", "failed"]).default("processing").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ResumeSession = typeof resumeSessions.$inferSelect;
+export type InsertResumeSession = typeof resumeSessions.$inferInsert;
