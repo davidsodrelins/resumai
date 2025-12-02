@@ -294,6 +294,82 @@ export const appRouter = router({
         return { content };
       }),
   }),
+
+  // ATS Analysis and AI Improvements
+  analysis: router({
+    // Analyze ATS compatibility
+    atsScore: protectedProcedure
+      .input(z.object({ resumeData: z.any() }))
+      .query(async ({ input }) => {
+        const { analyzeATSCompatibility } = await import("./atsAnalyzer");
+        return analyzeATSCompatibility(input.resumeData);
+      }),
+
+    // Generate AI-powered improvement suggestions
+    improvements: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          language: z.enum(["pt", "en", "es"]).default("pt"),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const { generateImprovementSuggestions } = await import("./aiImprovements");
+        return await generateImprovementSuggestions(input.resumeData, input.language);
+      }),
+
+    // Apply a specific improvement suggestion
+    applySuggestion: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          suggestion: z.any(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const { applySuggestion } = await import("./aiImprovements");
+        return applySuggestion(input.resumeData, input.suggestion);
+      }),
+
+    // Apply all improvement suggestions
+    applyAllSuggestions: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          suggestions: z.array(z.any()),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const { applyAllSuggestions } = await import("./aiImprovements");
+        return applyAllSuggestions(input.resumeData, input.suggestions);
+      }),
+
+    // Analyze keyword match with job description
+    keywordMatch: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          jobDescription: z.string(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const { analyzeKeywordMatch } = await import("./keywordMatcher");
+        return analyzeKeywordMatch(input.resumeData, input.jobDescription);
+      }),
+
+    // Suggest where to place a missing keyword
+    suggestPlacement: protectedProcedure
+      .input(
+        z.object({
+          keyword: z.string(),
+          resumeData: z.any(),
+        })
+      )
+      .query(async ({ input }) => {
+        const { suggestKeywordPlacement } = await import("./keywordMatcher");
+        return suggestKeywordPlacement(input.keyword, input.resumeData);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

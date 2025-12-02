@@ -182,3 +182,48 @@
 - [ ] Validar mapeamento de dados do LinkedIn
 - [ ] Testar tratamento de erros de autenticação
 - [ ] Criar testes automatizados para novas funcionalidades
+
+
+## Novas Funcionalidades (Fase 6) - Análise e Otimização Inteligente
+
+### Análise de Compatibilidade ATS
+- [x] Criar algoritmo de pontuação ATS (0-100)
+- [x] Implementar verificação de formatação (seções padrão, hierarquia)
+- [x] Analisar densidade de palavras-chave
+- [x] Verificar uso de verbos de ação
+- [x] Detectar problemas de formatação (tabelas, gráficos, colunas)
+- [x] Gerar relatório detalhado com sugestões específicas
+- [x] Criar interface visual com gráfico de pontuação
+- [ ] Adicionar badge de pontuação no preview do currículo
+- [x] Implementar sugestões categorizadas (críticas, importantes, opcionais)
+
+### Sugestões de Melhorias via IA
+- [x] Criar endpoint para análise via Llama IA
+- [x] Implementar análise de verbos de ação (substituir por mais fortes)
+- [x] Detectar oportunidades de quantificação de resultados
+- [x] Sugerir otimização de bullet points
+- [x] Analisar densidade de informação por seção
+- [x] Gerar preview antes/depois para cada sugestão
+- [x] Criar interface com lista de sugestões aplicáveis
+- [x] Implementar botão "Aplicar Sugestão" com preview
+- [ ] Adicionar opção "Aplicar Todas as Sugestões"
+
+### Análise de Palavras-Chave Vaga vs Currículo
+- [x] Criar parser de descrição de vaga
+- [x] Extrair palavras-chave relevantes da vaga
+- [x] Comparar com palavras-chave do currículo
+- [x] Calcular percentual de match
+- [x] Destacar palavras-chave presentes (verde)
+- [x] Destacar palavras-chave ausentes (vermelho)
+- [x] Sugerir onde adicionar palavras-chave ausentes
+- [x] Criar interface de comparação lado a lado
+- [x] Implementar gráfico de compatibilidade
+- [x] Adicionar sugestões contextuais de onde inserir termos
+
+## Testes e Validação
+- [ ] Testar scanner ATS com diferentes currículos
+- [ ] Validar sugestões de IA com casos reais
+- [ ] Testar análise de palavras-chave com vagas reais
+- [ ] Verificar precisão das pontuações
+- [ ] Validar aplicação de sugestões
+- [x] Testar responsividade das novas interfaces
