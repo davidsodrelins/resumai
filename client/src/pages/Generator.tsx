@@ -91,15 +91,17 @@ export default function Generator() {
     // Process each file
     for (const file of newFiles) {
       try {
-        // Upload to S3 first
-        const buffer = await file.arrayBuffer();
-        const fileName = `uploads/${Date.now()}-${file.name}`;
-        
-        // Note: This is a simplified version - in production you'd want to handle this server-side
         toast.info(`Processando ${file.name}...`);
         
+        // Convert file to base64
+        const buffer = await file.arrayBuffer();
+        const base64 = btoa(
+          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+        const dataUrl = `data:${file.type};base64,${base64}`;
+        
         const result = await uploadFileMutation.mutateAsync({
-          fileUrl: URL.createObjectURL(file),
+          fileUrl: dataUrl,
           mimeType: file.type
         });
 

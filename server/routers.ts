@@ -39,9 +39,18 @@ export const appRouter = router({
       }))
       .mutation(async ({ input }) => {
         try {
-          // Download file from URL
-          const response = await axios.get(input.fileUrl, { responseType: 'arraybuffer' });
-          const buffer = Buffer.from(response.data);
+          let buffer: Buffer;
+          
+          // Check if it's a data URL (base64)
+          if (input.fileUrl.startsWith('data:')) {
+            // Extract base64 data from data URL
+            const base64Data = input.fileUrl.split(',')[1];
+            buffer = Buffer.from(base64Data, 'base64');
+          } else {
+            // Download file from URL
+            const response = await axios.get(input.fileUrl, { responseType: 'arraybuffer' });
+            buffer = Buffer.from(response.data);
+          }
           
           // Extract text
           const text = await extractTextFromFile(buffer, input.mimeType);

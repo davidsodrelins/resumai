@@ -410,3 +410,14 @@
 - [ ] Implementar CI/CD com GitHub Actions
 - [ ] Adicionar monitoramento de erros (Sentry)
 - [ ] Implementar analytics de uso (Plausible ou similar)
+
+
+## Bugs Reportados (Dezembro 2024)
+
+### Bug Crítico: Processamento de PDF Falhando
+- [x] Investigar erro "Erro ao processar ResumeDavid.pdf"
+- [x] Corrigir loading infinito ao clicar em "Processar"
+- [x] Implementar conversão de arquivo para base64 no frontend
+- [x] Atualizar endpoint uploadFile para aceitar data URLs
+- [x] Criar testes automatizados para validação
+- [x] Validar correção com testes unitários
