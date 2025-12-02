@@ -11,6 +11,7 @@ import CoverLetter from "./pages/CoverLetter";
 import Compare from "./pages/Compare";
 import Analysis from "@/pages/Analysis";
 import SoftSkills from "@/pages/SoftSkills";
+import Portfolio from "@/pages/Portfolio";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       <Route path={"/cover-letter"} component={CoverLetter} />      <Route path={"/compare"} component={Compare} />
        <Route path="/analysis" component={Analysis} />
       <Route path="/soft-skills" component={SoftSkills} />
+      <Route path="/portfolio" component={Portfolio} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

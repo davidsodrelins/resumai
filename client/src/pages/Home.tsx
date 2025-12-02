@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getLoginUrl } from "@/const";
-import { FileText, Globe, Sparkles, Download, Edit, Zap } from "lucide-react";
+import { FileText, Globe, Sparkles, Download, Edit, Zap, Layout } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Home() {
@@ -140,6 +140,23 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
           </Card>
+
+          <Link href="/portfolio">
+            <Card className="border-2 hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer">
+              <CardHeader>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <Layout className="h-6 w-6 text-blue-600" />
+                </div>
+                <CardTitle className="flex items-center gap-2">
+                  Portfolio Web
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">NOVO</span>
+                </CardTitle>
+                <CardDescription>
+                  Transforme seu currículo em um site profissional com 3 templates modernos
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
         </div>
       </section>
 

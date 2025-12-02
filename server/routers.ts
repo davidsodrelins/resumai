@@ -12,6 +12,8 @@ import * as resumeHistory from "./resumeHistory";
 import { generateCoverLetter } from "./coverLetterGenerator";
 import { generateLatexResume } from "./latexExporter";
 import { analyzeSoftSkills } from "./softSkillsAnalyzer";
+import { generatePortfolio } from "./services/portfolioGenerator";
+import type { ResumeData } from "../shared/resumeTypes";
 
 export const appRouter = router({
   system: systemRouter,
@@ -394,6 +396,102 @@ export const appRouter = router({
       .query(async ({ input }) => {
         const { suggestKeywordPlacement } = await import("./keywordMatcher");
         return suggestKeywordPlacement(input.keyword, input.resumeData);
+      }),
+  }),
+
+  portfolio: router({
+    /**
+     * Generate portfolio website from resume data
+     */
+    generate: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          template: z.enum(["modern", "minimalist", "professional"]),
+          theme: z.enum(["light", "dark"]),
+          primaryColor: z.string().optional(),
+          customDomain: z.string().optional(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const portfolioData = await generatePortfolio(
+            input.resumeData as ResumeData,
+            {
+              template: input.template,
+              theme: input.theme,
+              primaryColor: input.primaryColor,
+              customDomain: input.customDomain,
+            }
+          );
+
+          // Upload HTML, CSS, JS to S3
+          const timestamp = Date.now();
+          const userId = ctx.user?.openId || "anonymous";
+          const baseKey = `portfolios/${userId}/${timestamp}`;
+
+          const htmlUpload = await storagePut(
+            `${baseKey}/index.html`,
+            portfolioData.html,
+            "text/html"
+          );
+
+          const cssUpload = await storagePut(
+            `${baseKey}/styles.css`,
+            portfolioData.css,
+            "text/css"
+          );
+
+          const jsUpload = await storagePut(
+            `${baseKey}/script.js`,
+            portfolioData.js,
+            "application/javascript"
+          );
+
+          return {
+            success: true,
+            portfolioUrl: htmlUpload.url,
+            metadata: portfolioData.metadata,
+            files: {
+              html: htmlUpload.url,
+              css: cssUpload.url,
+              js: jsUpload.url,
+            },
+          };
+        } catch (error) {
+          console.error("Error generating portfolio:", error);
+          throw new Error("Failed to generate portfolio");
+        }
+      }),
+
+    /**
+     * Get portfolio preview (without saving to S3)
+     */
+    preview: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          template: z.enum(["modern", "minimalist", "professional"]),
+          theme: z.enum(["light", "dark"]),
+          primaryColor: z.string().optional(),
+        })
+      )
+      .query(async ({ input }) => {
+        const portfolioData = await generatePortfolio(
+          input.resumeData as ResumeData,
+          {
+            template: input.template,
+            theme: input.theme,
+            primaryColor: input.primaryColor,
+          }
+        );
+
+        return {
+          html: portfolioData.html,
+          css: portfolioData.css,
+          js: portfolioData.js,
+          metadata: portfolioData.metadata,
+        };
       }),
   }),
 });
