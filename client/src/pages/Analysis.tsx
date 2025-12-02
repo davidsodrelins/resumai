@@ -73,6 +73,24 @@ export default function Analysis() {
     }
   };
 
+  const handleApplyAllSuggestions = async (suggestions: any[]) => {
+    if (!resumeData || suggestions.length === 0) return;
+
+    try {
+      let updatedResume = resumeData;
+      for (const suggestion of suggestions) {
+        updatedResume = await applySuggestionMutation.mutateAsync({
+          resumeData: updatedResume,
+          suggestion,
+        });
+      }
+      setResumeData(updatedResume);
+      toast.success(`${suggestions.length} sugestões aplicadas com sucesso!`);
+    } catch (error) {
+      toast.error("Erro ao aplicar sugestões");
+    }
+  };
+
   const handleKeywordAnalysis = async () => {
     if (!resumeData || !jobDescription.trim()) {
       toast.error("Adicione a descrição da vaga");
@@ -303,6 +321,30 @@ export default function Analysis() {
                           </Badge>
                         </div>
                       </div>
+
+                      {improvementsMutation.data.summary.highImpact > 0 && (
+                        <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                          <div className="space-y-1">
+                            <h5 className="font-semibold text-primary">Aplicar Todas as Sugestões de Alto Impacto</h5>
+                            <p className="text-sm text-muted-foreground">
+                              Otimize seu currículo automaticamente aplicando as {improvementsMutation.data.summary.highImpact} sugestões mais importantes
+                            </p>
+                          </div>
+                          <Button
+                            onClick={() => {
+                              const highImpactSuggestions = improvementsMutation.data!.suggestions.filter(
+                                (s) => s.impact === "high"
+                              );
+                              handleApplyAllSuggestions(highImpactSuggestions);
+                            }}
+                            disabled={applySuggestionMutation.isPending}
+                            variant="default"
+                          >
+                            <TrendingUp className="mr-2 h-4 w-4" />
+                            {applySuggestionMutation.isPending ? "Aplicando..." : "Aplicar Todas"}
+                          </Button>
+                        </div>
+                      )}
 
                       <div className="space-y-3">
                         {improvementsMutation.data.suggestions.map((suggestion) => (

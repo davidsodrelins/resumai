@@ -18,6 +18,7 @@ import { ResumePreview } from "@/components/ResumePreview";
 import { AutoSaveIndicator } from "@/components/AutoSaveIndicator";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import ATSScoreBadge from "@/components/ATSScoreBadge";
 import type { ResumeTemplate } from "@/../../shared/resumeTypes";
 
 export default function Generator() {
@@ -460,10 +461,26 @@ export default function Generator() {
             {/* Preview Section */}
             <Card>
               <CardHeader>
-                <CardTitle>Preview do Currículo</CardTitle>
-                <CardDescription>
-                  Revise seu currículo e faça o download
-                </CardDescription>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle>Preview do Currículo</CardTitle>
+                    <CardDescription>
+                      Revise seu currículo e faça o download
+                    </CardDescription>
+                  </div>
+                  {generatedResume && (
+                    <ATSScoreBadge 
+                      resumeData={{
+                        ...generatedResume,
+                        skills: generatedResume.skills?.flatMap((s: any) => s.items || []) || [],
+                        languages: generatedResume.languages?.map((l: any) => ({
+                          language: l.language || l,
+                          proficiency: l.proficiency || "Fluente"
+                        })) || []
+                      }}
+                    />
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 <ResumePreview 

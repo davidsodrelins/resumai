@@ -10,6 +10,7 @@ import { storagePut } from "./storage";
 import axios from "axios";
 import * as resumeHistory from "./resumeHistory";
 import { generateCoverLetter } from "./coverLetterGenerator";
+import { generateLatexResume } from "./latexExporter";
 
 export const appRouter = router({
   system: systemRouter,
@@ -126,6 +127,17 @@ export const appRouter = router({
     /**
      * Export resume as PDF
      */
+    exportLatex: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          language: z.enum(["pt", "en", "es"]).default("pt"),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const latex = generateLatexResume(input.resumeData, input.language);
+        return { latex };
+      }),
     exportPDF: protectedProcedure
       .input(z.object({
         resumeData: z.any() // ProcessedResumeData type
