@@ -214,7 +214,7 @@ export function ResumePreview({ resumeData, template, language }: ResumePreviewP
             <div key={idx} className="mb-3">
               <h4 className={`font-semibold ${styles.accent}`}>{project.name}</h4>
               <p className={`text-sm ${styles.text}`}>{project.description}</p>
-              {project.technologies && project.technologies.length > 0 && (
+              {project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 && (
                 <p className={`text-xs ${styles.text} mt-1`}>
                   <strong>Tecnologias:</strong> {project.technologies.join(", ")}
                 </p>

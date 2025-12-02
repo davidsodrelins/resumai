@@ -502,7 +502,7 @@ export default function Analysis() {
                                       : "Baixa"}
                                   </Badge>
                                 </div>
-                                {keyword.present && keyword.locations.length > 0 && (
+                                {keyword.present && keyword.locations && Array.isArray(keyword.locations) && keyword.locations.length > 0 && (
                                   <p className="text-xs text-muted-foreground mt-1">
                                     Encontrado em: {keyword.locations.join(", ")}
                                   </p>

@@ -587,7 +587,7 @@ export default function Generator() {
                       {generatedResume.skills.map((skill: any, idx: number) => (
                         <div key={idx} className="mb-2">
                           <span className="font-semibold text-slate-900">{skill.category}:</span>{' '}
-                          <span className="text-slate-700">{skill.items.join(', ')}</span>
+                          <span className="text-slate-700">{skill.items && Array.isArray(skill.items) ? skill.items.join(', ') : ''}</span>
                         </div>
                       ))}
                     </div>

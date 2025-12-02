@@ -421,3 +421,12 @@
 - [x] Atualizar endpoint uploadFile para aceitar data URLs
 - [x] Criar testes automatizados para validação
 - [x] Validar correção com testes unitários
+
+
+### Novas Tarefas (Dezembro 2024)
+- [x] Corrigir erro "Cannot read properties of undefined (reading 'join')" no mobile
+- [x] Criar CHANGELOG.md com histórico completo de versões
+- [x] Criar README.md profissional com documentação de todas as funcionalidades
+- [x] Adicionar badges no README (build status, license, etc)
+- [x] Documentar instruções de instalação e desenvolvimento
+- [x] Adicionar validação de arrays em Generator.tsx, ResumePreview.tsx e Analysis.tsx
