@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Trash2, Download, Eye, Clock, ArrowLeft } from "lucide-react";
+import { FileText, Trash2, Download, Eye, Clock, ArrowLeft, GitCompare } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
@@ -110,14 +110,24 @@ export default function History() {
               Gerador de Currículos IA
             </a>
           </Link>
-          <Button asChild variant="outline">
-            <Link href="/generator">
-              <a className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Criar Novo Currículo
-              </a>
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link href="/compare">
+                <a className="flex items-center gap-2">
+                  <GitCompare className="h-4 w-4" />
+                  Comparar Versões
+                </a>
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/generator">
+                <a className="flex items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Criar Novo Currículo
+                </a>
+              </Link>
+            </Button>
+          </div>
         </div>
       </header>
 

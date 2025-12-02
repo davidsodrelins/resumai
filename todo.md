@@ -140,3 +140,45 @@
 - [ ] Testar comparação de versões
 - [x] Validar exportação DOCX e PDF
 - [x] Testar responsividade mobile
+
+## Novas Funcionalidades (Fase 5)
+
+### Auto-Save Inteligente
+- [x] Implementar hook useAutoSave com debounce de 30 segundos
+- [x] Adicionar indicador visual "Salvando..." durante auto-save
+- [x] Mostrar notificação "Salvo com sucesso" após conclusão
+- [x] Implementar fallback com localStorage como backup
+- [x] Recuperar rascunho do localStorage ao reabrir página
+- [x] Adicionar timestamp de última modificação
+- [ ] Testar auto-save em diferentes cenários de edição
+
+### Comparação de Versões
+- [x] Criar página /compare para comparação lado a lado
+- [x] Implementar seletor de duas versões para comparar
+- [x] Criar componente de diff visual com cores
+- [x] Destacar adições em verde e remoções em vermelho
+- [x] Adicionar navegação entre diferenças encontradas
+- [x] Implementar exportação da versão escolhida
+- [x] Adicionar botão "Comparar" na página de histórico
+
+### Integração OAuth LinkedIn
+- [ ] Pesquisar documentação da API do LinkedIn
+- [ ] Configurar OAuth app no LinkedIn Developer Portal
+- [ ] Implementar fluxo de autenticação OAuth 2.0
+- [ ] Criar endpoint /api/linkedin/callback
+- [ ] Extrair dados completos do perfil (experiência, educação, skills)
+- [ ] Mapear dados do LinkedIn para estrutura ResumeData
+- [ ] Adicionar botão "Importar do LinkedIn" na interface
+- [ ] Implementar tratamento de erros e permissões
+- [ ] Adicionar loading state durante importação
+- [ ] Testar fluxo completo de importação
+
+### Testes e Validação
+- [ ] Testar auto-save em edição contínua
+- [ ] Testar recuperação de rascunho do localStorage
+- [ ] Testar comparação entre 2 versões diferentes
+- [ ] Testar navegação entre diferenças
+- [ ] Testar fluxo OAuth do LinkedIn
+- [ ] Validar mapeamento de dados do LinkedIn
+- [ ] Testar tratamento de erros de autenticação
+- [ ] Criar testes automatizados para novas funcionalidades

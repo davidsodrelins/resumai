@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,9 @@ import { getLoginUrl } from "@/const";
 import { ResumeEditor } from "@/components/ResumeEditor";
 import { TemplateSelector } from "@/components/TemplateSelector";
 import { ResumePreview } from "@/components/ResumePreview";
+import { AutoSaveIndicator } from "@/components/AutoSaveIndicator";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { ResumeTemplate } from "@/../../shared/resumeTypes";
 
 export default function Generator() {
@@ -36,12 +39,40 @@ export default function Generator() {
   const [selectedLanguage, setSelectedLanguage] = useState<'pt' | 'en' | 'es'>('pt');
   const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplate>('classic');
   const [generatedResume, setGeneratedResume] = useState<any>(null);
+  const [resumeDraft, setResumeDraft, clearResumeDraft] = useLocalStorage<any>('resume-draft', null);
 
+  const saveResumeMutation = trpc.history.saveResume.useMutation();
   const uploadFileMutation = trpc.resume.uploadFile.useMutation();
   const processInputsMutation = trpc.resume.processInputs.useMutation();
   const generateResumeMutation = trpc.resume.generateResume.useMutation();
   const exportDOCXMutation = trpc.resume.exportDOCX.useMutation();
   const exportPDFMutation = trpc.resume.exportPDF.useMutation();
+
+  // Auto-save functionality
+  const autoSave = useAutoSave({
+    data: generatedResume,
+    onSave: async (data) => {
+      if (!data) return;
+      await saveResumeMutation.mutateAsync({
+        resumeData: data,
+        model: selectedModel,
+        language: selectedLanguage,
+        template: selectedTemplate,
+        title: `Rascunho - ${new Date().toLocaleString('pt-BR')}`,
+      });
+    },
+    delay: 30000, // 30 seconds
+    enabled: currentStep === 'preview' && !!generatedResume,
+  });
+
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    if (resumeDraft && !generatedResume) {
+      setGeneratedResume(resumeDraft);
+      setCurrentStep('preview');
+      toast.info('Rascunho recuperado do armazenamento local');
+    }
+  }, []);
 
   // Redirect if not authenticated
   if (!authLoading && !isAuthenticated) {
@@ -122,6 +153,7 @@ export default function Generator() {
 
       if (result.success && result.resume) {
         setGeneratedResume(result.resume);
+        setResumeDraft(result.resume);
         setCurrentStep('preview');
         toast.success("Currículo gerado com sucesso!");
       }
@@ -387,10 +419,19 @@ export default function Generator() {
             {/* Editor Section */}
             <Card>
               <CardHeader>
-                <CardTitle>Editar Currículo</CardTitle>
-                <CardDescription>
-                  Faça ajustes nas informações do seu currículo
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Editar Currículo</CardTitle>
+                    <CardDescription>
+                      Faça ajustes nas informações do seu currículo
+                    </CardDescription>
+                  </div>
+                  <AutoSaveIndicator 
+                    isSaving={autoSave.isSaving}
+                    lastSaved={autoSave.lastSaved}
+                    error={autoSave.error}
+                  />
+                </div>
               </CardHeader>
               <CardContent>
                 <ResumeEditor 
@@ -408,7 +449,10 @@ export default function Generator() {
                       expiryDate: c.expiryDate,
                     })) || [],
                   }}
-                  onUpdate={(updatedData) => setGeneratedResume(updatedData)}
+                  onUpdate={(updatedData) => {
+                    setGeneratedResume(updatedData);
+                    setResumeDraft(updatedData);
+                  }}
                 />
               </CardContent>
             </Card>
