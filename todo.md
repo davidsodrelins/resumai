@@ -259,3 +259,48 @@
 - [ ] Testar compilação de arquivos LaTeX gerados
 - [ ] Verificar metadados ocultos no LaTeX
 - [ ] Criar testes automatizados para novas funcionalidades
+
+
+## Novas Funcionalidades Avançadas (Fase 8)
+
+### Análise de Soft Skills com IA
+- [x] Criar módulo softSkillsAnalyzer.ts
+- [x] Implementar identificação de soft skills presentes no currículo
+- [x] Criar banco de dados de soft skills por cargo/área
+- [x] Gerar sugestões de soft skills relevantes para o cargo desejado
+- [x] Criar exemplos contextualizados de como demonstrar cada skill
+- [x] Implementar endpoint tRPC para análise de soft skills
+- [ ] Criar interface visual para análise e sugestões
+- [ ] Adicionar botão "Aplicar Soft Skill" que insere exemplo na seção apropriada
+
+### Geração de Portfolio Web Automático
+- [ ] Criar módulo portfolioGenerator.ts
+- [ ] Implementar geração de HTML/CSS responsivo a partir do currículo
+- [ ] Criar 3 templates de portfolio (Moderno, Minimalista, Profissional)
+- [ ] Adicionar seção de projetos com links e descrições
+- [ ] Implementar otimização SEO (meta tags, structured data)
+- [ ] Gerar domínio personalizado (nome-sobrenome.manus.space)
+- [ ] Hospedar portfolio no Manus Space
+- [ ] Criar página de gerenciamento de portfolio
+- [ ] Adicionar analytics de visualizações
+- [ ] Implementar botão "Compartilhar Portfolio" com QR code
+
+### Integração com Job Boards
+- [ ] Pesquisar APIs disponíveis (LinkedIn Jobs, Indeed, Glassdoor)
+- [ ] Implementar scraper para vagas (se APIs não disponíveis)
+- [ ] Criar módulo jobMatcher.ts para matching de vagas
+- [ ] Implementar cálculo de compatibilidade (ATS score + keywords)
+- [ ] Criar sistema de filtros (localização, salário, remoto, etc.)
+- [ ] Implementar aplicação automática em vagas compatíveis
+- [ ] Criar relatório de candidaturas enviadas
+- [ ] Adicionar notificações de novas vagas compatíveis
+- [ ] Implementar cron job para busca periódica (a cada 30 min)
+- [ ] Enviar email com vagas encontradas para davidsodre_ba@hotmail.com
+
+## Testes e Validação
+- [ ] Testar análise de soft skills com diferentes perfis
+- [ ] Validar geração de portfolio em diferentes resoluções
+- [ ] Testar matching de vagas com currículos reais
+- [ ] Verificar aplicação automática em job boards
+- [ ] Validar envio de emails com vagas
+- [ ] Testar SEO do portfolio gerado

@@ -11,6 +11,7 @@ import axios from "axios";
 import * as resumeHistory from "./resumeHistory";
 import { generateCoverLetter } from "./coverLetterGenerator";
 import { generateLatexResume } from "./latexExporter";
+import { analyzeSoftSkills } from "./softSkillsAnalyzer";
 
 export const appRouter = router({
   system: systemRouter,
@@ -367,6 +368,19 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const { analyzeKeywordMatch } = await import("./keywordMatcher");
         return analyzeKeywordMatch(input.resumeData, input.jobDescription);
+      }),
+
+    analyzeSoftSkills: protectedProcedure
+      .input(
+        z.object({
+          resumeData: z.any(),
+          targetRole: z.string().optional(),
+          language: z.enum(["pt", "en", "es"]).default("pt"),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const analysis = await analyzeSoftSkills(input.resumeData, input.targetRole, input.language);
+        return analysis;
       }),
 
     // Suggest where to place a missing keyword
