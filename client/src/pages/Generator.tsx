@@ -394,7 +394,20 @@ export default function Generator() {
               </CardHeader>
               <CardContent>
                 <ResumeEditor 
-                  resumeData={generatedResume} 
+                  resumeData={{
+                    ...generatedResume,
+                    skills: generatedResume.skills?.flatMap((s: any) => s.items || []) || [],
+                    languages: generatedResume.languages?.map((l: any) => ({
+                      name: l.language,
+                      proficiency: l.proficiency,
+                    })) || [],
+                    certifications: generatedResume.certifications?.map((c: any) => ({
+                      name: c.name,
+                      issuer: c.issuer,
+                      date: c.date || "",
+                      expiryDate: c.expiryDate,
+                    })) || [],
+                  }}
                   onUpdate={(updatedData) => setGeneratedResume(updatedData)}
                 />
               </CardContent>
@@ -410,7 +423,20 @@ export default function Generator() {
               </CardHeader>
               <CardContent>
                 <ResumePreview 
-                  resumeData={generatedResume}
+                  resumeData={{
+                    ...generatedResume,
+                    skills: generatedResume.skills?.flatMap((s: any) => s.items || []) || [],
+                    languages: generatedResume.languages?.map((l: any) => ({
+                      name: l.language,
+                      proficiency: l.proficiency,
+                    })) || [],
+                    certifications: generatedResume.certifications?.map((c: any) => ({
+                      name: c.name,
+                      issuer: c.issuer,
+                      date: c.date || "",
+                      expiryDate: c.expiryDate,
+                    })) || [],
+                  }}
                   template={selectedTemplate}
                   language={selectedLanguage}
                 />

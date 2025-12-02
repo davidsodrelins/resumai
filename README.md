@@ -97,12 +97,20 @@ Uma plataforma web completa para geração de currículos profissionais otimizad
 
 ## 👨‍💻 Histórico de Versões
 
-### V3.0 (Atual) - Sistema de Histórico e Cartas
+### V4.0 (Atual) - Interface de Cartas e Correções
+- Interface completa para geração de cartas de apresentação
+- Formulário com campos para empresa, cargo e descrição da vaga
+- Preview e editor inline para cartas
+- Exportação de cartas em DOCX e PDF
+- Correções de bugs na renderização de skills
+- 30 testes automatizados passando
+- Validação manual completa do fluxo
+
+### V3.0 - Sistema de Histórico e Cartas
 - Sistema completo de histórico de currículos
 - Geração de cartas de apresentação com IA
 - Gerenciamento de rascunhos e versões finais
 - Integração entre currículos e cartas
-- 27 testes automatizados passando
 
 ### V2.0 - Editor e Templates
 - Editor interativo com edição inline

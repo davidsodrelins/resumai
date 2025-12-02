@@ -102,3 +102,41 @@
 - [ ] Mapear dados do LinkedIn para estrutura do currículo
 - [ ] Adicionar botão "Importar do LinkedIn" na interface
 - [ ] Tratar erros de autenticação e permissões
+
+## Novas Funcionalidades (Fase 4)
+
+### Interface de Cartas de Apresentação
+- [x] Criar página dedicada para cartas (/cover-letter)
+- [x] Implementar formulário com campos: empresa, cargo, descrição da vaga
+- [x] Adicionar seletor de idioma (PT, EN, ES)
+- [x] Criar preview da carta gerada
+- [x] Implementar editor inline para ajustes na carta
+- [x] Adicionar botões de exportação DOCX e PDF
+- [ ] Integrar com sistema de histórico
+- [x] Adicionar link na navegação
+
+### Auto-Save Inteligente
+- [ ] Implementar salvamento automático a cada 30 segundos
+- [ ] Adicionar indicador visual "Salvando..."
+- [ ] Mostrar notificação "Salvo com sucesso"
+- [ ] Implementar debounce para evitar salvamentos excessivos
+- [ ] Salvar estado de edição no localStorage como backup
+- [ ] Recuperar rascunho ao reabrir página
+
+### Comparação de Versões
+- [ ] Criar página de comparação (/compare)
+- [ ] Implementar seletor de duas versões para comparar
+- [ ] Mostrar currículos lado a lado
+- [ ] Destacar diferenças em cores (verde/vermelho)
+- [ ] Adicionar navegação entre diferenças
+- [ ] Permitir exportar versão escolhida
+
+### Testes e Validação
+- [x] Testar geração de currículo completo
+- [x] Testar upload de arquivos PDF e DOCX
+- [ ] Testar geração de carta de apresentação
+- [x] Testar salvamento e recuperação de histórico
+- [ ] Testar auto-save em diferentes cenários
+- [ ] Testar comparação de versões
+- [x] Validar exportação DOCX e PDF
+- [x] Testar responsividade mobile

@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import History from "./pages/History";
 import Generator from "./pages/Generator";
+import CoverLetter from "./pages/CoverLetter";
 
 function Router() {
   return (
@@ -14,6 +15,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/history"} component={History} />
       <Route path={"/generator"} component={Generator} />
+      <Route path={"/cover-letter"} component={CoverLetter} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
