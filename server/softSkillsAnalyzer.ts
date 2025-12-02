@@ -302,7 +302,15 @@ Devuelve SOLO un JSON válido en el formato:
     throw new Error("Failed to generate soft skill suggestion");
   }
   
-  const parsed = JSON.parse(content.trim());
+  // Remove markdown code blocks if present
+  let cleanContent = content.trim();
+  if (cleanContent.startsWith("```json")) {
+    cleanContent = cleanContent.replace(/^```json\n?/, "").replace(/\n?```$/, "");
+  } else if (cleanContent.startsWith("```")) {
+    cleanContent = cleanContent.replace(/^```\n?/, "").replace(/\n?```$/, "");
+  }
+  
+  const parsed = JSON.parse(cleanContent.trim());
   
   return {
     skill,

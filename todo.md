@@ -270,8 +270,12 @@
 - [x] Gerar sugestões de soft skills relevantes para o cargo desejado
 - [x] Criar exemplos contextualizados de como demonstrar cada skill
 - [x] Implementar endpoint tRPC para análise de soft skills
-- [ ] Criar interface visual para análise e sugestões
-- [ ] Adicionar botão "Aplicar Soft Skill" que insere exemplo na seção apropriada
+- [x] Criar página dedicada /soft-skills para análise
+- [x] Implementar gráfico de coverage score (0-100)
+- [x] Criar cards expansíveis para cada sugestão
+- [x] Mostrar preview do exemplo contextualizado
+- [x] Adicionar botão "Aplicar Soft Skill" que insere exemplo na seção apropriada
+- [x] Implementar feedback visual após aplicação
 
 ### Geração de Portfolio Web Automático
 - [ ] Criar módulo portfolioGenerator.ts

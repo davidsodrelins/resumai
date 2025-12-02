@@ -9,7 +9,8 @@ import History from "./pages/History";
 import Generator from "./pages/Generator";
 import CoverLetter from "./pages/CoverLetter";
 import Compare from "./pages/Compare";
-import Analysis from "./pages/Analysis";
+import Analysis from "@/pages/Analysis";
+import SoftSkills from "@/pages/SoftSkills";
 
 function Router() {
   return (
@@ -18,7 +19,8 @@ function Router() {
       <Route path={"/history"} component={History} />
       <Route path={"/generator"} component={Generator} />
       <Route path={"/cover-letter"} component={CoverLetter} />      <Route path={"/compare"} component={Compare} />
-      <Route path={"/analysis"} component={Analysis} />
+       <Route path="/analysis" component={Analysis} />
+      <Route path="/soft-skills" component={SoftSkills} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
