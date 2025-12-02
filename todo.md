@@ -450,3 +450,22 @@
 - [ ] Testar exportação com template Executive
 - [ ] Testar exportação com template Creative
 - [ ] Validar que preview e PDF têm as mesmas cores
+
+
+## Bugs Reportados - PDF V9.2.0 (Dezembro 2024)
+
+### Cabeçalho sobrepondo título
+- [x] Corrigir ordem de desenho (rect primeiro, texto depois)
+- [x] Ajustar posicionamento do texto no cabeçalho
+- [x] Garantir que o texto apareça sobre o fundo colorido
+- [x] Usar .fill() em vez de .fillColor().fill() para o retângulo
+
+### Cores diferentes do preview
+- [x] Comparar cores do ResumePreview.tsx com documentExporter.ts
+- [x] Ajustar paleta Classic para corresponder ao preview (slate-100, slate-900)
+- [x] Ajustar paleta Modern para corresponder ao preview (blue-500, blue-600)
+- [x] Ajustar paleta Minimal para corresponder ao preview (white, slate-800)
+- [x] Ajustar paleta Executive para corresponder ao preview (slate-800, amber-600)
+- [x] Ajustar paleta Creative para corresponder ao preview (pink-500, purple-500)
+- [x] Validar cores hex extraídas do Tailwind CSS
+- [x] Adicionar campo headerText separado para cor do texto do cabeçalho

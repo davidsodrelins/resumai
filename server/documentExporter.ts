@@ -290,37 +290,42 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     doc.on('end', () => resolve(Buffer.concat(chunks)));
     doc.on('error', reject);
 
-    // Define color palettes for each template
+    // Define color palettes matching ResumePreview.tsx
     const colors = {
       classic: {
-        header: '#334155', // slate-700
-        section: '#1e293b', // slate-800
-        accent: '#475569', // slate-600
-        text: '#000000'
+        header: '#f1f5f9', // slate-100 (bg-slate-100)
+        headerText: '#0f172a', // slate-900 (text-slate-900)
+        section: '#0f172a', // slate-900 (text-slate-900)
+        accent: '#334155', // slate-700 (text-slate-700)
+        text: '#334155' // slate-700
       },
       modern: {
-        header: '#3b82f6', // blue-500
-        section: '#2563eb', // blue-600
-        accent: '#8b5cf6', // purple-500
-        text: '#000000'
+        header: '#3b82f6', // blue-500 (from-blue-500)
+        headerText: '#ffffff', // white
+        section: '#2563eb', // blue-600 (text-blue-600)
+        accent: '#2563eb', // blue-600 (text-blue-600)
+        text: '#334155' // slate-700
       },
       minimal: {
-        header: '#1e293b', // slate-800
-        section: '#475569', // slate-600
-        accent: '#64748b', // slate-500
-        text: '#000000'
+        header: '#ffffff', // white (bg-white)
+        headerText: '#0f172a', // slate-900 (text-slate-900)
+        section: '#1e293b', // slate-800 (text-slate-800)
+        accent: '#1e293b', // slate-800 (text-slate-800)
+        text: '#475569' // slate-600
       },
       executive: {
-        header: '#1e293b', // slate-800
-        section: '#1e293b', // slate-800
-        accent: '#d97706', // amber-600
-        text: '#000000'
+        header: '#1e293b', // slate-800 (bg-slate-800)
+        headerText: '#ffffff', // white
+        section: '#0f172a', // slate-900 (text-slate-900)
+        accent: '#d97706', // amber-600 (text-amber-600)
+        text: '#334155' // slate-700
       },
       creative: {
-        header: '#ec4899', // pink-500
-        section: '#a855f7', // purple-500
-        accent: '#6366f1', // indigo-500
-        text: '#000000'
+        header: '#ec4899', // pink-500 (from-pink-500)
+        headerText: '#ffffff', // white
+        section: '#a855f7', // purple-500 (text-purple-600 approximation)
+        accent: '#a855f7', // purple-500 (text-purple-600)
+        text: '#334155' // slate-700
       }
     };
 
@@ -328,11 +333,11 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
 
     // Personal Information Header with colored background
     if (resumeData.personalInfo.fullName) {
-      // Draw colored header background
-      doc.rect(0, 0, doc.page.width, 120).fillColor(palette.header).fill();
+      // Draw colored header background FIRST
+      doc.rect(0, 0, doc.page.width, 120).fill(palette.header);
       
-      // Reset to white text for header
-      doc.fillColor('#ffffff');
+      // Then draw text on top
+      doc.fillColor(palette.headerText);
       doc.fontSize(24).font('Helvetica-Bold').text(resumeData.personalInfo.fullName, 50, 30, { align: 'center' });
       doc.moveDown(0.5);
     }
@@ -344,14 +349,14 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     if (resumeData.personalInfo.location) contactInfo.push(resumeData.personalInfo.location);
 
     if (contactInfo.length > 0) {
-      doc.fontSize(10).font('Helvetica').fillColor('#ffffff').text(contactInfo.join(' | '), { align: 'center' });
+      doc.fontSize(10).font('Helvetica').fillColor(palette.headerText).text(contactInfo.join(' | '), { align: 'center' });
     }
 
     if (resumeData.personalInfo.linkedin || resumeData.personalInfo.website) {
       const links: string[] = [];
       if (resumeData.personalInfo.linkedin) links.push(resumeData.personalInfo.linkedin);
       if (resumeData.personalInfo.website) links.push(resumeData.personalInfo.website);
-      doc.fontSize(10).font('Helvetica').fillColor('#ffffff').text(links.join(' | '), { align: 'center' });
+      doc.fontSize(10).font('Helvetica').fillColor(palette.headerText).text(links.join(' | '), { align: 'center' });
     }
 
     // Reset to black text for body
