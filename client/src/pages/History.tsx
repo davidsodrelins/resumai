@@ -1,8 +1,16 @@
+import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Trash2, Download, Eye, Clock, ArrowLeft, GitCompare } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DeleteConfirmationModal } from "@/components/DeleteConfirmationModal";
+import { FileText, Trash2, Download, Eye, Clock, ArrowLeft, GitCompare, MoreVertical } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
@@ -12,6 +20,8 @@ import { ptBR } from "date-fns/locale";
 export default function History() {
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [resumeToDelete, setResumeToDelete] = useState<any>(null);
 
   const { data: resumes, isLoading, refetch } = trpc.history.listResumes.useQuery(
     undefined,
@@ -21,6 +31,8 @@ export default function History() {
   const deleteMutation = trpc.history.deleteResume.useMutation({
     onSuccess: () => {
       toast.success("Currículo excluído com sucesso!");
+      setDeleteModalOpen(false);
+      setResumeToDelete(null);
       refetch();
     },
     onError: () => {
@@ -28,9 +40,20 @@ export default function History() {
     },
   });
 
-  const handleDelete = (id: number) => {
-    if (confirm("Tem certeza que deseja excluir este currículo?")) {
-      deleteMutation.mutate({ id });
+  const handleDelete = (resume: any) => {
+    const skipConfirmation = localStorage.getItem("skipDeleteConfirmation") === "true";
+    
+    if (skipConfirmation) {
+      deleteMutation.mutate({ id: resume.id });
+    } else {
+      setResumeToDelete(resume);
+      setDeleteModalOpen(true);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (resumeToDelete) {
+      deleteMutation.mutate({ id: resumeToDelete.id });
     }
   };
 
@@ -215,14 +238,26 @@ export default function History() {
                         <Eye className="h-4 w-4 mr-1" />
                         Visualizar
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(resume.id)}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={deleteMutation.isPending}
+                          >
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(resume)}
+                            className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Excluir currículo
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </CardContent>
                 </Card>
@@ -231,6 +266,15 @@ export default function History() {
           )}
         </div>
       </main>
+
+      {/* Modal de confirmação de exclusão */}
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        resume={resumeToDelete}
+        onConfirm={handleConfirmDelete}
+        isDeleting={deleteMutation.isPending}
+      />
     </div>
   );
 }

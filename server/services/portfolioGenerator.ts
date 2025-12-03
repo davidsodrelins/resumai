@@ -1037,16 +1037,27 @@ function getModernCSS(): string {
   }
   
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   
   .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
   .hero-contact {
     flex-direction: column;
     align-items: center;
+  }
+  
+  .hero-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   
   .timeline-modern::before {
@@ -1061,8 +1072,29 @@ function getModernCSS(): string {
     flex-direction: column;
   }
   
+  .timeline-title,
+  .timeline-company {
+    font-size: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .timeline-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
   .skills-grid-modern {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .container {
+    padding: 0 1.5rem;
   }
 }
 `;
@@ -1253,12 +1285,33 @@ function getMinimalistCSS(): string {
 /* Responsive */
 @media (max-width: 768px) {
   .name-minimal {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .tagline-minimal {
+    font-size: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
   .item-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+  
+  .item-title,
+  .item-subtitle {
+    font-size: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .item-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   
   .skills-minimal {
@@ -1267,6 +1320,21 @@ function getMinimalistCSS(): string {
   
   .skill-tag {
     font-size: 0.8125rem;
+    word-wrap: break-word;
+  }
+  
+  .section-title-minimal {
+    font-size: 1.5rem;
+  }
+  
+  .container {
+    padding: 0 1.5rem;
+  }
+  
+  .header-minimal,
+  .section-minimal {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 `;

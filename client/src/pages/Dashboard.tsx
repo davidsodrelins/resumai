@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,8 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmationModal } from "@/components/DeleteConfirmationModal";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js';
 import { Pie, Line } from 'react-chartjs-2';
 
@@ -19,12 +22,41 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 export default function Dashboard() {
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [resumeToDelete, setResumeToDelete] = useState<any>(null);
 
   const { data: resumes, isLoading } = trpc.history.listResumes.useQuery(undefined, {
     enabled: isAuthenticated,
   });
-  const deleteResumeMutation = trpc.history.deleteResume.useMutation();
+  const deleteResumeMutation = trpc.history.deleteResume.useMutation({
+    onSuccess: () => {
+      toast.success("Currículo excluído com sucesso!");
+      setDeleteModalOpen(false);
+      setResumeToDelete(null);
+      utils.history.listResumes.invalidate();
+    },
+    onError: () => {
+      toast.error("Erro ao excluir currículo");
+    },
+  });
   const utils = trpc.useUtils();
+
+  const handleDelete = (resume: any) => {
+    const skipConfirmation = localStorage.getItem("skipDeleteConfirmation") === "true";
+    
+    if (skipConfirmation) {
+      deleteResumeMutation.mutate({ id: resume.id });
+    } else {
+      setResumeToDelete(resume);
+      setDeleteModalOpen(true);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (resumeToDelete) {
+      deleteResumeMutation.mutate({ id: resumeToDelete.id });
+    }
+  };
 
   // Redirect if not authenticated
   if (!authLoading && !isAuthenticated) {
@@ -469,17 +501,14 @@ export default function Dashboard() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
-                            className="text-red-600 focus:text-red-600"
-                            onClick={async (e) => {
+                            className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                            onClick={(e) => {
                               e.preventDefault();
-                              if (confirm('Tem certeza que deseja excluir este currículo?')) {
-                                await deleteResumeMutation.mutateAsync({ id: resume.id });
-                                utils.history.listResumes.invalidate();
-                              }
+                              handleDelete(resume);
                             }}
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
-                            Excluir
+                            Excluir currículo
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -491,6 +520,15 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal de confirmação de exclusão */}
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        resume={resumeToDelete}
+        onConfirm={handleConfirmDelete}
+        isDeleting={deleteResumeMutation.isPending}
+      />
     </div>
   );
 }

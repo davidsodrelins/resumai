@@ -635,3 +635,63 @@
 - [x] Adicionar media query @media (max-width: 1024px)
 - [ ] Testar em diferentes tamanhos de tela
 - [ ] Aplicar correções nos outros templates (modern, minimalist)
+
+
+## Melhorias V9.6.0 (Dezembro 2024)
+
+### Responsividade Mobile - Templates Modern e Minimalist
+- [ ] Aplicar word-wrap e overflow-wrap no template Modern
+- [ ] Adicionar hyphens: auto no template Modern
+- [ ] Reduzir tamanhos de fonte no mobile (Modern)
+- [ ] Ajustar padding e margens no mobile (Modern)
+- [ ] Aplicar word-wrap e overflow-wrap no template Minimalist
+- [ ] Adicionar hyphens: auto no template Minimalist
+- [ ] Reduzir tamanhos de fonte no mobile (Minimalist)
+- [ ] Ajustar padding e margens no mobile (Minimalist)
+- [ ] Testar em diferentes tamanhos de tela
+
+### Botão de Exclusão na Página de Histórico
+- [ ] Criar página History.tsx se não existir
+- [ ] Adicionar imports de DropdownMenu e ícones
+- [ ] Implementar mutation deleteResume
+- [ ] Adicionar dropdown com botão Excluir em cada item
+- [ ] Adicionar confirmação antes de deletar
+- [ ] Invalidar query após exclusão
+- [ ] Adicionar feedback visual (toast)
+
+### Modal Customizado de Confirmação
+- [ ] Criar componente DeleteConfirmDialog.tsx
+- [ ] Usar AlertDialog do shadcn/ui
+- [ ] Mostrar preview do currículo a ser deletado
+- [ ] Adicionar checkbox "Não mostrar novamente"
+- [ ] Salvar preferência no localStorage
+- [ ] Substituir window.confirm() no Dashboard
+- [ ] Substituir window.confirm() no History
+- [ ] Adicionar animações de entrada/saída
+
+## Melhorias V9.6.0 (Responsividade e UX)
+
+### Responsividade Mobile dos Portfolios
+- [x] Aplicar word-wrap e overflow-wrap no template Modern
+- [x] Aplicar word-wrap e overflow-wrap no template Minimalist
+- [x] Reduzir tamanhos de fonte em media queries mobile
+- [x] Ajustar padding e margens para dispositivos móveis
+- [x] Corrigir quebra de layout em telas pequenas
+
+### Sistema de Exclusão Melhorado
+- [x] Adicionar dropdown de ações na página de Histórico
+- [x] Criar componente DeleteConfirmationModal com shadcn/ui
+- [x] Exibir preview do currículo no modal de confirmação
+- [x] Adicionar checkbox "Não mostrar novamente" com localStorage
+- [x] Substituir window.confirm() no Dashboard por modal customizado
+- [x] Substituir window.confirm() no Histórico por modal customizado
+- [x] Adicionar animações de transição no modal
+- [x] Implementar loading state durante exclusão
+- [x] Melhorar feedback visual com toast notifications
+
+### Melhorias de Interface
+- [x] Adicionar ícone MoreVertical nos dropdowns de ações
+- [x] Estilizar item de exclusão com cores vermelhas
+- [x] Adicionar ícones informativos no preview do modal
+- [x] Melhorar layout do modal com grid responsivo
+- [x] Adicionar badges de status (Rascunho) no modal
