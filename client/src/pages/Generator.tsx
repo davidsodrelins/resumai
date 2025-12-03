@@ -49,6 +49,7 @@ export default function Generator() {
   const generateResumeMutation = trpc.resume.generateResume.useMutation();
   const exportDOCXMutation = trpc.resume.exportDOCX.useMutation();
   const exportPDFMutation = trpc.resume.exportPDF.useMutation();
+  const exportLatexMutation = trpc.resume.exportLatex.useMutation();
 
   // Auto-save functionality
   const autoSave = useAutoSave({
@@ -204,6 +205,36 @@ export default function Generator() {
       }
     } catch (error) {
       toast.error("Erro ao exportar PDF. Tente novamente.");
+      console.error(error);
+    }
+  };
+
+  const handleExportLatex = async () => {
+    if (!generatedResume) return;
+
+    try {
+      toast.info("Gerando arquivo LaTeX...");
+      
+      const result = await exportLatexMutation.mutateAsync({
+        resumeData: generatedResume,
+        language: selectedLanguage
+      });
+
+      if (result.latex) {
+        // Create blob and download
+        const blob = new Blob([result.latex], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${generatedResume.personalInfo.fullName.replace(/\s+/g, '_')}_resume.tex`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast.success("LaTeX gerado! Download iniciado.");
+      }
+    } catch (error) {
+      toast.error("Erro ao exportar LaTeX. Tente novamente.");
       console.error(error);
     }
   };
@@ -612,6 +643,7 @@ export default function Generator() {
                     type="button"
                     onClick={handleExportPDF}
                     disabled={exportPDFMutation.isPending}
+                    variant="outline"
                     className="flex-1"
                   >
                     {exportPDFMutation.isPending ? (
@@ -620,6 +652,19 @@ export default function Generator() {
                       <Download className="mr-2 h-4 w-4" />
                     )}
                     Baixar PDF
+                  </Button>
+                  <Button 
+                    type="button"
+                    onClick={handleExportLatex}
+                    disabled={exportLatexMutation.isPending}
+                    className="flex-1"
+                  >
+                    {exportLatexMutation.isPending ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="mr-2 h-4 w-4" />
+                    )}
+                    Baixar LaTeX
                   </Button>
                 </div>
               </CardContent>

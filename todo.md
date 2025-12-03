@@ -528,3 +528,13 @@
 - [x] Garantir consistência visual em todas as páginas
 - [x] Adicionar botão de logout integrado
 - [x] Testar navegação completa
+
+## Verificação Solicitada (V9.7.1)
+
+### Exportação LaTeX
+- [x] Verificar se botão de download LaTeX está funcionando (botão não existia)
+- [x] Adicionar mutation exportLatex no Generator
+- [x] Criar handler handleExportLatex com download via Blob
+- [x] Adicionar botão "Baixar LaTeX" na interface ao lado de PDF/DOCX
+- [x] Verificar backend - procedure exportLatex já existia
+- [x] Testar compilação TypeScript - sem erros

@@ -7,6 +7,33 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [9.7.1] - 2024-12-03
+
+### Adicionado
+- **Botão de Exportação LaTeX no Generator**
+  - Criado handler `handleExportLatex` que gera arquivo .tex via tRPC
+  - Botão "Baixar LaTeX" adicionado ao lado de PDF e DOCX
+  - Download automático via Blob com nome do arquivo baseado no nome completo
+  - Loading state durante geração com spinner
+  - Toast de feedback (sucesso/erro)
+  - Integrado com procedure `exportLatex` existente no backend
+
+### Corrigido
+- **Bug Crítico**: Botão de exportação LaTeX não existia no frontend
+  - Causa: Procedure `exportLatex` existia no backend mas não tinha botão na UI
+  - Solução: Adicionada mutation `exportLatexMutation` e botão completo
+  - Resultado: Usuários agora podem baixar currículos em formato LaTeX (.tex)
+
+### Técnico
+- Adicionada mutation `trpc.resume.exportLatex.useMutation()` no Generator
+- Criado handler `handleExportLatex` com lógica de download via Blob API
+- Nome do arquivo: `{Nome_Completo}_resume.tex` (espaços substituídos por _)
+- Botão com estados: normal, loading (spinner), disabled
+- Integração com idioma selecionado (`selectedLanguage`)
+- TypeScript: 0 erros de compilação
+
+---
+
 ## [9.7.0] - 2024-12-03
 
 ### Adicionado
