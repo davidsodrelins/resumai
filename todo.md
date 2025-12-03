@@ -557,3 +557,43 @@
 - [x] Traduzir para português (locale)
 - [x] Integrar no Home.tsx para usuários autenticados
 - [ ] Adicionar opção "Refazer Tour" nas configurações
+
+
+## Funcionalidades V9.5.0 (Dezembro 2024)
+
+### Gráfico de Linha Temporal
+- [x] Criar gráfico de linha mostrando atividade dos últimos 30 dias
+- [x] Agrupar currículos por data de criação
+- [x] Calcular contagem diária de currículos criados
+- [x] Implementar gráfico com Chart.js LineElement
+- [x] Adicionar cores e gradiente no gráfico (azul com fill)
+- [x] Posicionar gráfico no Dashboard abaixo dos gráficos de pizza
+- [x] Adicionar tooltips mostrando data e quantidade (com plural)
+- [x] Implementar responsividade do gráfico (maintainAspectRatio: false)
+- [x] Adicionar títulos nos eixos X e Y
+- [x] Rotacionar labels do eixo X (45 graus)
+
+### Persistência de Score ATS
+- [x] Adicionar campo atsScore (int) na tabela savedResumes
+- [x] Executar migração do banco de dados (pnpm db:push)
+- [x] Atualizar cálculo de score ATS médio para usar dados reais
+- [x] Remover mock data do Dashboard
+- [x] Adicionar verificação hasAtsData para mostrar empty state
+- [x] Mostrar "--" e "Sem análises ainda" quando não há dados
+- [x] Filtrar scores null/undefined do cálculo
+- [ ] Modificar endpoint de análise para salvar score (requer integração)
+- [ ] Criar gráfico de evolução do score ATS ao longo do tempo
+- [ ] Adicionar filtro de período (7 dias, 30 dias, todos)
+
+### Botão Refazer Tour
+- [x] Criar função para limpar localStorage (hasSeenTour)
+- [x] Adicionar botão "Refazer Tour" no menu do usuário
+- [x] Implementar dropdown no header com opções do usuário
+- [x] Adicionar ícone de ajuda (HelpCircle) no botão
+- [x] Adicionar ícone de usuário (User) no trigger
+- [x] Adicionar opção "Sair" com ícone LogOut
+- [x] Reexecutar tour após clicar no botão
+- [x] Usar useState para controlar execução do tour
+- [x] Importar componentes DropdownMenu do shadcn/ui
+- [ ] Adicionar confirmação antes de iniciar tour novamente
+- [ ] Testar funcionalidade em diferentes páginas

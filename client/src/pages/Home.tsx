@@ -2,17 +2,33 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getLoginUrl } from "@/const";
-import { FileText, Globe, Sparkles, Download, Edit, Zap, Layout } from "lucide-react";
+import { FileText, Globe, Sparkles, Download, Edit, Zap, Layout, HelpCircle, User, LogOut } from "lucide-react";
 import { Link } from "wouter";
 import GuidedTour from "@/components/GuidedTour";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
+  const [runTour, setRunTour] = useState(false);
+
+  const handleRestartTour = () => {
+    localStorage.removeItem('hasSeenTour');
+    setRunTour(true);
+    setTimeout(() => setRunTour(false), 100); // Reset after triggering
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
       {/* Guided Tour */}
-      {isAuthenticated && <GuidedTour run={true} />}
+      {isAuthenticated && <GuidedTour run={runTour || true} />}
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -29,7 +45,31 @@ export default function Home() {
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">Dashboard</Button>
               </Link>
-              <span className="text-sm text-slate-600">Olá, {user?.name}</span>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    {user?.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleRestartTour}>
+                    <HelpCircle className="mr-2 h-4 w-4" />
+                    <span>Refazer Tour</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <a href="/api/auth/logout" className="flex items-center">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sair</span>
+                    </a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <Link href="/generator">
                 <Button>Criar Currículo</Button>
               </Link>

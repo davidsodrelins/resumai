@@ -77,14 +77,59 @@ export default function Dashboard() {
   const recentCount = resumes?.filter(r => new Date(r.createdAt) >= fourWeeksAgo).length || 0;
   const avgPerWeek = (recentCount / 4).toFixed(1);
 
-  // Calculate ATS score average (mock data for now - will be real when analysis is saved)
-  const atsScores = resumes?.map(() => Math.floor(Math.random() * 30) + 70) || []; // Mock: 70-100
+  // Calculate ATS score average from real data
+  const atsScores = resumes?.map(r => r.atsScore).filter((score): score is number => score !== null && score !== undefined) || [];
   const avgAtsScore = atsScores.length > 0 
     ? (atsScores.reduce((a, b) => a + b, 0) / atsScores.length).toFixed(0)
     : 0;
   const atsTrend = atsScores.length >= 2 
     ? atsScores[atsScores.length - 1] > atsScores[0] ? 'up' : 'down'
     : 'neutral';
+  const hasAtsData = atsScores.length > 0;
+
+  // Calculate activity timeline (last 30 days)
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  
+  // Group resumes by date
+  const activityByDate: Record<string, number> = {};
+  resumes?.forEach(resume => {
+    const date = new Date(resume.createdAt);
+    if (date >= thirtyDaysAgo) {
+      const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
+      activityByDate[dateKey] = (activityByDate[dateKey] || 0) + 1;
+    }
+  });
+
+  // Create array of last 30 days with counts
+  const last30Days = [];
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const dateKey = date.toISOString().split('T')[0];
+    last30Days.push({
+      date: dateKey,
+      count: activityByDate[dateKey] || 0,
+      label: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+    });
+  }
+
+  // Chart data for activity timeline
+  const activityChartData = {
+    labels: last30Days.map(d => d.label),
+    datasets: [
+      {
+        label: 'Currículos Criados',
+        data: last30Days.map(d => d.count),
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+      },
+    ],
+  };
 
   const templateNames: Record<string, string> = {
     classic: "Classic",
@@ -188,19 +233,34 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Score ATS Médio
               </CardTitle>
-              {atsTrend === 'up' ? (
-                <TrendingUp className="h-4 w-4 text-green-600" />
-              ) : atsTrend === 'down' ? (
-                <TrendingDown className="h-4 w-4 text-red-600" />
+              {hasAtsData ? (
+                atsTrend === 'up' ? (
+                  <TrendingUp className="h-4 w-4 text-green-600" />
+                ) : atsTrend === 'down' ? (
+                  <TrendingDown className="h-4 w-4 text-red-600" />
+                ) : (
+                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                )
               ) : (
                 <BarChart3 className="h-4 w-4 text-muted-foreground" />
               )}
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{avgAtsScore}/100</div>
-              <p className="text-xs text-muted-foreground">
-                {atsTrend === 'up' ? 'Melhorando' : atsTrend === 'down' ? 'Em queda' : 'Estável'}
-              </p>
+              {hasAtsData ? (
+                <>
+                  <div className="text-2xl font-bold">{avgAtsScore}/100</div>
+                  <p className="text-xs text-muted-foreground">
+                    {atsTrend === 'up' ? 'Melhorando' : atsTrend === 'down' ? 'Em queda' : 'Estável'}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-slate-400">--</div>
+                  <p className="text-xs text-muted-foreground">
+                    Sem análises ainda
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -298,6 +358,66 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Activity Timeline */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Atividade dos Últimos 30 Dias</CardTitle>
+            <CardDescription>Currículos criados ao longo do tempo</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64">
+              {totalResumes > 0 ? (
+                <Line
+                  data={activityChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function(context) {
+                            return `${context.parsed.y} currículo${context.parsed.y !== 1 ? 's' : ''}`;
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        ticks: {
+                          stepSize: 1,
+                          precision: 0,
+                        },
+                        title: {
+                          display: true,
+                          text: 'Quantidade'
+                        }
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: 'Data'
+                        },
+                        ticks: {
+                          maxRotation: 45,
+                          minRotation: 45
+                        }
+                      }
+                    }
+                  }}
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-slate-500">Nenhum dado disponível</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Recent Resumes */}
         <Card>

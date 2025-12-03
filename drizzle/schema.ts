@@ -28,6 +28,7 @@ export const savedResumes = mysqlTable("saved_resumes", {
   language: mysqlEnum("language", ["pt", "en", "es"]).notNull(),
   template: mysqlEnum("template", ["classic", "modern", "minimal", "executive", "creative"]).notNull(),
   isDraft: int("is_draft").default(0).notNull(), // 0 = final, 1 = draft
+  atsScore: int("ats_score"), // ATS compatibility score (0-100), null if not analyzed
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
 });
