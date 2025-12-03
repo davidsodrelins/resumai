@@ -597,3 +597,41 @@
 - [x] Importar componentes DropdownMenu do shadcn/ui
 - [ ] Adicionar confirmação antes de iniciar tour novamente
 - [ ] Testar funcionalidade em diferentes páginas
+
+
+## Bugs e Melhorias Reportados (Dezembro 2024)
+
+### Análise e Otimização não funciona
+- [x] Investigar por que mostra "Nenhum currículo carregado"
+- [x] Verificar endpoint de listagem de currículos
+- [x] Corrigir integração com histórico
+- [x] Adicionar query trpc.history.listResumes
+- [x] Implementar fallback para localStorage
+- [x] Carregar currículo mais recente automaticamente
+- [x] Testar carregamento de currículos salvos
+
+### Remover Mock Data
+- [x] Buscar referências a "Alexandre Vasconcelos" no código
+- [x] Verificar banco de dados
+- [x] Confirmar que não há mock data no código
+- [x] Mock não encontrado (provavelmente dado de teste do usuário)
+
+### Botão de Exclusão de Currículos
+- [x] Verificar endpoint deleteResume no backend (já existia)
+- [x] Adicionar endpoint no router tRPC
+- [x] Criar dropdown com botão de exclusão no Dashboard
+- [x] Adicionar confirmação antes de deletar (window.confirm)
+- [x] Atualizar lista após exclusão (invalidate query)
+- [x] Adicionar ícones Trash2 e MoreVertical
+- [x] Importar componentes DropdownMenu do shadcn/ui
+
+### Layout Mobile do Portfolio Quebrado
+- [x] Investigar overflow de texto no mobile
+- [x] Adicionar word-wrap e overflow-wrap nos textos
+- [x] Adicionar hyphens: auto para quebra de palavras
+- [x] Reduzir tamanho de fontes no mobile
+- [x] Ajustar padding da sidebar no mobile
+- [x] Aplicar correções no template professional
+- [x] Adicionar media query @media (max-width: 1024px)
+- [ ] Testar em diferentes tamanhos de tela
+- [ ] Aplicar correções nos outros templates (modern, minimalist)

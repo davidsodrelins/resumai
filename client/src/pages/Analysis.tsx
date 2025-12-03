@@ -14,6 +14,9 @@ export default function Analysis() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [activeTab, setActiveTab] = useState("ats");
+  
+  // Get resumes from history
+  const { data: resumes } = trpc.history.listResumes.useQuery();
 
   // ATS Analysis
   const { data: atsScore, isLoading: atsLoading } = trpc.analysis.atsScore.useQuery(
@@ -29,13 +32,25 @@ export default function Analysis() {
   const keywordMatchMutation = trpc.analysis.keywordMatch.useMutation();
 
   const handleLoadResume = () => {
-    // Load resume from localStorage or history
+    // Try to load from localStorage first
     const savedResume = localStorage.getItem("currentResume");
     if (savedResume) {
       try {
         const parsed = JSON.parse(savedResume);
         setResumeData(parsed);
         toast.success("Currículo carregado com sucesso!");
+      } catch (error) {
+        toast.error("Erro ao carregar currículo");
+      }
+    } else if (resumes && resumes.length > 0) {
+      // Load most recent resume
+      try {
+        // resumeData is already a string in the database
+        const parsed = typeof resumes[0].resumeData === 'string' 
+          ? JSON.parse(resumes[0].resumeData) 
+          : resumes[0].resumeData;
+        setResumeData(parsed);
+        toast.success("Currículo mais recente carregado!");
       } catch (error) {
         toast.error("Erro ao carregar currículo");
       }

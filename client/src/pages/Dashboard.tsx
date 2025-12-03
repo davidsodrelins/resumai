@@ -1,7 +1,13 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Download, BarChart3, Calendar, TrendingUp, Award, TrendingDown } from "lucide-react";
+import { FileText, Download, BarChart3, Calendar, TrendingUp, Award, TrendingDown, Trash2, MoreVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js';
@@ -17,6 +23,8 @@ export default function Dashboard() {
   const { data: resumes, isLoading } = trpc.history.listResumes.useQuery(undefined, {
     enabled: isAuthenticated,
   });
+  const deleteResumeMutation = trpc.history.deleteResume.useMutation();
+  const utils = trpc.useUtils();
 
   // Redirect if not authenticated
   if (!authLoading && !isAuthenticated) {
@@ -447,11 +455,35 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </div>
-                    <Link href={`/history`}>
-                      <Button variant="ghost" size="sm">
-                        Ver
-                      </Button>
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link href={`/history`}>
+                        <Button variant="ghost" size="sm">
+                          Ver
+                        </Button>
+                      </Link>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            className="text-red-600 focus:text-red-600"
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              if (confirm('Tem certeza que deseja excluir este currículo?')) {
+                                await deleteResumeMutation.mutateAsync({ id: resume.id });
+                                utils.history.listResumes.invalidate();
+                              }
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Excluir
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
                 ))}
               </div>

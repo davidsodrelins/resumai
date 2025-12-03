@@ -1575,6 +1575,7 @@ body {
     height: auto;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+    padding: 2rem 1.5rem;
   }
   
   .main-pro {
@@ -1590,6 +1591,35 @@ body {
   
   .skills-grid-pro {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  /* Fix text overflow on mobile */
+  .about-text,
+  .experience-description,
+  .education-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .name-pro {
+    font-size: 1.75rem;
+    word-wrap: break-word;
+  }
+  
+  .title-pro {
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+  
+  .section-title-pro {
+    font-size: 1.5rem;
+  }
+  
+  .position-pro,
+  .company-pro {
+    font-size: 1rem;
+    word-wrap: break-word;
   }
 }
 `;
