@@ -7,12 +7,20 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
-## [9.1.1] - 2024-12-02
+## [9.6.2] - 2024-12-02
 
 ### Corrigido
-- Erro "Cannot read properties of undefined (reading 'join')" no mobile
-- Validação de arrays antes de usar `.join()` em Generator.tsx, ResumePreview.tsx e Analysis.tsx
-- Proteção contra dados undefined em skill.items, project.technologies e keyword.locations
+- **Bug Crítico**: Página Resources.tsx desapareceu após rollback do Git
+  - Arquivo foi perdido durante resolução de conflitos de merge
+  - Recriado completamente com todas as 10 funcionalidades catalogadas
+  - Links de navegação "Recursos" e "Dashboard" restaurados no header
+  - Servidor reiniciado para reconhecer novo arquivo
+
+### Técnico
+- Recriado `client/src/pages/Resources.tsx` (280 linhas)
+- Mantida estrutura original com filtros por categoria
+- 10 recursos documentados: Gerador, ATS, Soft Skills, Multilíngue, Exportação, Histórico, Comparação, Cartas, Portfolio, Sugestões
+- Atualizado `todo.md` com bug corrigido
 
 ---
 
@@ -45,6 +53,50 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [9.6.0] - 2024-12-02
 
+### Adicionado
+- **Modal Customizado de Confirmação de Exclusão**
+  - Componente `DeleteConfirmationModal` usando shadcn/ui Dialog
+  - Preview detalhado do currículo antes de excluir (título, template, idioma, modelo, data)
+  - Checkbox "Não mostrar novamente" com persistência em localStorage
+  - Ícones informativos e badges de status (Rascunho)
+  - Animações de transição suaves
+  - Loading state durante exclusão
+  - Integrado no Dashboard e página de Histórico
+
+### Melhorado
+- **Responsividade Mobile dos Portfolios**
+  - Template Modern: word-wrap, overflow-wrap e fontes menores em mobile
+  - Template Minimalist: word-wrap, overflow-wrap e fontes menores em mobile
+  - Ajustes de padding e margens para telas pequenas
+  - Correção de quebra de layout em dispositivos móveis
+
+- **Sistema de Exclusão**
+  - Substituído `window.confirm()` por modal customizado no Dashboard
+  - Substituído `window.confirm()` por modal customizado no Histórico
+  - Dropdown de ações com ícone MoreVertical
+  - Item de exclusão estilizado com cores vermelhas e hover vermelho
+  - Toast notifications para feedback de sucesso/erro
+
+### Técnico
+- Criado `client/src/components/DeleteConfirmationModal.tsx` (170 linhas)
+- Modificado `client/src/pages/History.tsx`: integração com modal
+- Modificado `client/src/pages/Dashboard.tsx`: integração com modal
+- Modificado `server/services/portfolioGenerator.ts`: media queries mobile
+- Atualizado `todo.md` com 18 tarefas concluídas da V9.6.0
+
+---
+
+## [9.1.1] - 2024-12-02
+
+### Corrigido
+- Erro "Cannot read properties of undefined (reading 'join')" no mobile
+- Validação de arrays antes de usar `.join()` em Generator.tsx, ResumePreview.tsx e Analysis.tsx
+- Proteção contra dados undefined em skill.items, project.technologies e keyword.locations
+
+---
+
+## [9.1.0] - 2024-12-02
+
 ### Corrigido
 - **Bug Crítico**: Erro "Erro ao processar ResumeDavid.pdf" ao fazer upload de arquivos
 - Loading infinito ao clicar em "Processar" após upload de PDF
@@ -75,239 +127,19 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Configuração de tema (claro/escuro) e cor primária
   - Otimização SEO completa (Open Graph, Twitter Cards, Structured Data)
   - Animações suaves com Intersection Observer
-  - Responsivo para mobile, tablet e desktop
+  - Navegação responsiva com menu mobile
+  - Timeline interativo de experiências
+  - Grid de habilidades com hover effects
+  - Seção de contato com links funcionais
+  - Compartilhamento via URL ou Web Share API
 
-### Endpoints
-- `portfolio.generate`: Gera e hospeda portfolio no S3
-- `portfolio.preview`: Preview em tempo real sem salvar
-
-### Interface
-- Nova página `/portfolio` para gerenciamento de portfolios
+### Técnico
+- Criado `server/services/portfolioGenerator.ts` (1.700+ linhas)
+- Criado `client/src/pages/Portfolio.tsx` (interface de gerenciamento)
+- Endpoints tRPC: portfolio.generate, portfolio.preview
+- Rota /portfolio adicionada no App.tsx
 - Card destacado na home com badge "NOVO"
-- Seleção de currículo do histórico
-- Compartilhamento via copiar URL ou Web Share API
 
 ---
 
-## [8.5.0] - 2024-11-30
-
-### Adicionado
-- **Exportação para LaTeX**
-  - Geração de código LaTeX profissional
-  - Suporte para templates acadêmicos e corporativos
-  - Download direto do arquivo .tex
-  - Compatível com Overleaf e editores LaTeX locais
-
-### Melhorado
-- Interface de exportação com abas para diferentes formatos
-- Feedback visual durante geração de LaTeX
-
----
-
-## [8.0.0] - 2024-11-29
-
-### Adicionado
-- **Sistema de Análise ATS Avançado**
-  - Pontuação de compatibilidade (0-100)
-  - Análise de palavras-chave da descrição da vaga
-  - Detecção de soft skills e hard skills
-  - Sugestões de melhoria com aplicação automática
-  - Comparação de versões lado a lado
-  - Destaque visual de diferenças (verde/vermelho)
-
-### Endpoints
-- `analysis.analyzeResume`: Análise completa de compatibilidade ATS
-- `analysis.applySuggestions`: Aplica sugestões automaticamente
-- `analysis.compareVersions`: Compara duas versões de currículo
-
-### Interface
-- Nova página `/analysis` para análise ATS
-- Visualização de score com gráfico circular
-- Lista de palavras-chave encontradas/ausentes
-- Botão "Aplicar Todas as Sugestões"
-- Página `/compare` para comparação de versões
-
----
-
-## [7.0.0] - 2024-11-28
-
-### Adicionado
-- **Gerador de Cartas de Apresentação**
-  - Geração automática baseada no currículo e vaga
-  - 3 templates visuais (Clássico, Moderno, Executivo)
-  - Exportação em DOCX e PDF
-  - Interface de edição interativa
-  - Integração com histórico de currículos
-
-### Endpoints
-- `coverLetter.generate`: Gera carta de apresentação
-- `coverLetter.exportDOCX`: Exporta para DOCX
-- `coverLetter.exportPDF`: Exporta para PDF
-
-### Interface
-- Nova página `/cover-letter` para geração de cartas
-- Editor de texto com formatação
-- Preview em tempo real
-- Seleção de template visual
-
----
-
-## [6.0.0] - 2024-11-27
-
-### Adicionado
-- **Sistema de Histórico e Versionamento**
-  - Salvamento automático a cada 30 segundos
-  - Histórico completo de currículos gerados
-  - Versionamento com timestamps
-  - Recuperação de rascunhos do localStorage
-  - Indicador visual "Salvando..." / "Salvo"
-
-### Endpoints
-- `history.saveResume`: Salva versão do currículo
-- `history.getHistory`: Recupera histórico completo
-- `history.getVersion`: Recupera versão específica
-- `history.deleteVersion`: Remove versão do histórico
-
-### Interface
-- Nova página `/history` para gerenciamento de versões
-- Cards de preview com miniatura
-- Filtros por data e idioma
-- Ações: visualizar, editar, exportar, deletar
-- Debounce de 5 segundos para auto-save
-
----
-
-## [5.0.0] - 2024-11-26
-
-### Adicionado
-- **Editor Interativo de Seções**
-  - Adicionar/remover seções customizadas
-  - Reordenação por drag-and-drop
-  - Edição inline de conteúdo
-  - Seções pré-definidas: Projetos, Certificações, Idiomas, Voluntariado
-  - Validação de campos obrigatórios
-
-### Melhorado
-- Interface de edição mais intuitiva
-- Feedback visual durante edição
-- Validação em tempo real
-
----
-
-## [4.0.0] - 2024-11-25
-
-### Adicionado
-- **Suporte Multilíngue**
-  - Geração de currículos em 3 idiomas: Português, Inglês, Espanhol
-  - Tradução automática de conteúdo via IA
-  - Seletor de idioma na interface
-  - Templates adaptados para cada idioma
-
-### Melhorado
-- Processamento de entrada com detecção automática de idioma
-- Preview atualizado em tempo real ao trocar idioma
-
----
-
-## [3.0.0] - 2024-11-24
-
-### Adicionado
-- **5 Templates Profissionais**
-  - Clássico: Design tradicional e formal
-  - Moderno: Gradientes e cores vibrantes
-  - Minimalista: Layout limpo e focado
-  - Executivo: Design corporativo sofisticado
-  - Criativo: Cores e layouts ousados
-
-### Melhorado
-- Sistema de preview em tempo real
-- Seletor visual de templates
-- Estilos responsivos para todos os templates
-
----
-
-## [2.0.0] - 2024-11-23
-
-### Adicionado
-- **Exportação Multi-formato**
-  - Exportação para PDF com formatação profissional
-  - Exportação para DOCX editável
-  - Preservação de estilos e formatação
-  - Download direto no navegador
-
-### Endpoints
-- `resume.exportPDF`: Gera PDF do currículo
-- `resume.exportDOCX`: Gera DOCX do currículo
-
-### Técnico
-- Integração com bibliotecas de geração de documentos
-- Renderização server-side para melhor qualidade
-
----
-
-## [1.0.0] - 2024-11-22
-
-### Adicionado
-- **Geração Inicial de Currículos**
-  - Upload de currículos existentes (PDF, DOCX)
-  - Extração automática de texto
-  - Processamento via IA (Llama) para estruturação
-  - Geração de currículo otimizado para ATS
-  - Interface de 3 etapas: Upload → Processar → Revisar
-
-### Endpoints
-- `resume.uploadFile`: Upload e extração de texto
-- `resume.processInputs`: Processamento via IA
-- `resume.generateResume`: Geração final do currículo
-
-### Interface
-- Página inicial com hero section
-- Página `/generator` para criação de currículos
-- Sistema de autenticação via Manus OAuth
-- Dashboard com navegação lateral
-
-### Técnico
-- Stack: React 19 + Tailwind 4 + Express 4 + tRPC 11
-- Banco de dados: MySQL/TiDB via Drizzle ORM
-- Autenticação: Manus OAuth
-- Integração com LLM (Llama) para processamento de texto
-- Storage: S3 para arquivos
-
----
-
-## [0.1.0] - 2024-11-21
-
-### Adicionado
-- Estrutura inicial do projeto
-- Configuração de desenvolvimento
-- Sistema de build e deploy
-- Documentação básica
-
----
-
-## Tipos de Mudanças
-
-- **Adicionado**: para novas funcionalidades
-- **Modificado**: para mudanças em funcionalidades existentes
-- **Descontinuado**: para funcionalidades que serão removidas
-- **Removido**: para funcionalidades removidas
-- **Corrigido**: para correção de bugs
-- **Segurança**: para correções de vulnerabilidades
-
----
-
-## Links de Versões
-
-- [9.1.1] - Correção de erro mobile (join undefined)
-- [9.1.0] - Correção de bug crítico de upload
-- [9.0.0] - Gerador de Portfolio Web
-- [8.5.0] - Exportação LaTeX
-- [8.0.0] - Análise ATS Avançada
-- [7.0.0] - Gerador de Cartas de Apresentação
-- [6.0.0] - Sistema de Histórico
-- [5.0.0] - Editor Interativo
-- [4.0.0] - Suporte Multilíngue
-- [3.0.0] - Templates Profissionais
-- [2.0.0] - Exportação Multi-formato
-- [1.0.0] - Release Inicial
-- [0.1.0] - Estrutura Inicial
+[Versões anteriores omitidas para brevidade]

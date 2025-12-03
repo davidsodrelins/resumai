@@ -497,3 +497,11 @@
 - [x] Verificar query de listagem de currículos
 - [x] Testar seleção de currículo no dropdown
 - [x] Validar fluxo completo de análise ATS
+
+## Bug Reportado (V9.6.2)
+
+### Menu Header Desaparecido
+- [x] Investigar por que opções Recursos e Dashboard sumiram do header
+- [x] Verificar código do componente Home.tsx
+- [x] Restaurar links de navegação no header (arquivo Resources.tsx recriado)
+- [x] Testar navegação entre páginas
