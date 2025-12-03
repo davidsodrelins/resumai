@@ -20,6 +20,12 @@ export default function Home() {
           
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
+              <Link href="/resources">
+                <Button variant="ghost" size="sm">Recursos</Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm">Dashboard</Button>
+              </Link>
               <span className="text-sm text-slate-600">Olá, {user?.name}</span>
               <Link href="/generator">
                 <Button>Criar Currículo</Button>

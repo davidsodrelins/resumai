@@ -484,3 +484,40 @@
 - [ ] Identificar recursos documentados no README/CHANGELOG
 - [ ] Verificar quais não estão visíveis ou acessíveis na interface
 - [ ] Criar lista de funcionalidades para implementar ou documentar melhor
+
+
+## Novas Funcionalidades - Descoberta e Engajamento (Dezembro 2024)
+
+### Página de Recursos (/recursos)
+- [x] Criar componente Resources.tsx
+- [x] Listar todas as funcionalidades disponíveis com descrições
+- [x] Organizar em categorias (Geração, Análise, Otimização, Exportação, Gerenciamento)
+- [x] Adicionar ícones para cada funcionalidade (Lucide icons)
+- [x] Incluir links diretos para cada recurso
+- [x] Adicionar badges "NOVO" para funcionalidades recentes (Portfolio)
+- [x] Criar lista de benefícios para cada recurso
+- [x] Adicionar filtros por categoria
+- [x] Criar seção CTA no final da página
+
+### Dashboard de Estatísticas (/dashboard)
+- [x] Criar componente Dashboard.tsx
+- [x] Mostrar total de currículos gerados
+- [x] Exibir média semanal de criação
+- [x] Gráfico de currículos por template (barra de progresso)
+- [x] Gráfico de currículos por idioma (barra de progresso)
+- [x] Template favorito (mais usado)
+- [x] Idioma principal (mais usado)
+- [x] Currículos mais recentes (últimos 5)
+- [x] Adicionar cards com métricas principais (4 cards)
+- [x] Implementar autenticação e redirect
+- [ ] Adicionar gráficos avançados com Chart.js
+- [ ] Implementar linha do tempo de atividade
+- [ ] Adicionar score ATS médio
+
+### Integração com Navegação
+- [x] Adicionar link "Recursos" no menu principal (header Home.tsx)
+- [x] Adicionar link "Dashboard" no menu do usuário (header Home.tsx)
+- [x] Adicionar rotas no App.tsx (/resources, /dashboard)
+- [x] Importar componentes no App.tsx
+- [ ] Criar breadcrumbs para navegação
+- [ ] Adicionar links em outras páginas
