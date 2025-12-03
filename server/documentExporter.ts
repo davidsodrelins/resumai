@@ -365,8 +365,14 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
 
     // Professional Summary
     if (resumeData.personalInfo.summary) {
+      const currentY = doc.y;
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('PROFESSIONAL SUMMARY');
-      doc.moveDown(0.3);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.5);
       doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(resumeData.personalInfo.summary, { align: 'justify' });
       doc.moveDown(1);
     }
@@ -374,7 +380,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     // Work Experience
     if (resumeData.experience.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('WORK EXPERIENCE');
-      doc.moveDown(0.5);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.7);
 
       resumeData.experience.forEach((exp, index) => {
         doc.fontSize(12).font('Helvetica-Bold').fillColor(palette.accent).text(`${exp.position} - ${exp.company}`);
@@ -400,7 +411,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     // Education
     if (resumeData.education.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('EDUCATION');
-      doc.moveDown(0.5);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.7);
 
       resumeData.education.forEach((edu) => {
         const degreeText = edu.field ? `${edu.degree} in ${edu.field}` : edu.degree;
@@ -425,7 +441,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     // Skills
     if (resumeData.skills.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('SKILLS');
-      doc.moveDown(0.5);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.7);
 
       resumeData.skills.forEach((skillCategory) => {
         doc.fontSize(10).font('Helvetica-Bold').fillColor(palette.accent).text(`${skillCategory.category}: `, { continued: true });
@@ -438,7 +459,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     // Languages
     if (resumeData.languages.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('LANGUAGES');
-      doc.moveDown(0.5);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.7);
 
       resumeData.languages.forEach((lang) => {
         doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(`${lang.language}: ${lang.proficiency}`);
@@ -450,7 +476,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     // Certifications
     if (resumeData.certifications.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('CERTIFICATIONS');
-      doc.moveDown(0.5);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.7);
 
       resumeData.certifications.forEach((cert) => {
         const certText = cert.date ? `${cert.name} - ${cert.issuer} (${cert.date})` : `${cert.name} - ${cert.issuer}`;
@@ -463,7 +494,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     // Projects
     if (resumeData.projects.length > 0) {
       doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text('PROJECTS');
-      doc.moveDown(0.5);
+      // Draw decorative line below title
+      doc.moveTo(50, doc.y + 5)
+         .lineTo(doc.page.width - 50, doc.y + 5)
+         .lineWidth(2)
+         .stroke(palette.accent);
+      doc.moveDown(0.7);
 
       resumeData.projects.forEach((project) => {
         doc.fontSize(11).font('Helvetica-Bold').fillColor(palette.accent).text(project.name);
@@ -483,7 +519,12 @@ export async function generatePDF(resumeData: ProcessedResumeData, template: 'cl
     if (resumeData.additionalSections.length > 0) {
       resumeData.additionalSections.forEach((section) => {
         doc.fontSize(14).font('Helvetica-Bold').fillColor(palette.section).text(section.title.toUpperCase());
-        doc.moveDown(0.5);
+        // Draw decorative line below title
+        doc.moveTo(50, doc.y + 5)
+           .lineTo(doc.page.width - 50, doc.y + 5)
+           .lineWidth(2)
+           .stroke(palette.accent);
+        doc.moveDown(0.7);
         doc.fontSize(10).font('Helvetica').fillColor(palette.text).text(section.content, { align: 'justify' });
         doc.moveDown(1);
       });

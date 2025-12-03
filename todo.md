@@ -469,3 +469,18 @@
 - [x] Ajustar paleta Creative para corresponder ao preview (pink-500, purple-500)
 - [x] Validar cores hex extraídas do Tailwind CSS
 - [x] Adicionar campo headerText separado para cor do texto do cabeçalho
+
+
+## Melhorias Visuais PDF (Dezembro 2024)
+
+### Adicionar linhas decorativas nos títulos
+- [x] Implementar linhas horizontais coloridas abaixo dos títulos de seção
+- [x] Usar cor de acento de cada template
+- [x] Ajustar espessura da linha (2px)
+- [x] Posicionar linha 5px abaixo do texto do título
+- [x] Aplicar em todas as seções (Summary, Experience, Education, Skills, Languages, Certifications, Projects, Additional)
+
+### Funcionalidades ausentes na UI
+- [ ] Identificar recursos documentados no README/CHANGELOG
+- [ ] Verificar quais não estão visíveis ou acessíveis na interface
+- [ ] Criar lista de funcionalidades para implementar ou documentar melhor
