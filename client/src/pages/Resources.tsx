@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import GlobalNavigation from "@/components/GlobalNavigation";
 import {
   FileText,
   TrendingUp,
@@ -199,27 +200,17 @@ export default function Resources() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">Recursos da Plataforma</h1>
-              <p className="text-sm text-slate-600">
-                Descubra todas as funcionalidades disponíveis
-              </p>
-            </div>
-            <Button asChild variant="outline">
-              <Link href="/">
-                <a className="flex items-center gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  Voltar
-                </a>
-              </Link>
-            </Button>
-          </div>
+      <GlobalNavigation />
+
+      {/* Page Header */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-2xl font-bold text-slate-900">Recursos da Plataforma</h1>
+          <p className="text-sm text-slate-600">
+            Descubra todas as funcionalidades disponíveis
+          </p>
         </div>
-      </header>
+      </div>
 
       <main className="container mx-auto px-4 py-12">
         {/* Category Filters */}

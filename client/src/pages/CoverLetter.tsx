@@ -12,6 +12,7 @@ import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import type { ResumeData } from "@shared/resumeTypes";
+import GlobalNavigation from "@/components/GlobalNavigation";
 
 export default function CoverLetter() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -128,29 +129,7 @@ export default function CoverLetter() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/">
-            <a className="flex items-center gap-2 text-xl font-bold text-slate-900 hover:text-blue-600 transition-colors">
-              <FileText className="h-6 w-6" />
-              Gerador de Currículos IA
-            </a>
-          </Link>
-          <div className="flex gap-2">
-            <Button asChild variant="outline">
-              <Link href="/history">
-                <a>Meus Currículos</a>
-              </Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/generator">
-                <a>Criar Currículo</a>
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <GlobalNavigation />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">

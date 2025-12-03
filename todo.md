@@ -515,3 +515,16 @@
 - [x] Criar arquivo Dashboard.tsx (estava faltando)
 - [x] Adicionar imports e rotas no App.tsx
 - [x] Testar navegação manualmente - FUNCIONANDO
+
+## Melhoria Solicitada (V9.7.0)
+
+### Navegação Global Persistente
+- [x] Criar componente GlobalNavigation.tsx
+- [x] Adicionar logo, links principais e informações do usuário
+- [x] Tornar sticky no topo (position: sticky)
+- [x] Integrar em todas as páginas principais (9 páginas)
+- [x] Destacar página atual na navegação (active state)
+- [x] Implementar responsividade mobile (menu inferior)
+- [x] Garantir consistência visual em todas as páginas
+- [x] Adicionar botão de logout integrado
+- [x] Testar navegação completa

@@ -7,6 +7,52 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [9.7.0] - 2024-12-03
+
+### Adicionado
+- **Navegação Global Persistente em Todas as Páginas**
+  - Criado componente `GlobalNavigation.tsx` reutilizável
+  - Menu sticky no topo com backdrop blur e sombra sutil
+  - Links principais: Início, Criar, Recursos, Dashboard
+  - Destaque visual da página atual (botão azul)
+  - Informações do usuário: "Olá, {nome}" + botão Sair
+  - Botão de logout integrado com confirmação via toast
+  - Responsividade mobile: menu horizontal scrollável abaixo do header
+  - Logo clicavel que retorna para home
+  - Integrado em 9 páginas: Generator, History, Analysis, Dashboard, Resources, Compare, CoverLetter, Portfolio, SoftSkills
+
+### Modificado
+- **Removido Headers Individuais de Todas as Páginas**
+  - Generator: removido header com botão "Voltar"
+  - History: removido header com logo e botões de ação
+  - Analysis: convertido header para page header simples
+  - Dashboard: removido header com botão "Voltar"
+  - Resources: convertido header para page header simples
+  - Compare: removido botão "Voltar" do header interno
+  - CoverLetter: removido header completo com logo e botões
+  - Portfolio: adicionado wrapper com background gradient
+  - SoftSkills: removido header com logo e informações do usuário
+
+### Melhorado
+- **Consistência Visual e UX**
+  - Todas as páginas agora compartilham o mesmo header
+  - Navegação instantânea entre seções principais
+  - Usuário sempre sabe onde está (highlight da página atual)
+  - Logout acessível de qualquer página
+  - Experiência mobile otimizada com menu adaptativo
+  - Redução de código duplicado (headers individuais)
+
+### Técnico
+- Criado `client/src/components/GlobalNavigation.tsx` (120 linhas)
+- Modificado 9 arquivos de páginas para integrar GlobalNavigation
+- Implementado lógica de detecção de página ativa com `useLocation()`
+- Adicionado mutação tRPC de logout com feedback via toast
+- Responsividade: `md:flex` para desktop, scroll horizontal para mobile
+- Classes Tailwind: `sticky top-0 z-50` para header fixo
+- Atualizado `todo.md` com 9 tarefas concluídas
+
+---
+
 ## [9.6.3] - 2024-12-02
 
 ### Corrigido

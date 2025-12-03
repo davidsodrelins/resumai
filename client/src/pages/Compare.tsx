@@ -10,6 +10,7 @@ import { Link, useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import GlobalNavigation from "@/components/GlobalNavigation";
 
 export default function Compare() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -108,21 +109,15 @@ export default function Compare() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <GlobalNavigation />
+      
       <div className="container py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-serif font-bold mb-2">Comparar Versões</h1>
-            <p className="text-muted-foreground">
-              Compare duas versões do seu currículo lado a lado
-            </p>
-          </div>
-          <Link href="/history">
-            <Button variant="outline">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar
-            </Button>
-          </Link>
+        <div className="mb-8">
+          <h1 className="text-4xl font-serif font-bold mb-2">Comparar Versões</h1>
+          <p className="text-muted-foreground">
+            Compare duas versões do seu currículo lado a lado
+          </p>
         </div>
 
         {/* Version Selectors */}

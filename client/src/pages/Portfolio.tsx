@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader2, ExternalLink, Eye, Download, Share2, Copy, Check } from "lucide-react";
+import GlobalNavigation from "@/components/GlobalNavigation";
 
 
 export default function Portfolio() {
@@ -116,13 +117,16 @@ export default function Portfolio() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-7xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Gerador de Portfolio Web</h1>
-        <p className="text-muted-foreground">
-          Transforme seu currículo em um site profissional em segundos
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <GlobalNavigation />
+      
+      <div className="container mx-auto py-8 px-4 max-w-7xl">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Gerador de Portfolio Web</h1>
+          <p className="text-muted-foreground">
+            Transforme seu currículo em um site profissional em segundos
+          </p>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Configuration Panel */}
@@ -359,6 +363,7 @@ export default function Portfolio() {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );

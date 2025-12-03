@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, CheckCircle2, XCircle, Lightbulb, TrendingUp, FileText } from "lucide-react";
 import { toast } from "sonner";
 import type { ResumeData } from "@shared/resumeTypes";
+import GlobalNavigation from "@/components/GlobalNavigation";
 
 export default function Analysis() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
@@ -118,16 +119,16 @@ export default function Analysis() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">Análise e Otimização</h1>
-              <p className="text-sm text-slate-600">
-                Analise e melhore seu currículo com IA
-              </p>
-            </div>
+      <GlobalNavigation />
+
+      {/* Page Header */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-2xl font-bold text-slate-900">Análise e Otimização</h1>
+          <p className="text-sm text-slate-600">
+            Analise e melhore seu currículo com IA
+          </p>
+          <div className="mt-4">
             {resumesLoading ? (
               <div className="text-sm text-slate-600">Carregando currículos...</div>
             ) : resumes && resumes.length > 0 && (
@@ -146,7 +147,7 @@ export default function Analysis() {
             )}
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="container mx-auto px-4 py-8">
         {!resumeData ? (

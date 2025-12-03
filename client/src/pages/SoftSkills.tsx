@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, CheckCircle2, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import GlobalNavigation from "@/components/GlobalNavigation";
 
 export default function SoftSkills() {
   const { user, loading: authLoading } = useAuth();
@@ -70,22 +71,7 @@ export default function SoftSkills() {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <a href="/" className="text-2xl font-bold text-primary">
-              Gerador de Currículos IA
-            </a>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">Olá, {user.name}</span>
-            <Button variant="outline" asChild>
-              <a href="/generator">Voltar ao Editor</a>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <GlobalNavigation />
       
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-5xl mx-auto space-y-8">

@@ -19,6 +19,7 @@ import { AutoSaveIndicator } from "@/components/AutoSaveIndicator";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import ATSScoreBadge from "@/components/ATSScoreBadge";
+import GlobalNavigation from "@/components/GlobalNavigation";
 import type { ResumeTemplate } from "@/../../shared/resumeTypes";
 
 export default function Generator() {
@@ -209,17 +210,7 @@ export default function Generator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar
-            </Button>
-          </Link>
-        </div>
-      </header>
+      <GlobalNavigation />
 
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Progress Indicator */}
