@@ -42,6 +42,7 @@ export default function Generator() {
   const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplate>('classic');
   const [generatedResume, setGeneratedResume] = useState<any>(null);
   const [resumeDraft, setResumeDraft, clearResumeDraft] = useLocalStorage<any>('resume-draft', null);
+  const [draftMetadata, setDraftMetadata, clearDraftMetadata] = useLocalStorage<any>('resume-draft-metadata', null);
 
   const saveResumeMutation = trpc.history.saveResume.useMutation();
   const uploadFileMutation = trpc.resume.uploadFile.useMutation();
@@ -73,6 +74,14 @@ export default function Generator() {
     if (resumeDraft && !generatedResume) {
       setGeneratedResume(resumeDraft);
       setCurrentStep('preview');
+      
+      // Restore metadata if available
+      if (draftMetadata) {
+        if (draftMetadata.model) setSelectedModel(draftMetadata.model);
+        if (draftMetadata.language) setSelectedLanguage(draftMetadata.language);
+        if (draftMetadata.template) setSelectedTemplate(draftMetadata.template);
+      }
+      
       toast.info('Rascunho recuperado do armazenamento local');
     }
   }, []);
@@ -159,6 +168,11 @@ export default function Generator() {
       if (result.success && result.resume) {
         setGeneratedResume(result.resume);
         setResumeDraft(result.resume);
+        setDraftMetadata({
+          model: selectedModel,
+          language: selectedLanguage,
+          template: selectedTemplate
+        });
         setCurrentStep('preview');
         toast.success("Currículo gerado com sucesso!");
       }
@@ -478,6 +492,11 @@ export default function Generator() {
                   onUpdate={(updatedData) => {
                     setGeneratedResume(updatedData);
                     setResumeDraft(updatedData);
+                    setDraftMetadata({
+                      model: selectedModel,
+                      language: selectedLanguage,
+                      template: selectedTemplate
+                    });
                   }}
                 />
               </CardContent>

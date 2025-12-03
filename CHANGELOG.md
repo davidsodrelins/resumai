@@ -7,6 +7,28 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [9.7.2] - 2024-12-03
+
+### Corrigido
+- **Bug Crítico**: Currículos não estavam sendo salvos automaticamente no histórico
+  - Causa: Metadados (`selectedModel`, `selectedLanguage`, `selectedTemplate`) não eram salvos/restaurados do localStorage
+  - Quando rascunho era carregado, apenas `generatedResume` era restaurado, mas metadados ficavam com valores padrão
+  - Auto-save tentava salvar com metadados incorretos, causando falha silenciosa
+  - Solução: Adicionado `useLocalStorage` para `draftMetadata` separado
+  - Metadados agora são salvos quando currículo é gerado ou editado
+  - Metadados são restaurados automaticamente ao carregar rascunho
+  - Resultado: Auto-save funciona corretamente após 30 segundos de edição
+
+### Técnico
+- Adicionado `useLocalStorage` para `resume-draft-metadata`
+- Salvamento de metadados em `handleGenerateResume` (após geração)
+- Salvamento de metadados em `onUpdate` do `ResumeEditor` (durante edição)
+- Restauração de metadados no `useEffect` de carregamento do rascunho
+- Estrutura de metadados: `{ model, language, template }`
+- TypeScript: 0 erros de compilação
+
+---
+
 ## [9.7.1] - 2024-12-03
 
 ### Adicionado

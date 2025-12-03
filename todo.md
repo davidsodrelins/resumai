@@ -538,3 +538,17 @@
 - [x] Adicionar botão "Baixar LaTeX" na interface ao lado de PDF/DOCX
 - [x] Verificar backend - procedure exportLatex já existia
 - [x] Testar compilação TypeScript - sem erros
+
+## Bug Reportado (V9.7.2)
+
+### Currículos Não Estão Sendo Salvos
+- [x] Investigar funcionalidade de auto-save no Generator
+- [x] Verificar mutation saveResumeMutation (estava OK)
+- [x] Verificar hook useAutoSave (estava OK)
+- [x] Identificar problema: metadados (model, language, template) não eram salvos/restaurados do localStorage
+- [x] Adicionar useLocalStorage para draftMetadata
+- [x] Salvar metadados quando currículo é gerado
+- [x] Salvar metadados quando currículo é editado
+- [x] Restaurar metadados ao carregar rascunho do localStorage
+- [x] Remover logs de debug temporários
+- [x] Testar compilação - sem erros
