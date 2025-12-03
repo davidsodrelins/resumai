@@ -4,12 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getLoginUrl } from "@/const";
 import { FileText, Globe, Sparkles, Download, Edit, Zap, Layout } from "lucide-react";
 import { Link } from "wouter";
+import GuidedTour from "@/components/GuidedTour";
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+      {/* Guided Tour */}
+      {isAuthenticated && <GuidedTour run={true} />}
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">

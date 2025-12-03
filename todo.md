@@ -521,3 +521,39 @@
 - [x] Importar componentes no App.tsx
 - [ ] Criar breadcrumbs para navegação
 - [ ] Adicionar links em outras páginas
+
+
+## Funcionalidades Avançadas - V9.4.0 (Dezembro 2024)
+
+### Gráficos Avançados com Chart.js
+- [x] Instalar react-chartjs-2 e chart.js
+- [x] Criar gráfico de pizza para distribuição de templates
+- [x] Criar gráfico de pizza para distribuição de idiomas
+- [x] Adicionar cores personalizadas nos gráficos (azul, roxo, verde, laranja, rosa)
+- [x] Implementar tooltips informativos (Chart.js built-in)
+- [x] Tornar gráficos responsivos (maintainAspectRatio: false)
+- [x] Registrar componentes do Chart.js (ArcElement, Tooltip, Legend)
+- [ ] Criar gráfico de linha para atividade ao longo do tempo
+
+### Score ATS Médio
+- [x] Calcular score ATS médio dos currículos do usuário (mock data)
+- [x] Criar card de métrica para score ATS médio
+- [x] Adicionar indicador de tendência (subindo/descendo/estável)
+- [x] Ícones dinâmicos (TrendingUp verde, TrendingDown vermelho)
+- [x] Mostrar score no formato X/100
+- [ ] Adicionar campo atsScore na tabela de histórico (persistência real)
+- [ ] Implementar gráfico de linha mostrando evolução do score
+- [ ] Mostrar comparação com média da plataforma
+
+### Tour Guiado Interativo
+- [x] Instalar biblioteca de tour (react-joyride)
+- [x] Criar componente GuidedTour.tsx
+- [x] Criar steps do tour (boas-vindas → criar currículo → recursos → dashboard)
+- [x] Implementar detecção de primeiro acesso (localStorage hasSeenTour)
+- [x] Adicionar highlights nos elementos importantes (targets)
+- [x] Criar botões de navegação (próximo, voltar, pular, finalizar)
+- [x] Salvar estado do tour no localStorage
+- [x] Customizar estilos (cores azuis, bordas arredondadas)
+- [x] Traduzir para português (locale)
+- [x] Integrar no Home.tsx para usuários autenticados
+- [ ] Adicionar opção "Refazer Tour" nas configurações
