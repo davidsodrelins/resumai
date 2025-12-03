@@ -7,6 +7,34 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [9.6.3] - 2024-12-02
+
+### Corrigido
+- **Bug Crítico**: Itens do menu "Recursos" e "Dashboard" não apareciam no header
+  - Causa: Links de navegação não estavam implementados no header do Home.tsx
+  - Adicionado botões "Recursos" e "Dashboard" com variant="ghost" no header
+  - Criado arquivo Dashboard.tsx (estava faltando após rollback do Git)
+  - Adicionado imports e rotas /resources e /dashboard no App.tsx
+  - Navegação completa restaurada e testada
+
+### Adicionado
+- **Página Dashboard Completa**
+  - Estatísticas gerais: Total de currículos, currículos este mês
+  - Template favorito e idioma principal (mais utilizados)
+  - Gráficos de distribuição por template, idioma e modelo
+  - Atividade recente: últimos 5 currículos criados
+  - Cards de ações rápidas: Criar, Histórico, Análise
+  - Design responsivo com gradientes e ícones
+  - Integração completa com tRPC para dados em tempo real
+
+### Técnico
+- Criado `client/src/pages/Dashboard.tsx` (450+ linhas)
+- Modificado `client/src/pages/Home.tsx`: adicionado links de navegação no header
+- Modificado `client/src/App.tsx`: imports e rotas para Resources e Dashboard
+- Atualizado `todo.md` com 6 bugs corrigidos
+
+---
+
 ## [9.6.2] - 2024-12-02
 
 ### Corrigido

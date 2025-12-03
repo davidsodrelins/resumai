@@ -505,3 +505,13 @@
 - [x] Verificar código do componente Home.tsx
 - [x] Restaurar links de navegação no header (arquivo Resources.tsx recriado)
 - [x] Testar navegação entre páginas
+
+## Bug Persistente (V9.6.3)
+
+### Itens do Menu Ainda Não Aparecem
+- [x] Verificar código do Home.tsx onde o header é renderizado
+- [x] Verificar se os links "Recursos" e "Dashboard" estão no código (faltavam)
+- [x] Adicionar botões Recursos e Dashboard no header do Home.tsx
+- [x] Criar arquivo Dashboard.tsx (estava faltando)
+- [x] Adicionar imports e rotas no App.tsx
+- [x] Testar navegação manualmente - FUNCIONANDO

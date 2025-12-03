@@ -12,6 +12,8 @@ import Compare from "./pages/Compare";
 import Analysis from "@/pages/Analysis";
 import SoftSkills from "@/pages/SoftSkills";
 import Portfolio from "@/pages/Portfolio";
+import Resources from "@/pages/Resources";
+import Dashboard from "@/pages/Dashboard";
 
 function Router() {
   return (
@@ -23,8 +25,9 @@ function Router() {
        <Route path="/analysis" component={Analysis} />
       <Route path="/soft-skills" component={SoftSkills} />
       <Route path="/portfolio" component={Portfolio} />
-      <Route path={"/404"} component={NotFound} />
-      <Route component={NotFound} />
+      <Route path="/resources" component={Resources} />
+      <Route path="/dashboard" component={Dashboard} />
+      <Route path={"/404"} component={NotFound} />      <Route component={NotFound} />
     </Switch>
   );
 }
