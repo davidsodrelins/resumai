@@ -1,1 +1,0 @@
-ALTER TABLE `saved_resumes` ADD `ats_score` int;

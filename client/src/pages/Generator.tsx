@@ -604,6 +604,7 @@ export default function Generator() {
                     Voltar
                   </Button>
                   <Button 
+                    type="button"
                     onClick={handleExportDOCX}
                     disabled={exportDOCXMutation.isPending}
                     variant="outline"
@@ -617,6 +618,7 @@ export default function Generator() {
                     Baixar DOCX
                   </Button>
                   <Button 
+                    type="button"
                     onClick={handleExportPDF}
                     disabled={exportPDFMutation.isPending}
                     className="flex-1"

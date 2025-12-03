@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -12,11 +13,12 @@ import type { ResumeData } from "@shared/resumeTypes";
 
 export default function Analysis() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [activeTab, setActiveTab] = useState("ats");
-  
-  // Get resumes from history
-  const { data: resumes } = trpc.history.listResumes.useQuery();
+
+  // Load resumes from history
+  const { data: resumes, isLoading: resumesLoading } = trpc.history.listResumes.useQuery();
 
   // ATS Analysis
   const { data: atsScore, isLoading: atsLoading } = trpc.analysis.atsScore.useQuery(
@@ -31,31 +33,22 @@ export default function Analysis() {
   // Keyword Matching
   const keywordMatchMutation = trpc.analysis.keywordMatch.useMutation();
 
-  const handleLoadResume = () => {
-    // Try to load from localStorage first
-    const savedResume = localStorage.getItem("currentResume");
-    if (savedResume) {
-      try {
-        const parsed = JSON.parse(savedResume);
-        setResumeData(parsed);
-        toast.success("Currículo carregado com sucesso!");
-      } catch (error) {
-        toast.error("Erro ao carregar currículo");
-      }
-    } else if (resumes && resumes.length > 0) {
-      // Load most recent resume
-      try {
-        // resumeData is already a string in the database
-        const parsed = typeof resumes[0].resumeData === 'string' 
-          ? JSON.parse(resumes[0].resumeData) 
-          : resumes[0].resumeData;
-        setResumeData(parsed);
-        toast.success("Currículo mais recente carregado!");
-      } catch (error) {
-        toast.error("Erro ao carregar currículo");
-      }
-    } else {
-      toast.error("Nenhum currículo encontrado. Gere um currículo primeiro.");
+  // Auto-load the most recent resume on mount
+  useEffect(() => {
+    if (resumes && resumes.length > 0 && !resumeData) {
+      const mostRecent = resumes[0];
+      setSelectedResumeId(mostRecent.id);
+      setResumeData(mostRecent.resumeData);
+      toast.success("Currículo mais recente carregado automaticamente!");
+    }
+  }, [resumes]);
+
+  const handleSelectResume = (resumeId: number) => {
+    const resume = resumes?.find(r => r.id === resumeId);
+    if (resume) {
+      setSelectedResumeId(resumeId);
+      setResumeData(resume.resumeData);
+      toast.success("Currículo carregado com sucesso!");
     }
   };
 
@@ -135,11 +128,21 @@ export default function Analysis() {
                 Analise e melhore seu currículo com IA
               </p>
             </div>
-            {!resumeData && (
-              <Button onClick={handleLoadResume}>
-                <FileText className="mr-2 h-4 w-4" />
-                Carregar Currículo
-              </Button>
+            {resumesLoading ? (
+              <div className="text-sm text-slate-600">Carregando currículos...</div>
+            ) : resumes && resumes.length > 0 && (
+              <Select value={selectedResumeId?.toString()} onValueChange={(val) => handleSelectResume(parseInt(val))}>
+                <SelectTrigger className="w-[300px]">
+                  <SelectValue placeholder="Selecione um currículo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {resumes.map((resume) => (
+                    <SelectItem key={resume.id} value={resume.id.toString()}>
+                      {resume.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             )}
           </div>
         </div>
@@ -155,10 +158,32 @@ export default function Analysis() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button onClick={handleLoadResume} size="lg">
-                <FileText className="mr-2 h-4 w-4" />
-                Carregar Currículo
-              </Button>
+              {resumesLoading ? (
+                <div className="text-center py-8">Carregando currículos...</div>
+              ) : resumes && resumes.length > 0 ? (
+                <div className="space-y-4">
+                  <p className="text-sm text-slate-600">Selecione um currículo do seu histórico:</p>
+                  <Select onValueChange={(val) => handleSelectResume(parseInt(val))}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecione um currículo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {resumes.map((resume) => (
+                        <SelectItem key={resume.id} value={resume.id.toString()}>
+                          {resume.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <div className="text-center py-8 space-y-4">
+                  <p className="text-slate-600">Nenhum currículo encontrado no histórico.</p>
+                  <Button asChild>
+                    <a href="/generator">Criar Primeiro Currículo</a>
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         ) : (

@@ -7,41 +7,6 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
-## [9.6.0] - 2024-12-02
-
-### Adicionado
-- **Modal Customizado de Confirmação de Exclusão**
-  - Componente `DeleteConfirmationModal` usando shadcn/ui Dialog
-  - Preview detalhado do currículo antes de excluir (título, template, idioma, modelo, data)
-  - Checkbox "Não mostrar novamente" com persistência em localStorage
-  - Ícones informativos e badges de status (Rascunho)
-  - Animações de transição suaves
-  - Loading state durante exclusão
-  - Integrado no Dashboard e página de Histórico
-
-### Melhorado
-- **Responsividade Mobile dos Portfolios**
-  - Template Modern: word-wrap, overflow-wrap e fontes menores em mobile
-  - Template Minimalist: word-wrap, overflow-wrap e fontes menores em mobile
-  - Ajustes de padding e margens para telas pequenas
-  - Correção de quebra de layout em dispositivos móveis
-
-- **Sistema de Exclusão**
-  - Substituído `window.confirm()` por modal customizado no Dashboard
-  - Substituído `window.confirm()` por modal customizado no Histórico
-  - Dropdown de ações com ícone MoreVertical
-  - Item de exclusão estilizado com cores vermelhas e hover vermelho
-  - Toast notifications para feedback de sucesso/erro
-
-### Técnico
-- Criado `client/src/components/DeleteConfirmationModal.tsx` (170 linhas)
-- Modificado `client/src/pages/History.tsx`: integração com modal
-- Modificado `client/src/pages/Dashboard.tsx`: integração com modal
-- Modificado `server/services/portfolioGenerator.ts`: media queries mobile
-- Atualizado `todo.md` com 18 tarefas concluídas da V9.6.0
-
----
-
 ## [9.1.1] - 2024-12-02
 
 ### Corrigido
@@ -51,7 +16,34 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
-## [9.1.0] - 2024-12-02
+## [9.6.1] - 2024-12-02
+
+### Corrigido
+- **Bug Crítico**: Botões de exportação (PDF/DOCX) redirecionando para /generator em vez de fazer download
+  - Adicionado `type="button"` nos botões para evitar submit do formulário
+  - Handlers de exportação agora funcionam corretamente
+  - Testado em todas as páginas (Generator, History, Compare)
+
+- **Bug Crítico**: Página de Análise não carregava currículos
+  - Substituído carregamento do localStorage por query do histórico
+  - Carregamento automático do currículo mais recente ao abrir a página
+  - Dropdown de seleção de currículos no header e no empty state
+  - Mensagem de toast informando carregamento automático
+
+### Melhorado
+- Interface da página de Análise com dropdown de seleção
+- Empty state com link para criar primeiro currículo
+- Loading states durante carregamento de currículos
+
+### Técnico
+- Modificado `client/src/pages/Generator.tsx`: type="button" nos botões de exportação
+- Modificado `client/src/pages/Analysis.tsx`: carregamento automático do histórico
+- Adicionado imports: useEffect, Select components
+- Atualizado `todo.md` com 7 bugs corrigidos
+
+---
+
+## [9.6.0] - 2024-12-02
 
 ### Corrigido
 - **Bug Crítico**: Erro "Erro ao processar ResumeDavid.pdf" ao fazer upload de arquivos
