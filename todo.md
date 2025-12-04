@@ -852,3 +852,21 @@
 - [x] Ajustar configuração para produção (sameSite: lax)
 - [x] Adicionar logs detalhados em login/signup
 - [ ] Testar novamente em produção
+
+
+## V10.13.2 - Tentar sameSite: "none" em Produção
+
+### Problema
+- [x] V10.13.1 publicada com sameSite: "lax"
+- [ ] Login ainda não funciona em produção
+- [ ] Cookie pode não estar sendo setado corretamente
+
+### Hipótese
+- sameSite: "lax" pode não funcionar se frontend/backend tiverem subdomínios diferentes
+- Pode precisar de sameSite: "none" + secure: true para produção
+- Domain do cookie pode precisar ser setado explicitamente
+
+### Solução
+- [ ] Reverter para sameSite: "none" com secure: true
+- [ ] Testar em produção
+- [ ] Se não funcionar, adicionar domain explícito
