@@ -1,4 +1,5 @@
 import { notifyOwner } from "../_core/notification";
+import { sendWelcomeEmailSMTP, isSmtpConfigured } from "./smtpEmail";
 
 /**
  * Escape HTML special characters to prevent XSS
@@ -204,8 +205,16 @@ export async function sendWelcomeEmail(userName: string, userEmail: string): Pro
   try {
     const emailContent = getWelcomeEmailTemplate(userName);
     
-    // Por enquanto, notifica o owner sobre novo signup
-    // Em produção, isso seria substituído por SendGrid, AWS SES, etc.
+    // Tentar enviar via SMTP se configurado
+    if (isSmtpConfigured()) {
+      const smtpSuccess = await sendWelcomeEmailSMTP(userEmail, userName, emailContent);
+      if (smtpSuccess) {
+        console.log(`[WelcomeEmail] Email de boas-vindas enviado via SMTP: ${userEmail}`);
+        return true;
+      }
+    }
+    
+    // Fallback: notificar owner
     const success = await notifyOwner({
       title: `🎉 Novo usuário cadastrado: ${userName}`,
       content: `
@@ -223,10 +232,7 @@ ${emailContent.substring(0, 500)}...
 
 ---
 
-**Próximos passos:**
-1. Integrar com serviço de email real (SendGrid, AWS SES, etc.)
-2. Configurar templates de email no serviço escolhido
-3. Adicionar tracking de abertura e cliques
+**Nota:** SMTP não está configurado. Configure as variáveis de ambiente SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS para enviar emails reais.
       `.trim(),
     });
 

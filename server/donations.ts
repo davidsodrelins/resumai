@@ -132,9 +132,18 @@ export async function getUserDonations(userId: string): Promise<number> {
 /**
  * Check if user is a donor
  */
-export async function isUserDonor(userId: string): Promise<boolean> {
+export async function isUserDonor(userId: string | number): Promise<boolean> {
   const db = await getDb();
   if (!db) return false;
+  
+  if (typeof userId === 'number') {
+    const [user] = await db
+      .select({ isDonor: users.isDonor })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+    return Boolean(user?.isDonor);
+  }
   
   const [user] = await db
     .select({ isDonor: users.isDonor })

@@ -693,3 +693,40 @@
 - [x] Testar envio de email após signup
 - [x] Adicionar proteção XSS com escape HTML
 - [x] Criar 10 testes automatizados (todos passando)
+
+
+## Novas Funcionalidades (Fase 9) - SMTP, Recuperação de Senha e Testes
+
+### SMTP para Envio de Emails
+- [x] Instalar e configurar nodemailer
+- [x] Criar módulo smtpEmail.ts com suporte a SMTP
+- [x] Implementar transporter fake para desenvolvimento
+- [x] Integrar com welcomeEmail para envio real
+- [x] Adicionar variáveis de ambiente SMTP
+- [x] Fallback para notificações do Manus
+
+### Recuperação de Senha
+- [x] Criar módulo passwordReset.ts
+- [x] Gerar tokens únicos com expiração (15 minutos)
+- [x] Validar tokens e redefinir senhas
+- [x] Enviar emails de reset via SMTP
+- [x] Limpeza periódica de tokens expirados
+- [x] Criar rotas tRPC (requestReset, validateToken, resetPassword)
+- [x] Criar 13 testes automatizados (todos passando)
+
+### Testes End-to-End
+- [x] Testar fluxo de signup
+- [x] Testar fluxo de login
+- [x] Testar limites de currículo (5 para gratuitos)
+- [x] Testar bloqueio após limite
+- [x] Testar doações Stripe
+- [x] Testar currículos ilimitados para doadores
+- [x] Testar salvamento de currículos
+- [x] Criar 17 testes E2E (todos passando)
+
+### Correções de Segurança
+- [x] Corrigir configuração de cookies JWT (sameSite/secure)
+- [x] Adicionar proteção XSS em templates de email
+- [x] Validar senhas com mínimo de 6 caracteres
+- [x] Hash de senhas com bcrypt (10 rounds)
+- [x] Aceitar userId numérico ou string em funções de doação

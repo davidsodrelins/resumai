@@ -18,9 +18,11 @@ import { signupUser, loginUser } from "./publicAuth";
 import { sendWelcomeEmail } from "./modules/welcomeEmail";
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
+import { passwordResetRouter } from "./routers/passwordReset";
 
 export const appRouter = router({
   system: systemRouter,
+  passwordReset: passwordResetRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     
