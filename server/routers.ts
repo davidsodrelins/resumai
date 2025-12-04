@@ -325,7 +325,7 @@ export const appRouter = router({
     // Analyze ATS compatibility
     atsScore: protectedProcedure
       .input(z.object({ resumeData: z.any() }))
-      .query(async ({ input }) => {
+      .mutation(async ({ input }) => {
         const { analyzeATSCompatibility } = await import("./atsAnalyzer");
         return analyzeATSCompatibility(input.resumeData);
       }),

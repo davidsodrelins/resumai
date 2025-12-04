@@ -22,10 +22,8 @@ export default function Analysis() {
   const { data: resumes, isLoading: resumesLoading } = trpc.history.listResumes.useQuery();
 
   // ATS Analysis
-  const { data: atsScore, isLoading: atsLoading } = trpc.analysis.atsScore.useQuery(
-    { resumeData: resumeData! },
-    { enabled: !!resumeData && activeTab === "ats" }
-  );
+  const atsScoreMutation = trpc.analysis.atsScore.useMutation();
+  const [atsScore, setAtsScore] = useState<any>(null);
 
   // AI Improvements
   const improvementsMutation = trpc.analysis.improvements.useMutation();
@@ -52,6 +50,25 @@ export default function Analysis() {
       toast.success("Currículo carregado com sucesso!");
     }
   };
+
+  const handleAnalyzeATS = async () => {
+    if (!resumeData) return;
+
+    try {
+      const result = await atsScoreMutation.mutateAsync({ resumeData });
+      setAtsScore(result);
+    } catch (error) {
+      toast.error("Erro ao analisar currículo");
+      console.error(error);
+    }
+  };
+
+  // Auto-analyze when resume is loaded and ATS tab is active
+  useEffect(() => {
+    if (resumeData && activeTab === "ats" && !atsScore) {
+      handleAnalyzeATS();
+    }
+  }, [resumeData, activeTab]);
 
   const handleGenerateImprovements = async () => {
     if (!resumeData) return;
@@ -214,7 +231,7 @@ export default function Analysis() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {atsLoading ? (
+                  {atsScoreMutation.isPending ? (
                     <div className="text-center py-8">Analisando...</div>
                   ) : atsScore ? (
                     <>
@@ -273,7 +290,7 @@ export default function Analysis() {
                       <div className="space-y-4">
                         <h4 className="font-semibold">Sugestões de Melhoria</h4>
                         <div className="space-y-3">
-                          {atsScore.suggestions.map((suggestion, index) => (
+                          {atsScore.suggestions.map((suggestion: any, index: number) => (
                             <div
                               key={index}
                               className="flex gap-3 p-4 rounded-lg border bg-card"
@@ -559,7 +576,7 @@ export default function Analysis() {
                         <div className="space-y-4">
                           <h4 className="font-semibold">Sugestões de Otimização</h4>
                           <div className="space-y-3">
-                            {keywordMatchMutation.data.suggestions.map((suggestion, index) => (
+                            {keywordMatchMutation.data.suggestions.map((suggestion: any, index: number) => (
                               <div key={index} className="p-4 rounded-lg border bg-card">
                                 <div className="flex items-start gap-3">
                                   <Lightbulb className="h-5 w-5 text-primary shrink-0 mt-0.5" />

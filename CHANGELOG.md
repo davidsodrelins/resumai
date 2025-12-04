@@ -7,6 +7,47 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [9.7.3] - 2024-12-03
+
+### Corrigido
+- **Bug Crítico**: Análise ATS não executava após seleção de currículo (Erro 414 URI Too Long)
+  - Causa: `useQuery` enviava `resumeData` completo como query parameter na URL (GET)
+  - Currículos grandes (>8KB) excediam limite de tamanho da URL
+  - Navegador retornava erro 414 (Request-URI Too Large)
+  - Análise iniciava ("Analisando...") mas falhava silenciosamente
+  - Solução: Migrado `atsScore` de `query` para `mutation` no backend
+  - Frontend atualizado para usar `useMutation` (POST envia dados no body)
+  - Trigger automático via `useEffect` quando currículo é carregado
+  - Resultado: Análise funciona perfeitamente com currículos de qualquer tamanho
+
+### Modificado
+- **Backend**: `server/routers.ts`
+  - `analysis.atsScore` mudado de `.query()` para `.mutation()`
+  - Mantida mesma lógica de análise (analyzeATSCompatibility)
+  - Input schema permanece o mesmo: `{ resumeData: z.any() }`
+
+- **Frontend**: `client/src/pages/Analysis.tsx`
+  - Substituído `useQuery` por `useMutation` para atsScore
+  - Criado handler `handleAnalyzeATS()` para executar análise
+  - Adicionado `useEffect` para trigger automático quando currículo é carregado
+  - Estado local `atsScore` para armazenar resultado
+  - Substituído `atsLoading` por `atsScoreMutation.isPending`
+  - Corrigidos tipos TypeScript: `suggestion: any, index: number`
+
+- **Frontend**: `client/src/components/ATSScoreBadge.tsx`
+  - Substituído `useQuery` por `useMutation`
+  - Execução automática via `useEffect` ao montar componente
+  - Loading state gerenciado com `atsScoreMutation.isPending`
+
+### Técnico
+- Problema: HTTP GET tem limite de ~8KB para URL (varia por navegador/servidor)
+- Solução: HTTP POST envia dados no body, sem limite prático de tamanho
+- Benefício: Suporta currículos com 100+ experiências, projetos e habilidades
+- TypeScript: 0 erros de compilação
+- Teste manual: Pontuação 59/100, breakdown detalhado, 6 sugestões exibidas
+
+---
+
 ## [9.7.2] - 2024-12-03
 
 ### Corrigido

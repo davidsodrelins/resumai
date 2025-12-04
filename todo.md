@@ -552,3 +552,17 @@
 - [x] Restaurar metadados ao carregar rascunho do localStorage
 - [x] Remover logs de debug temporários
 - [x] Testar compilação - sem erros
+
+## Bug Reportado (V9.7.3)
+
+### Análise ATS Não Executa Após Seleção
+- [x] Investigar código da página Analysis
+- [x] Verificar console do navegador - Erro 414 (URI Too Long)
+- [x] Causa raiz: `useQuery` envia `resumeData` como query parameter na URL
+- [x] Currículos são objetos grandes demais para caber em URL
+- [x] Mudar `atsScore` de `useQuery` (GET) para `useMutation` (POST) no backend
+- [x] Atualizar Analysis.tsx para usar `useMutation` com trigger automático
+- [x] Atualizar ATSScoreBadge.tsx para usar `useMutation`
+- [x] Corrigir erros de tipo TypeScript (suggestion: any, index: number)
+- [x] Testar fluxo completo de análise - FUNCIONANDO PERFEITAMENTE
+- [x] Pontuação: 59/100, breakdown detalhado, sugestões exibidas

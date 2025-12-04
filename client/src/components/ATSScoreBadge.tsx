@@ -19,21 +19,19 @@ export default function ATSScoreBadge({ resumeData, className = "" }: ATSScoreBa
   const [score, setScore] = useState<number | null>(null);
   const [breakdown, setBreakdown] = useState<any>(null);
 
-  // Query ATS score
-  const { data: atsData } = trpc.analysis.atsScore.useQuery(
-    { resumeData },
-    {
-      enabled: !!resumeData,
-      refetchOnWindowFocus: false,
-    }
-  );
+  // Mutation ATS score
+  const atsScoreMutation = trpc.analysis.atsScore.useMutation();
 
   useEffect(() => {
-    if (atsData) {
-      setScore(atsData.overall);
-      setBreakdown(atsData.breakdown);
+    if (resumeData && score === null && !atsScoreMutation.isPending) {
+      atsScoreMutation.mutateAsync({ resumeData }).then((result) => {
+        setScore(result.overall);
+        setBreakdown(result.breakdown);
+      }).catch((error) => {
+        console.error("Error fetching ATS score:", error);
+      });
     }
-  }, [atsData]);
+  }, [resumeData]);
 
   if (score === null) {
     return null;
