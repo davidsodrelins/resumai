@@ -738,3 +738,12 @@
 
 - [x] All authentication fixes implemented
 - [x] Ready for production deployment
+
+
+## V10.11.0 - Fix ProtectedRoute Cookie Recognition
+
+- [x] Investigar por que ProtectedRoute não reconhece cookie após login
+- [x] Verificar configuração de cookies no servidor (domain, path, sameSite)
+- [x] Implementar correção no ProtectedRoute ou cookie handling
+- [x] Testar login completo end-to-end no site publicado
+- [x] Garantir que redirecionamento funciona após login
