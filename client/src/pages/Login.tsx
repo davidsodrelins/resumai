@@ -12,14 +12,18 @@ export default function Login() {
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const utils = trpc.useUtils();
 
   const loginMutation = trpc.auth.login.useMutation({
-    onSuccess: () => {
-      console.log("✅ Login bem-sucedido! Redirecionando para /generator");
-      // Aguardar um pouco para o cookie ser setado
+    onSuccess: async () => {
+      console.log("✅ Login bem-sucedido! Invalidando cache e redirecionando");
+      // Invalidar cache do auth.me para forçar refresh
+      await utils.auth.me.invalidate();
+      // Aguardar um pouco mais para garantir que tudo foi processado
       setTimeout(() => {
+        console.log("🚀 Redirecionando para /generator");
         setLocation("/generator");
-      }, 500);
+      }, 1000);
     },
     onError: (error) => {
       console.error("❌ Erro ao fazer login:", error);

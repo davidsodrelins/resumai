@@ -18,6 +18,7 @@ import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import DonationSuccess from "@/pages/DonationSuccess";
 import Profile from "@/pages/Profile";
+import Admin from "@/pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -58,6 +59,9 @@ function Router() {
       </Route>
       <Route path="/profile">
         <ProtectedRoute><Profile /></ProtectedRoute>
+      </Route>
+      <Route path="/admin">
+        <ProtectedRoute><Admin /></ProtectedRoute>
       </Route>
       <Route path={"/404"} component={NotFound} />      <Route component={NotFound} />
     </Switch>

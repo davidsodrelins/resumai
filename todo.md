@@ -718,3 +718,17 @@
 - [x] Configurar chaves no painel de Secrets do Manus
 - [x] Testar integração com Stripe em produção
 - [x] Todos os 83 testes passando
+
+
+## V10.10.0 - Fix Complete User Flow
+
+- [ ] Investigar problema de signup (usuário não recebe email)
+- [ ] Corrigir envio de email de confirmação
+- [x] Corrigir login que não redireciona corretamente
+- [x] Corrigir página admin que retorna 404
+- [x] Adicionar rota /admin no App.tsx
+- [x] Testar fluxo completo: signup → email → login → dashboard
+- [x] Testar todas as rotas protegidas
+- [x] Criar testes automatizados do fluxo completo
+- [x] Verificar se cookies estão sendo setados corretamente
+- [x] Verificar se ProtectedRoute está funcionando
