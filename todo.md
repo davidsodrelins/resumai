@@ -799,3 +799,20 @@
 - [ ] Usar sessionStorage para marcar "login bem-sucedido" e verificar na home
 - [ ] Forçar refetch do auth.me após redirect
 - [ ] Verificar se precisa configurar domain explicitamente no cookie
+
+
+## V10.12.2 - Corrigir Redirecionamento Após Login
+
+### Problema Reportado
+- [x] Login funciona (cookie setado corretamente)
+- [ ] Após login, redireciona para /generator
+- [ ] Usuário não tem acesso a /generator (ProtectedRoute)
+- [ ] Sistema redireciona de volta para home
+- [ ] Home mostra página pública ao invés de dashboard
+
+### Correções Necessárias
+- [ ] Alterar redirect de Login.tsx para /dashboard
+- [ ] Alterar redirect de Signup.tsx para /dashboard
+- [ ] Ajustar Home.tsx para detectar usuário logado
+- [ ] Se logado, mostrar dashboard ou redirecionar automaticamente
+- [ ] Testar fluxo completo: login → dashboard → navegação

@@ -48,8 +48,8 @@ export default function Signup() {
         const isAuthenticated = await checkAuth();
         
         if (isAuthenticated) {
-          console.log("🎉 Autenticação confirmada! Redirecionando...");
-          window.location.href = "/generator";
+          console.log("🎉 Autenticação confirmada! Redirecionando para dashboard...");
+          window.location.href = "/dashboard";
           return;
         }
         
