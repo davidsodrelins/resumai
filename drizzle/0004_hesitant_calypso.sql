@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `email_verified` int DEFAULT 0 NOT NULL;

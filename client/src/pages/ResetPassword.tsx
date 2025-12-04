@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
@@ -194,11 +195,9 @@ export function ResetPassword() {
                   onChange={(e) => setNewPassword(e.target.value)}
                   disabled={validating}
                   className="w-full"
-                  minLength={6}
+                  minLength={8}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Mínimo de 6 caracteres
-                </p>
+                <PasswordStrengthIndicator password={newPassword} showRequirements={true} />
               </div>
 
               {/* Confirm Password */}

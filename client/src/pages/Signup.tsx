@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
+import { PasswordStrengthIndicator } from "../components/PasswordStrengthIndicator";
 import { FileText, Loader2 } from "lucide-react";
 
 export default function Signup() {
@@ -31,8 +32,8 @@ export default function Signup() {
       return;
     }
 
-    if (password.length < 6) {
-      alert("A senha deve ter no mínimo 6 caracteres");
+    if (password.length < 8) {
+      alert("A senha deve ter no mínimo 8 caracteres");
       return;
     }
 
@@ -89,12 +90,13 @@ export default function Signup() {
               <Input
                 id="password"
                 type="password"
-                placeholder="Mínimo 6 caracteres"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={signupMutation.isPending}
                 required
               />
+              <PasswordStrengthIndicator password={password} showRequirements={true} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirmar Senha</Label>

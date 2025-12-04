@@ -18,6 +18,9 @@ export const users = mysqlTable("users", {
   lastDonationAt: timestamp("last_donation_at"),
   stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
   
+  // Email verification
+  emailVerified: int("email_verified").default(0).notNull(), // 0 = not verified, 1 = verified
+  
   // Usage limits
   resumesThisMonth: int("resumes_this_month").default(0).notNull(),
   lastResetAt: timestamp("last_reset_at").defaultNow().notNull(),

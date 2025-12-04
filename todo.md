@@ -800,3 +800,66 @@
 - [x] Testar validação de email
 - [x] Testar mensagens de erro
 - [x] Testar links de navegação
+
+
+## Melhorias (Fase 11) - SMTP Real, Verificação de Email e Força de Senha
+
+### Configurar SMTP Real
+- [ ] Documentar processo de configuração do Gmail App Password
+- [ ] Documentar processo de configuração do SendGrid
+- [ ] Documentar processo de configuração do AWS SES
+- [ ] Adicionar guia de setup no README.md
+- [ ] Testar envio de email com credenciais reais
+- [ ] Validar templates de email
+
+### Verificação de Email
+- [ ] Criar tabela para armazenar tokens de verificação
+- [ ] Implementar geração de token único com expiração (24h)
+- [ ] Criar endpoint para enviar email de verificação
+- [ ] Criar endpoint para validar token de verificação
+- [ ] Criar página de confirmação de email
+- [ ] Modificar signup para exigir verificação antes de login
+- [ ] Adicionar link de reenvio de email de verificação
+- [ ] Testar fluxo completo de verificação
+
+### Indicador de Força de Senha
+- [ ] Criar função de cálculo de força de senha
+- [ ] Implementar componente visual de força (barra colorida)
+- [ ] Adicionar requisitos visuais (maiúsculas, números, caracteres especiais)
+- [ ] Integrar com formulário de signup
+- [ ] Integrar com formulário de reset de senha
+- [ ] Testar validações de força de senha
+- [ ] Adicionar feedback em tempo real
+
+
+## Status Final - Fase 11 Concluída
+
+### Indicador de Força de Senha - COMPLETO ✅
+- [x] Função de cálculo de força de senha implementada
+- [x] Componente visual com barra colorida (vermelho/amarelo/azul/verde)
+- [x] Requisitos visuais com checkboxes (maiúsculas, números, caracteres especiais)
+- [x] Integrado com formulário de signup
+- [x] Integrado com formulário de reset de senha
+- [x] Feedback em tempo real funcionando no browser
+- [x] Pontuação de 0-100 com níveis (fraca/média/forte/muito-forte)
+
+### Verificação de Email - PARCIALMENTE COMPLETO ✅
+- [x] Campo emailVerified adicionado ao banco de dados
+- [x] Função de geração de token único implementada
+- [x] Função de marcação de email como verificado
+- [x] Função de verificação de status de email
+- [x] 7 testes automatizados (todos passando)
+- [ ] Integração com signup (próxima fase)
+- [ ] Página de confirmação de email (próxima fase)
+
+### SMTP Real - PREPARADO ✅
+- [x] Módulo nodemailer instalado
+- [x] Configuração de SMTP implementada
+- [x] Fallback para notificações Manus
+- [x] Pronto para configuração com credenciais reais
+- [ ] Documentação de setup (próxima fase)
+
+### Resumo de Testes
+- Total: 107 testes passando | 1 skipped
+- Novos: +7 testes de verificação de email
+- Cobertura: Autenticação, Doações, Recuperação de Senha, Verificação de Email, E2E
