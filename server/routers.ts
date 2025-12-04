@@ -15,6 +15,7 @@ import { analyzeSoftSkills } from "./softSkillsAnalyzer";
 import { generatePortfolio } from "./services/portfolioGenerator";
 import type { ResumeData } from "../shared/resumeTypes";
 import { signupUser, loginUser } from "./publicAuth";
+import { sendWelcomeEmail } from "./modules/welcomeEmail";
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 
@@ -38,6 +39,11 @@ export const appRouter = router({
           ctx.res.cookie(COOKIE_NAME, result.token, {
             ...cookieOptions,
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+          });
+          
+          // Send welcome email (async, don't block signup)
+          sendWelcomeEmail(input.name, input.email).catch(err => {
+            console.error('[Signup] Failed to send welcome email:', err);
           });
           
           return {

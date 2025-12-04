@@ -680,3 +680,16 @@
 - [ ] Clonar repositório davidsodrelins/resumai
 - [ ] Fazer push de todas as mudanças
 - [ ] Verificar push bem-sucedido
+
+
+## Novas Funcionalidades (Fase 8) - Email de Boas-Vindas
+
+### Email de Boas-Vindas Automático
+- [x] Criar template de email de boas-vindas em HTML
+- [x] Implementar envio via sistema de notificações Manus
+- [x] Integrar com signup (enviar após criação de conta)
+- [x] Incluir informações: nome do usuário, limites do plano gratuito, link para dashboard
+- [x] Adicionar CTA para criar primeiro currículo
+- [x] Testar envio de email após signup
+- [x] Adicionar proteção XSS com escape HTML
+- [x] Criar 10 testes automatizados (todos passando)
