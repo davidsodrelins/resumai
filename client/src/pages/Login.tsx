@@ -5,15 +5,14 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { Alert, AlertDescription } from "../components/ui/alert";
-import { FileText, Loader2, AlertCircle } from "lucide-react";
+
+import { FileText, Loader2 } from "lucide-react";
 
 export default function Login() {
   const [, setLocation] = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
@@ -22,16 +21,15 @@ export default function Login() {
       window.location.href = "/generator";
     },
     onError: (error) => {
-      setError(error.message || "Erro ao fazer login");
+      alert(error.message || "Erro ao fazer login");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     
     if (!email || !password) {
-      setError("Por favor, preencha email e senha");
+      alert("Por favor, preencha email e senha");
       return;
     }
 
@@ -53,14 +51,6 @@ export default function Login() {
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          {error && (
-            <Alert className="mx-6 mt-6 bg-red-50 border-red-200">
-              <AlertCircle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-800">
-                {error}
-              </AlertDescription>
-            </Alert>
-          )}
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -102,11 +92,6 @@ export default function Login() {
                 "Entrar"
               )}
             </Button>
-            <div className="text-xs text-center text-muted-foreground">
-              <Link href="/forgot-password" className="text-blue-600 hover:underline">
-                Esqueceu a senha?
-              </Link>
-            </div>
             <div className="text-sm text-center text-muted-foreground">
               Não tem uma conta?{" "}
               <Link href="/signup" className="text-blue-600 hover:underline font-medium">

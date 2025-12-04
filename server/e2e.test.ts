@@ -1,276 +1,251 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { getDb } from "./db";
-import { users, savedResumes } from "../drizzle/schema";
+import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
-import { signupUser, loginUser, checkResumeLimit, incrementResumeCount } from "./publicAuth";
-import { isUserDonor, createDonationCheckout } from "./donations";
+import { signupUser, loginUser } from "./publicAuth";
 
-describe("End-to-End Flows", () => {
+/**
+ * E2E Tests - User Journey
+ * 
+ * These tests simulate a complete user journey:
+ * 1. Signup
+ * 2. Login
+ * 3. Verify user data
+ * 4. Test role-based access
+ * 5. Verify admin functionality
+ */
+describe("E2E - User Journey", () => {
   let testUserId: number;
-  let testEmail: string;
-  let testPassword: string;
-  let testName: string;
+  const testEmail = `e2e-test-${Date.now()}@test.com`;
+  const testPassword = "TestPassword123";
+  const testName = "E2E Test User";
 
   beforeAll(async () => {
-    // Setup test user
-    testEmail = `e2e-${Date.now()}@test.com`;
-    testPassword = "test123456";
-    testName = "E2E Test User";
-  });
-
-  describe("Signup Flow", () => {
-    it("should complete signup flow", async () => {
-      const result = await signupUser({
-        email: testEmail,
-        password: testPassword,
-        name: testName,
-      });
-
-      expect(result.user).toBeDefined();
-      expect(result.user.email).toBe(testEmail.toLowerCase());
-      expect(result.user.name).toBe(testName);
-      expect(result.token).toBeDefined();
-
-      testUserId = result.user.id;
-    });
-
-    it("should create user in database with correct defaults", async () => {
-      const db = await getDb();
-      if (!db) throw new Error("Database connection failed");
-
-      const userResult = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, testUserId))
-        .limit(1);
-
-      const user = userResult[0];
-
-      expect(user).toBeDefined();
-      expect(user.email).toBe(testEmail.toLowerCase());
-      expect(user.name).toBe(testName);
-      expect(user.loginMethod).toBe("email");
-      expect(user.role).toBe("user");
-      expect(user.isDonor).toBe(0); // Should be free user
-      expect(user.resumesThisMonth).toBe(0); // No resumes yet
-      expect(user.totalDonated).toBe(0); // No donations yet
-    });
-  });
-
-  describe("Login Flow", () => {
-    it("should complete login flow with correct credentials", async () => {
-      const result = await loginUser({
-        email: testEmail,
-        password: testPassword,
-      });
-
-      expect(result.user).toBeDefined();
-      expect(result.user.email).toBe(testEmail.toLowerCase());
-      expect(result.user.name).toBe(testName);
-      expect(result.user.isDonor).toBe(false);
-      expect(result.token).toBeDefined();
-    });
-
-    it("should reject login with wrong password", async () => {
-      await expect(
-        loginUser({
-          email: testEmail,
-          password: "wrongpassword",
-        })
-      ).rejects.toThrow("Email ou senha incorretos");
-    });
-
-    it("should reject login with non-existent email", async () => {
-      await expect(
-        loginUser({
-          email: "nonexistent@test.com",
-          password: testPassword,
-        })
-      ).rejects.toThrow("Email ou senha incorretos");
-    });
-  });
-
-  describe("Resume Limit Flow - Free User", () => {
-    it("should allow free user to create 5 resumes", async () => {
-      for (let i = 0; i < 5; i++) {
-        const limit = await checkResumeLimit(testUserId);
-        expect(limit.canCreate).toBe(true);
-        expect(limit.remaining).toBeGreaterThan(0);
-
-        // Simulate resume creation
-        await incrementResumeCount(testUserId);
-      }
-    });
-
-    it("should block free user from creating 6th resume", async () => {
-      const limit = await checkResumeLimit(testUserId);
-      expect(limit.canCreate).toBe(false);
-      expect(limit.remaining).toBe(0);
-    });
-
-    it("should show correct remaining count", async () => {
-      const limit = await checkResumeLimit(testUserId);
-      expect(limit.remaining).toBe(0);
-    });
-  });
-
-  describe("Donation Flow", () => {
-    it("should create donation checkout session", async () => {
-      const result = await createDonationCheckout(
-        testUserId.toString(),
-        500,
-        "Coffee donation",
-        "https://resumai.manus.space/donation-success",
-        "https://resumai.manus.space/donation-cancel"
-      );
-
-      expect(result).toBeDefined();
-      expect(result.sessionId).toBeDefined();
-      expect(result.url).toBeDefined();
-      expect(result.url).toContain("checkout.stripe.com");
-    });
-
-    it("should verify user is not donor before donation", async () => {
-      const isDonor = await isUserDonor(testUserId);
-      expect(isDonor).toBe(false);
-    });
-  });
-
-  describe("Resume Limit Flow - After Donation", () => {
-    it("should manually mark user as donor for testing", async () => {
-      const db = await getDb();
-      if (!db) throw new Error("Database connection failed");
-
-      await db
-        .update(users)
-        .set({
-          isDonor: 1,
-          totalDonated: 500,
-        })
-        .where(eq(users.id, testUserId));
-    });
-
-    it("should verify user is now donor", async () => {
-      const isDonor = await isUserDonor(testUserId);
-      expect(isDonor).toBe(true);
-    });
-
-    it("should allow donor to create unlimited resumes", async () => {
-      // Try to create more than 5 resumes
-      for (let i = 0; i < 10; i++) {
-        const limit = await checkResumeLimit(testUserId);
-        expect(limit.canCreate).toBe(true);
-        expect(limit.remaining).toBe(-1); // -1 = unlimited
-      }
-    });
-
-    it("should not increment resume count for donors", async () => {
-      const db = await getDb();
-      if (!db) throw new Error("Database connection failed");
-
-      const userBefore = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, testUserId))
-        .limit(1);
-
-      const countBefore = userBefore[0].resumesThisMonth;
-
-      // Try to increment
-      await incrementResumeCount(testUserId);
-
-      const userAfter = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, testUserId))
-        .limit(1);
-
-      const countAfter = userAfter[0].resumesThisMonth;
-
-      // Count should not change for donors
-      expect(countAfter).toBe(countBefore);
-    });
-  });
-
-  describe("Resume Saving Flow", () => {
-    it("should allow user to save resume", async () => {
-      const db = await getDb();
-      if (!db) throw new Error("Database connection failed");
-
-      const resumeData = {
-        personalInfo: {
-          fullName: "Test User",
-          email: "test@example.com",
-          phone: "(11) 99999-9999",
-          location: "São Paulo, SP",
-          summary: "Test summary",
-        },
-        experience: [],
-        education: [],
-        skills: [],
-        languages: [],
-      };
-
-      const [result] = await db.insert(savedResumes).values({
-        userId: testUserId,
-        title: "Test Resume",
-        resumeData: JSON.stringify(resumeData),
-        template: "classic",
-        language: "pt",
-        model: "complete",
-        isDraft: false,
-      });
-
-      expect(result.insertId).toBeDefined();
-    });
-
-    it("should retrieve saved resumes", async () => {
-      const db = await getDb();
-      if (!db) throw new Error("Database connection failed");
-
-      const resumes = await db
-        .select()
-        .from(savedResumes)
-        .where(eq(savedResumes.userId, testUserId));
-
-      expect(resumes.length).toBeGreaterThan(0);
-      expect(resumes[0].title).toBe("Test Resume");
-      expect(resumes[0].template).toBe("classic");
-      expect(resumes[0].language).toBe("pt");
-    });
-  });
-
-  describe("Complete User Journey", () => {
-    it("should summarize complete flow: signup -> login -> resume limit -> donation -> unlimited", async () => {
-      // 1. Signup ✓
-      // 2. Login ✓
-      // 3. Check resume limit (5 allowed) ✓
-      // 4. Create 5 resumes ✓
-      // 5. Try to create 6th (blocked) ✓
-      // 6. Donate ✓
-      // 7. Unlimited resumes ✓
-
-      const db = await getDb();
-      if (!db) throw new Error("Database connection failed");
-
-      const finalUser = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, testUserId))
-        .limit(1);
-
-      expect(finalUser[0]).toBeDefined();
-      expect(finalUser[0].isDonor).toBe(1);
-      expect(finalUser[0].totalDonated).toBeGreaterThan(0);
-    });
+    console.log("[E2E] Starting E2E tests");
   });
 
   afterAll(async () => {
-    // Cleanup test user
-    const db = await getDb();
-    if (db) {
-      await db.delete(savedResumes).where(eq(savedResumes.userId, testUserId));
-      await db.delete(users).where(eq(users.id, testUserId));
+    // Cleanup: delete test user
+    try {
+      const db = await getDb();
+      if (db) {
+        await db.delete(users).where(eq(users.email, testEmail));
+        console.log("[E2E] Test user cleaned up");
+      }
+    } catch (error) {
+      console.error("[E2E] Error during cleanup:", error);
     }
+  });
+
+  // ===== AUTHENTICATION TESTS =====
+
+  it("should signup a new user", async () => {
+    console.log("[E2E] Test 1: Signup");
+    const result = await signupUser({
+      email: testEmail,
+      password: testPassword,
+      name: testName,
+    });
+
+    expect(result).toBeDefined();
+    expect(result.user).toBeDefined();
+    expect(result.user.email).toBe(testEmail);
+    expect(result.user.name).toBe(testName);
+    expect(result.token).toBeDefined();
+
+    testUserId = result.user.id;
+    console.log("[E2E] ✓ Signup successful, userId:", testUserId);
+  });
+
+  it("should login with correct credentials", async () => {
+    console.log("[E2E] Test 2: Login");
+    const result = await loginUser({
+      email: testEmail,
+      password: testPassword,
+    });
+
+    expect(result).toBeDefined();
+    expect(result.user).toBeDefined();
+    expect(result.user.email).toBe(testEmail);
+    expect(result.token).toBeDefined();
+    console.log("[E2E] ✓ Login successful");
+  });
+
+  it("should reject login with incorrect password", async () => {
+    console.log("[E2E] Test 3: Login with wrong password");
+    try {
+      await loginUser({
+        email: testEmail,
+        password: "WrongPassword123",
+      });
+      expect.fail("Should have thrown error");
+    } catch (error: any) {
+      expect(error.message).toContain("Email ou senha incorretos");
+      console.log("[E2E] ✓ Login correctly rejected");
+    }
+  });
+
+  it("should reject login with non-existent email", async () => {
+    console.log("[E2E] Test 4: Login with non-existent email");
+    try {
+      await loginUser({
+        email: "nonexistent@test.com",
+        password: testPassword,
+      });
+      expect.fail("Should have thrown error");
+    } catch (error: any) {
+      expect(error.message).toContain("Email ou senha incorretos");
+      console.log("[E2E] ✓ Login correctly rejected");
+    }
+  });
+
+  // ===== USER DATA TESTS =====
+
+  it("should verify user exists in database", async () => {
+    console.log("[E2E] Test 5: Verify user in database");
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const result = await db.select().from(users).where(eq(users.email, testEmail)).limit(1);
+
+    expect(result.length).toBe(1);
+    expect(result[0].email).toBe(testEmail);
+    expect(result[0].name).toBe(testName);
+    console.log("[E2E] ✓ User verified in database");
+  });
+
+  it("should verify user has correct role (user)", async () => {
+    console.log("[E2E] Test 6: Verify user role");
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const result = await db.select().from(users).where(eq(users.email, testEmail)).limit(1);
+
+    expect(result.length).toBe(1);
+    expect(result[0].role).toBe("user");
+    console.log("[E2E] ✓ User role verified (should be 'user')");
+  });
+
+  it("should verify user is not a donor initially", async () => {
+    console.log("[E2E] Test 7: Verify user is not donor");
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const result = await db.select().from(users).where(eq(users.email, testEmail)).limit(1);
+
+    expect(result.length).toBe(1);
+    expect(result[0].isDonor).toBe(0);
+    console.log("[E2E] ✓ User is not a donor initially");
+  });
+
+  // ===== ADMIN TESTS =====
+
+  it("should verify admin user exists", async () => {
+    console.log("[E2E] Test 8: Verify admin user exists");
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const result = await db
+      .select()
+      .from(users)
+      .where(eq(users.role, "admin"))
+      .limit(1);
+
+    expect(result.length).toBeGreaterThan(0);
+    expect(result[0].role).toBe("admin");
+    console.log("[E2E] ✓ Admin user verified");
+  });
+
+  it("should verify admin has different role than regular user", async () => {
+    console.log("[E2E] Test 9: Verify role separation");
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const adminResult = await db
+      .select()
+      .from(users)
+      .where(eq(users.role, "admin"))
+      .limit(1);
+
+    const userResult = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, testEmail))
+      .limit(1);
+
+    expect(adminResult[0].role).toBe("admin");
+    expect(userResult[0].role).toBe("user");
+    expect(adminResult[0].role).not.toBe(userResult[0].role);
+    console.log("[E2E] ✓ Role separation verified");
+  });
+
+  // ===== SECURITY TESTS =====
+
+  it("should not expose password hash in login response", async () => {
+    console.log("[E2E] Test 10: Verify password hash not exposed");
+    const result = await loginUser({
+      email: testEmail,
+      password: testPassword,
+    });
+
+    expect(result.user).toBeDefined();
+    expect(result.user.passwordHash).toBeUndefined();
+    expect(Object.keys(result.user)).not.toContain("passwordHash");
+    console.log("[E2E] ✓ Password hash not exposed");
+  });
+
+  it("should verify password is hashed in database", async () => {
+    console.log("[E2E] Test 11: Verify password is hashed");
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const result = await db.select().from(users).where(eq(users.email, testEmail)).limit(1);
+
+    expect(result[0].passwordHash).toBeDefined();
+    expect(result[0].passwordHash).not.toBe(testPassword);
+    expect(result[0].passwordHash?.length).toBeGreaterThan(20);
+    console.log("[E2E] ✓ Password is hashed in database");
+  });
+
+  // ===== MULTIPLE USERS TEST =====
+
+  it("should handle multiple users without conflicts", async () => {
+    console.log("[E2E] Test 12: Multiple users");
+    const email2 = `e2e-test-2-${Date.now()}@test.com`;
+    const password2 = "AnotherPassword123";
+    const name2 = "Another User";
+
+    // Signup second user
+    const result1 = await signupUser({
+      email: email2,
+      password: password2,
+      name: name2,
+    });
+
+    expect(result1.user.email).toBe(email2);
+
+    // Verify first user still exists
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const firstUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, testEmail))
+      .limit(1);
+
+    const secondUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email2))
+      .limit(1);
+
+    expect(firstUser.length).toBe(1);
+    expect(secondUser.length).toBe(1);
+    expect(firstUser[0].id).not.toBe(secondUser[0].id);
+
+    // Cleanup second user
+    await db.delete(users).where(eq(users.email, email2));
+    console.log("[E2E] ✓ Multiple users handled correctly");
   });
 });

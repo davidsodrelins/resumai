@@ -18,9 +18,6 @@ export const users = mysqlTable("users", {
   lastDonationAt: timestamp("last_donation_at"),
   stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
   
-  // Email verification
-  emailVerified: int("email_verified").default(0).notNull(), // 0 = not verified, 1 = verified
-  
   // Usage limits
   resumesThisMonth: int("resumes_this_month").default(0).notNull(),
   lastResetAt: timestamp("last_reset_at").defaultNow().notNull(),
@@ -111,17 +108,3 @@ export const resumeSessions = mysqlTable("resume_sessions", {
 
 export type ResumeSession = typeof resumeSessions.$inferSelect;
 export type InsertResumeSession = typeof resumeSessions.$inferInsert;
-
-/**
- * Email verification tokens - stores tokens for email verification
- */
-export const emailVerificationTokens = mysqlTable("email_verification_tokens", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("user_id").notNull(),
-  token: varchar("token", { length: 255 }).notNull().unique(),
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export type EmailVerificationToken = typeof emailVerificationTokens.$inferSelect;
-export type InsertEmailVerificationToken = typeof emailVerificationTokens.$inferInsert;

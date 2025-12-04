@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart } from "lucide-react";
+import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -30,6 +30,7 @@ export default function GlobalNavigation() {
     { path: "/generator", label: "Criar", icon: FileText },
     { path: "/resources", label: "Recursos", icon: LayoutGrid },
     { path: "/dashboard", label: "Dashboard", icon: BarChart3 },
+    ...(user?.role === "admin" ? [{ path: "/admin", label: "Admin", icon: Shield }] : []),
   ];
 
   const isActive = (path: string) => {
@@ -94,6 +95,18 @@ export default function GlobalNavigation() {
                 <span className="text-sm text-slate-600 hidden sm:block">
                   Olá, {user?.name}
                 </span>
+                {user?.role === "admin" && (
+                  <Link href="/admin">
+                    <Button
+                      variant={isActive("/admin") ? "default" : "outline"}
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Shield className="h-4 w-4" />
+                      <span className="hidden sm:inline">Admin</span>
+                    </Button>
+                  </Link>
+                )}
                 <Button
                   variant="outline"
                   size="sm"

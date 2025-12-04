@@ -29,20 +29,6 @@
       "when": 1764817781187,
       "tag": "0003_purple_sinister_six",
       "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1764845324711,
-      "tag": "0004_hesitant_calypso",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1764845712171,
-      "tag": "0005_early_gideon",
-      "breakpoints": true
     }
   ]
 }
