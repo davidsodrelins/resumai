@@ -566,3 +566,116 @@
 - [x] Corrigir erros de tipo TypeScript (suggestion: any, index: number)
 - [x] Testar fluxo completo de análise - FUNCIONANDO PERFEITAMENTE
 - [x] Pontuação: 59/100, breakdown detalhado, sugestões exibidas
+
+## Feature Solicitada (V10.0.0) - ResumAI Plataforma Pública
+
+### Sistema de Autenticação Pública
+- [ ] Remover dependência do OAuth Manus
+- [ ] Criar tabela `users` com email/senha/nome
+- [ ] Implementar hash de senha com bcrypt
+- [ ] Criar página de cadastro (/signup)
+- [ ] Criar página de login (/login)
+- [ ] Implementar recuperação de senha via email
+- [ ] Criar página de perfil editável
+- [ ] Migrar currículos existentes para novo sistema de usuários
+
+### Sistema de Doações com Stripe
+- [ ] Adicionar feature Stripe ao projeto (webdev_add_feature)
+- [ ] Configurar chaves Stripe (test + production)
+- [ ] Criar tabela `donations` para rastrear doações
+- [ ] Implementar 3 opções de doação temáticas:
+  - [ ] ☕ "Me pague um café" (R$ 5)
+  - [ ] 🍫 "Compre um chocolate pra Luluzinha" (R$ 10)
+  - [ ] 🥪 "Me pague um sanduíche" (R$ 15)
+- [ ] Adicionar opção de valor personalizado
+- [ ] Criar modal de doação com Stripe Checkout
+- [ ] Implementar webhook para confirmar pagamentos
+- [ ] Adicionar badge "Apoiador" para doadores
+- [ ] Criar página de agradecimento pós-doação
+- [ ] Adicionar botão "Apoiar" no GlobalNavigation
+
+### Branding ResumAI
+- [ ] Renomear "Gerador de Currículos IA" para "ResumAI"
+- [ ] Atualizar logo e favicon
+- [ ] Atualizar título e meta tags
+- [ ] Criar nova landing page pública
+- [ ] Adicionar seção "Por que doar?" com história pessoal
+- [ ] Adicionar contador de usuários ajudados
+- [ ] Criar seção de depoimentos (opcional)
+
+### Sistema de Limites e Premium
+- [ ] Criar tabela `user_stats` para rastrear uso
+- [ ] Implementar contador de currículos criados/mês
+- [ ] Limitar não-doadores a 5 currículos/mês
+- [ ] Mostrar aviso quando atingir 80% do limite (4/5)
+- [ ] Bloquear criação ao atingir limite com CTA de doação
+- [ ] Marcar doadores como "premium" (sem limites)
+- [ ] Adicionar badge visual para usuários premium
+- [ ] Reset automático de contador no início do mês
+
+### Melhorias de UX
+- [ ] Adicionar tour guiado para novos usuários
+- [ ] Criar página "Como Funciona"
+- [ ] Adicionar FAQ sobre doações
+- [ ] Implementar notificações de boas-vindas
+- [ ] Adicionar analytics de uso (opcional)
+
+
+## Feature Solicitada (V10.0.0) - Plataforma Pública ResumAI
+
+### Fase 1: Autenticação Básica (CONCLUÍDA)
+- [x] Atualizar schema com campos passwordHash, totalDonated, donorBadge, resumeCount, lastResetDate
+- [x] Criar módulo publicAuth.ts com signup/login/verifyToken
+- [x] Adicionar endpoints tRPC auth.signup e auth.login
+- [x] Criar página Login.tsx
+- [x] Criar página Signup.tsx
+- [x] Adicionar rotas no App.tsx
+- [x] Aplicar migração do banco (pnpm db:push)
+
+### Fase 2: Middleware e Proteção de Rotas
+- [x] Atualizar context.ts para verificar JWT token em cookies
+- [x] Manter compatibilidade com OAuth existente
+- [ ] Criar componente ProtectedRoute para rotas privadas
+- [ ] Proteger rotas: /generator, /history, /analysis, /compare, etc
+- [ ] Redirecionar não-autenticados para /login
+- [ ] Testar fluxo de autenticação completo
+
+### Fase 3: Landing Page e Branding ResumAI
+- [ ] Atualizar VITE_APP_TITLE para "ResumAI"
+- [ ] Criar nova landing page pública (Home.tsx)
+- [ ] Adicionar seção hero com CTA "Criar Conta Grátis"
+- [ ] Adicionar seção de recursos principais
+- [ ] Adicionar seção "Por que doar?" com história
+- [ ] Adicionar contador de usuários ajudados
+- [ ] Atualizar GlobalNavigation com logo ResumAI
+
+### Fase 4: Sistema de Doações Stripe
+- [ ] Criar endpoints tRPC para checkout Stripe
+- [ ] Criar componente DonationModal.tsx
+- [ ] Adicionar opções: Café (R$5), Chocolate Luluzinha (R$10), Sanduíche (R$15), Personalizado
+- [ ] Adicionar botão "Apoiar Projeto" no GlobalNavigation
+- [ ] Criar página de agradecimento após doação
+- [ ] Atualizar totalDonated e donorBadge após pagamento
+- [ ] Adicionar badge "Apoiador" no perfil
+
+### Fase 5: Sistema de Limites
+- [ ] Implementar verificação de limite antes de gerar currículo
+- [ ] Adicionar contador de currículos no Dashboard
+- [ ] Resetar contador mensalmente (lastResetDate)
+- [ ] Exibir modal "Limite atingido" com CTA para doar
+- [ ] Doadores têm currículos ilimitados
+- [ ] Testar fluxo de limites
+
+### Fase 6: Testes Unitários
+- [ ] Escrever teste para signup (server/publicAuth.test.ts)
+- [ ] Escrever teste para login
+- [ ] Escrever teste para verifyToken
+- [ ] Escrever teste para checkResumeLimit
+- [ ] Escrever teste para incrementResumeCount
+- [ ] Executar pnpm test e garantir 100% de sucesso
+
+### Fase 7: Deploy GitHub
+- [ ] Criar checkpoint final V10.0.0
+- [ ] Clonar repositório davidsodrelins/resumai
+- [ ] Fazer push de todas as mudanças
+- [ ] Verificar push bem-sucedido

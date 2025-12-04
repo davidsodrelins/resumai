@@ -14,11 +14,64 @@ import { generateLatexResume } from "./latexExporter";
 import { analyzeSoftSkills } from "./softSkillsAnalyzer";
 import { generatePortfolio } from "./services/portfolioGenerator";
 import type { ResumeData } from "../shared/resumeTypes";
+import { signupUser, loginUser } from "./publicAuth";
 
 export const appRouter = router({
   system: systemRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
+    
+    signup: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string().min(6),
+        name: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const result = await signupUser(input);
+          
+          // Set session cookie with JWT token
+          const cookieOptions = getSessionCookieOptions(ctx.req);
+          ctx.res.cookie(COOKIE_NAME, result.token, {
+            ...cookieOptions,
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+          });
+          
+          return {
+            success: true,
+            user: result.user,
+          };
+        } catch (error: any) {
+          throw new Error(error.message || "Erro ao criar conta");
+        }
+      }),
+    
+    login: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const result = await loginUser(input);
+          
+          // Set session cookie with JWT token
+          const cookieOptions = getSessionCookieOptions(ctx.req);
+          ctx.res.cookie(COOKIE_NAME, result.token, {
+            ...cookieOptions,
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+          });
+          
+          return {
+            success: true,
+            user: result.user,
+          };
+        } catch (error: any) {
+          throw new Error(error.message || "Erro ao fazer login");
+        }
+      }),
+    
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });

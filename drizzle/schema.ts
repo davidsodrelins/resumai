@@ -5,11 +5,23 @@ import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json } from "driz
  */
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
+  openId: varchar("openId", { length: 64 }).unique(), // Now optional for public auth
+  email: varchar("email", { length: 320 }).notNull().unique(), // Required and unique for public auth
+  passwordHash: varchar("password_hash", { length: 255 }), // For password-based auth
   name: text("name"),
-  email: varchar("email", { length: 320 }),
-  loginMethod: varchar("loginMethod", { length: 64 }),
+  loginMethod: varchar("loginMethod", { length: 64 }).default("email"),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  
+  // Donation tracking
+  isDonor: int("is_donor").default(0).notNull(), // 0 = no, 1 = yes
+  totalDonated: int("total_donated").default(0).notNull(), // Total em centavos (R$ 5 = 500)
+  lastDonationAt: timestamp("last_donation_at"),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+  
+  // Usage limits
+  resumesThisMonth: int("resumes_this_month").default(0).notNull(),
+  lastResetAt: timestamp("last_reset_at").defaultNow().notNull(),
+  
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),

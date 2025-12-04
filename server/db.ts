@@ -32,6 +32,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   try {
     const values: InsertUser = {
       openId: user.openId,
+      email: user.email || `${user.openId}@oauth.temp`, // Temporary email for OAuth users
     };
     const updateSet: Record<string, unknown> = {};
 
@@ -42,7 +43,11 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       const value = user[field];
       if (value === undefined) return;
       const normalized = value ?? null;
-      values[field] = normalized;
+      if (field === 'email' && value) {
+        values[field] = value as string; // Override temp email if real email provided
+      } else if (field !== 'email') {
+        values[field] = normalized;
+      }
       updateSet[field] = normalized;
     };
 

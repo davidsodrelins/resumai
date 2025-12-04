@@ -14,11 +14,15 @@ import SoftSkills from "@/pages/SoftSkills";
 import Portfolio from "@/pages/Portfolio";
 import Resources from "@/pages/Resources";
 import Dashboard from "@/pages/Dashboard";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/login"} component={Login} />
+      <Route path={"/signup"} component={Signup} />
       <Route path={"/history"} component={History} />
       <Route path={"/generator"} component={Generator} />
       <Route path={"/cover-letter"} component={CoverLetter} />      <Route path={"/compare"} component={Compare} />
