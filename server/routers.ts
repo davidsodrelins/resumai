@@ -16,6 +16,7 @@ import { generatePortfolio } from "./services/portfolioGenerator";
 import type { ResumeData } from "../shared/resumeTypes";
 import { signupUser, loginUser } from "./publicAuth";
 import { sendWelcomeEmail } from "./modules/welcomeEmail";
+import { createAndSendVerificationEmail, verifyEmailToken, isEmailVerified, resendVerificationEmail } from "./modules/emailVerification";
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 import { passwordResetRouter } from "./routers/passwordReset";
@@ -89,6 +90,52 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+
+    verifyEmail: publicProcedure
+      .input(z.object({
+        token: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const success = await verifyEmailToken(input.token);
+          if (!success) {
+            throw new Error("Token inválido ou expirado");
+          }
+          return {
+            success: true,
+            message: "Email verificado com sucesso!",
+          };
+        } catch (error: any) {
+          throw new Error(error.message || "Erro ao verificar email");
+        }
+      }),
+
+    resendVerificationEmail: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const success = await resendVerificationEmail(input.email);
+          if (!success) {
+            throw new Error("Não foi possível reenviar o email de verificação");
+          }
+          return {
+            success: true,
+            message: "Email de verificação reenviado com sucesso!",
+          };
+        } catch (error: any) {
+          throw new Error(error.message || "Erro ao reenviar email");
+        }
+      }),
+
+    checkEmailVerified: protectedProcedure
+      .query(async ({ ctx }) => {
+        const verified = await isEmailVerified(ctx.user.id);
+        return {
+          verified,
+        };
+      }),
   }),
 
   resume: router({

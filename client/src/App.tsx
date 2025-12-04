@@ -20,6 +20,7 @@ import DonationSuccess from "@/pages/DonationSuccess";
 import Profile from "@/pages/Profile";
 import { ResetPassword } from "@/pages/ResetPassword";
 import { ForgotPassword } from "@/pages/ForgotPassword";
+import { VerifyEmail } from "@/pages/VerifyEmail";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/login"} component={Login} />
       <Route path={"/signup"} component={Signup} />
+      <Route path={"/verify-email"} component={VerifyEmail} />
       <Route path={"/forgot-password"} component={ForgotPassword} />
       <Route path={"/reset-password"} component={ResetPassword} />
       <Route path={"/donation/success"}>

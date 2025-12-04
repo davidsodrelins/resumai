@@ -111,3 +111,17 @@ export const resumeSessions = mysqlTable("resume_sessions", {
 
 export type ResumeSession = typeof resumeSessions.$inferSelect;
 export type InsertResumeSession = typeof resumeSessions.$inferInsert;
+
+/**
+ * Email verification tokens - stores tokens for email verification
+ */
+export const emailVerificationTokens = mysqlTable("email_verification_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull(),
+  token: varchar("token", { length: 255 }).notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type EmailVerificationToken = typeof emailVerificationTokens.$inferSelect;
+export type InsertEmailVerificationToken = typeof emailVerificationTokens.$inferInsert;
