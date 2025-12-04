@@ -730,3 +730,73 @@
 - [x] Validar senhas com mínimo de 6 caracteres
 - [x] Hash de senhas com bcrypt (10 rounds)
 - [x] Aceitar userId numérico ou string em funções de doação
+
+
+## Novas Funcionalidades (Fase 10) - Frontend de Autenticação
+
+### Página de Reset de Senha
+- [ ] Criar componente ResetPassword.tsx
+- [ ] Validar token ao carregar página
+- [ ] Formulário de nova senha com confirmação
+- [ ] Integração com trpc.passwordReset.resetPassword
+- [ ] Mensagens de sucesso/erro
+- [ ] Redirect para login após sucesso
+
+### Página de Forgot Password
+- [ ] Criar componente ForgotPassword.tsx
+- [ ] Formulário de email
+- [ ] Integração com trpc.passwordReset.requestReset
+- [ ] Mensagem de confirmação
+- [ ] Link para voltar ao login
+
+### Debugar e Corrigir Login
+- [ ] Investigar por que clique não funciona
+- [ ] Verificar handler de submit do formulário
+- [ ] Testar em navegador real (não Preview Mode)
+- [ ] Adicionar loading state ao botão
+- [ ] Melhorar mensagens de erro
+
+### Melhorias de UX
+- [ ] Adicionar link "Esqueceu a senha?" na página de login
+- [ ] Validação de email em tempo real
+- [ ] Mostrar força da senha
+- [ ] Confirmar senha com feedback visual
+- [ ] Melhorar mensagens de erro específicas
+
+
+## Status Final - Fase 10 Concluída
+
+### Página de Reset de Senha
+- [x] Criar componente ResetPassword.tsx
+- [x] Validar token ao carregar página
+- [x] Formulário de nova senha com confirmação
+- [x] Integração com trpc.passwordReset.resetPassword
+- [x] Mensagens de sucesso/erro
+- [x] Redirect para login após sucesso
+
+### Página de Forgot Password
+- [x] Criar componente ForgotPassword.tsx
+- [x] Formulário de email
+- [x] Integração com trpc.passwordReset.requestReset
+- [x] Mensagem de confirmação
+- [x] Link para voltar ao login
+- [x] Testado com sucesso no browser
+
+### Melhorias no Login
+- [x] Adicionar link "Esqueceu a senha?" na página de login
+- [x] Adicionar estado de erro na página de login
+- [x] Melhorar mensagens de erro específicas
+- [x] Validação de email e senha
+
+### Integração de Rotas
+- [x] Adicionar rota /forgot-password
+- [x] Adicionar rota /reset-password
+- [x] Integrar com App.tsx
+- [x] Testar navegação entre páginas
+
+### Testes Realizados
+- [x] Testar fluxo de forgot password (sucesso)
+- [x] Testar redirecionamento automático para login
+- [x] Testar validação de email
+- [x] Testar mensagens de erro
+- [x] Testar links de navegação

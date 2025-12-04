@@ -18,6 +18,8 @@ import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import DonationSuccess from "@/pages/DonationSuccess";
 import Profile from "@/pages/Profile";
+import { ResetPassword } from "@/pages/ResetPassword";
+import { ForgotPassword } from "@/pages/ForgotPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -26,6 +28,8 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/login"} component={Login} />
       <Route path={"/signup"} component={Signup} />
+      <Route path={"/forgot-password"} component={ForgotPassword} />
+      <Route path={"/reset-password"} component={ResetPassword} />
       <Route path={"/donation/success"}>
         <ProtectedRoute><DonationSuccess /></ProtectedRoute>
       </Route>
