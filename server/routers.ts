@@ -20,10 +20,12 @@ import { createAndSendVerificationEmail, verifyEmailToken, isEmailVerified, rese
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 import { passwordResetRouter } from "./routers/passwordReset";
+import { adminRouter } from "./routers/admin";
 
 export const appRouter = router({
   system: systemRouter,
   passwordReset: passwordResetRouter,
+  admin: adminRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     

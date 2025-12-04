@@ -4,6 +4,7 @@ import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 import { ENV } from "./_core/env";
+import { createAndSendVerificationEmail } from "./modules/emailVerification";
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = ENV.cookieSecret;
@@ -61,18 +62,26 @@ export async function signupUser(data: SignupData) {
     isDonor: 0,
     totalDonated: 0,
     resumesThisMonth: 0,
+    emailVerified: 0,
+  });
+
+  const userId = newUser.insertId;
+
+  // Send verification email (async, don't block signup)
+  createAndSendVerificationEmail(userId, email.toLowerCase(), name).catch(err => {
+    console.error('[Signup] Failed to send verification email:', err);
   });
 
   // Generate JWT token
   const token = jwt.sign(
-    { userId: newUser.insertId, email: email.toLowerCase() },
+    { userId, email: email.toLowerCase() },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES_IN }
   );
 
   return {
     user: {
-      id: newUser.insertId,
+      id: userId,
       email: email.toLowerCase(),
       name,
     },

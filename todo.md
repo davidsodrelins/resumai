@@ -311,6 +311,45 @@
 - [ ] Testar SEO do portfolio gerado
 
 
+## Novas Funcionalidades (Fase 10-13) - Autenticação, Email e Admin
+
+### Fase 10: Recuperação de Senha
+- [x] Criar módulo de recuperação de senha
+- [x] Implementar geração de tokens com expiração (15 min)
+- [x] Criar página /forgot-password para solicitar reset
+- [x] Criar página /reset-password para redefinir senha
+- [x] Enviar email com link de reset via SMTP
+- [x] Validar token e atualizar senha
+- [x] Criar 13 testes automatizados (todos passando)
+
+### Fase 11: Melhorias de UX
+- [x] Criar indicador de força de senha com barra colorida
+- [x] Implementar requisitos de senha (maiúscula, número, caractere especial)
+- [x] Adicionar feedback em tempo real
+- [x] Criar sistema de verificação de email
+- [x] Adicionar campo emailVerified ao schema
+- [x] Criar 7 testes de verificação de email
+
+### Fase 12: SMTP Real e Verificação de Email
+- [x] Configurar credenciais SMTP reais (hidalgo.digital)
+- [x] Integrar nodemailer para envio de emails
+- [x] Criar tabela emailVerificationTokens
+- [x] Implementar endpoints tRPC para verificação
+- [x] Criar página /verify-email para confirmação
+- [x] Enviar email de verificação após signup
+- [x] Criar 3 testes de SMTP (todos passando)
+- [x] Fazer push para GitHub com código completo
+
+### Fase 13: Verificação de Email + Painel Admin
+- [x] Integrar verificação de email ao fluxo de signup
+- [x] Criar página Admin.tsx com dashboard completo
+- [x] Implementar router admin com endpoints
+- [x] Criar usuário admin (davidsodrelins@outlook.com)
+- [x] Adicionar estatísticas (usuários, doadores, doações)
+- [x] Implementar tabela de usuários recentes
+- [x] Adicionar funcionalidades de gerenciamento (promover, rebaixar, deletar)
+- [x] Testar fluxo completo (110 testes passando)
+
 ## Novas Funcionalidades Avançadas (Fase 9) - Próximas Implementações
 
 ### Gerador de Portfolio Web Automático
