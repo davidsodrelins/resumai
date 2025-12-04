@@ -1,15 +1,19 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { FileText, Home, LayoutGrid, BarChart3, LogOut } from "lucide-react";
+import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+
+import DonationModal from "./DonationModal";
 
 export default function GlobalNavigation() {
   const { user, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const logoutMutation = trpc.auth.logout.useMutation();
+  const [showDonationModal, setShowDonationModal] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -78,6 +82,15 @@ export default function GlobalNavigation() {
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => setShowDonationModal(true)}
+                  className="gap-2 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white"
+                >
+                  <Heart className="h-4 w-4" />
+                  <span className="hidden sm:inline">Apoiar</span>
+                </Button>
                 <span className="text-sm text-slate-600 hidden sm:block">
                   Olá, {user?.name}
                 </span>
@@ -122,6 +135,9 @@ export default function GlobalNavigation() {
           </nav>
         )}
       </div>
+      
+      {/* Donation Modal */}
+      <DonationModal open={showDonationModal} onOpenChange={setShowDonationModal} />
     </header>
   );
 }

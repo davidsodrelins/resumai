@@ -15,6 +15,7 @@ import { analyzeSoftSkills } from "./softSkillsAnalyzer";
 import { generatePortfolio } from "./services/portfolioGenerator";
 import type { ResumeData } from "../shared/resumeTypes";
 import { signupUser, loginUser } from "./publicAuth";
+import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 
 export const appRouter = router({
   system: systemRouter,
@@ -556,6 +557,68 @@ export const appRouter = router({
           metadata: portfolioData.metadata,
         };
       }),
+  }),
+
+  donation: router({
+    /**
+     * Get donation options
+     */
+    getOptions: publicProcedure.query(() => {
+      return DONATION_OPTIONS;
+    }),
+
+    /**
+     * Create Stripe checkout session for donation
+     */
+    createCheckout: protectedProcedure
+      .input(z.object({
+        amount: z.number().min(100), // Minimum R$ 1.00
+        description: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user || !ctx.user.openId) {
+          throw new Error("User not authenticated");
+        }
+
+        const successUrl = `${ctx.req.protocol}://${ctx.req.get("host")}/donation/success?session_id={CHECKOUT_SESSION_ID}`;
+        const cancelUrl = `${ctx.req.protocol}://${ctx.req.get("host")}/`;
+
+        const checkout = await createDonationCheckout(
+          ctx.user.openId,
+          input.amount,
+          input.description,
+          successUrl,
+          cancelUrl
+        );
+
+        return checkout;
+      }),
+
+    /**
+     * Handle successful payment (called from webhook or success page)
+     */
+    confirmPayment: protectedProcedure
+      .input(z.object({
+        sessionId: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        await handleSuccessfulPayment(input.sessionId);
+        return { success: true };
+      }),
+
+    /**
+     * Get user's total donations
+     */
+    getTotal: protectedProcedure.query(async ({ ctx }) => {
+      if (!ctx.user || !ctx.user.openId) {
+        return { total: 0, isDonor: false };
+      }
+
+      const total = await getUserDonations(ctx.user.openId);
+      const isDonor = await isUserDonor(ctx.user.openId);
+
+      return { total, isDonor };
+    }),
   }),
 });
 

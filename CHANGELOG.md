@@ -7,6 +7,51 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [10.0.0-rc] - 2024-12-04
+
+### 🎉 Plataforma Pública ResumAI Completa
+
+#### Adicionado
+- **Sistema de Doações Stripe**
+  - Módulo donations.ts com integração Stripe completa
+  - Endpoints tRPC: createCheckout, confirmPayment, getTotal
+  - DonationModal com 4 opções temáticas:
+    - ☕ Me pague um café (R$ 5)
+    - 🍫 Chocolate pra Luluzinha (R$ 10)
+    - 🥪 Me pague um sanduíche (R$ 15)
+    - 💝 Valor personalizado
+  - Botão "Apoiar" no GlobalNavigation (gradient rosa/vermelho)
+  - Página DonationSuccess.tsx de agradecimento
+  - Atualização automática de totalDonated e isDonor
+  - Badge "Apoiador ⭐" para doadores
+  - Rota /donation/success protegida
+
+- **Sistema de Limites de Uso**
+  - Módulo usageLimits.ts com 3 funções principais
+  - checkResumeLimit(): verifica se usuário pode criar currículo
+  - incrementResumeCount(): incrementa contador mensal
+  - getUserUsageStats(): retorna estatísticas de uso
+  - Limite de 5 currículos/mês para não-doadores
+  - Currículos ilimitados para apoiadores (isDonor = 1)
+  - Reset automático mensal (30 dias)
+  - Contador de uso no Dashboard
+
+#### Técnico
+- Adicionado stripeSecretKey ao ENV
+- Instalado dependência: stripe@^18.0.0
+- Schema do banco com campos: totalDonated, isDonor, donorBadge, resumesThisMonth, lastResetAt
+- Integração Stripe Checkout Session com success_url e cancel_url
+- Webhook handler para confirmar pagamentos (confirmPayment)
+- TypeScript: 0 erros de compilação
+
+### 🚧 Pendente (Próxima Versão)
+- Integrar checkResumeLimit no endpoint generateResume
+- Modal "Limite atingido" com CTA para doar
+- Testes unitários para autenticação e doações
+- Deploy no repositório GitHub davidsodrelins/resumai
+
+---
+
 ## [10.0.0-beta] - 2024-12-04
 
 ### 🎉 Transformação em Plataforma Pública ResumAI

@@ -16,6 +16,7 @@ import Resources from "@/pages/Resources";
 import Dashboard from "@/pages/Dashboard";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
+import DonationSuccess from "@/pages/DonationSuccess";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -24,6 +25,9 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/login"} component={Login} />
       <Route path={"/signup"} component={Signup} />
+      <Route path={"/donation/success"}>
+        <ProtectedRoute><DonationSuccess /></ProtectedRoute>
+      </Route>
       <Route path={"/history"}>
         <ProtectedRoute><History /></ProtectedRoute>
       </Route>
