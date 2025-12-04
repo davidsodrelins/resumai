@@ -10,23 +10,27 @@ import { FileText, Loader2 } from "lucide-react";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
-      // Success - redirect will happen
-      // Redirect to generator
-      window.location.href = "/generator";
+      console.log("✅ Login bem-sucedido! Redirecionando para /generator");
+      // Aguardar um pouco para o cookie ser setado
+      setTimeout(() => {
+        setLocation("/generator");
+      }, 500);
     },
     onError: (error) => {
+      console.error("❌ Erro ao fazer login:", error);
       alert(error.message || "Erro ao fazer login");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log("📝 Tentando fazer login com:", email);
     
     if (!email || !password) {
       alert("Por favor, preencha email e senha");

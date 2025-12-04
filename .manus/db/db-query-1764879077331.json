@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, email, name, role FROM users WHERE email = 'davidsodre_ba@hotmail.com' LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user N3BSNFzQVoSPgJB.d9d9b09b46ec --database Xun2VBVEnEvhLzMTzmVwM7 --execute SELECT id, email, name, role FROM users WHERE email = 'davidsodre_ba@hotmail.com' LIMIT 1;",
+  "rows": [
+    {
+      "id": "1620005",
+      "email": "davidsodre_ba@hotmail.com",
+      "name": "David Sodré Lins da Silva",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\trole\n1620005\tdavidsodre_ba@hotmail.com\tDavid Sodré Lins da Silva\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

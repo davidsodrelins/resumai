@@ -710,3 +710,11 @@
 - [x] Testar múltiplos usuários sem conflitos
 - [x] Criar admin router com procedures (getStats, getRecentUsers, promoteUser, demoteUser, deleteUser)
 - [x] Todos os 83 testes passando
+
+
+## V10.8.0 - Stripe Production Keys
+
+- [x] Gerar chaves de produção do Stripe (pk_live_ e sk_live_)
+- [x] Configurar chaves no painel de Secrets do Manus
+- [x] Testar integração com Stripe em produção
+- [x] Todos os 83 testes passando

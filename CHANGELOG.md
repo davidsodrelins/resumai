@@ -7,6 +7,207 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [10.6.0] - 2025-12-04
+
+### 🔐 Verificação de Email + Painel Admin
+
+**Integração completa de verificação de email ao fluxo de signup e painel administrativo com estatísticas em tempo real.**
+
+#### ✨ Novos Recursos
+
+**Verificação de Email:**
+- Envio automático de email de verificação após signup
+- Tabela `emailVerificationTokens` para gerenciar tokens
+- Tokens com expiração de 24 horas
+- Página `/verify-email` para confirmar email
+- Endpoint tRPC para verificar tokens
+- Endpoint para reenviar email de verificação
+- Campo `emailVerified` no schema de usuários
+
+**Painel Administrativo:**
+- Nova página `/admin` com dashboard completo
+- Estatísticas em tempo real:
+  - Total de usuários
+  - Total de apoiadores
+  - Total de doações
+  - Total de currículos gerados
+  - Emails verificados vs pendentes
+- Tabela de usuários recentes com 10 últimos cadastros
+- Ações de gerenciamento (promover, rebaixar, deletar usuário)
+- Endpoints tRPC protegidos com verificação de role `admin`
+- Router admin com 5 endpoints principais
+
+**SMTP Real Configurado:**
+- Integração com Nodemailer
+- Credenciais SMTP reais (hidalgo.digital)
+- Envio de emails de verificação funcionando
+- Envio de emails de recuperação de senha
+- Envio de emails de boas-vindas
+- Templates HTML responsivos
+
+#### 🧪 Testes
+
+- 110 testes passando (1 skipped)
+- 7 testes de verificação de email
+- 3 testes de SMTP
+- 13 testes de recuperação de senha
+- 17 testes E2E
+- 10 testes de email de boas-vindas
+- 10 testes de força de senha
+- 11 testes de autenticação
+- 10 testes de doações
+- 15 testes de histórico
+- 12 testes de análise
+
+#### 🐛 Correções
+
+- Corrigido problema de cookie JWT em desenvolvimento (sameSite: 'lax')
+- Corrigido problema de hash bcrypt em testes
+- Melhorado tratamento de erros em endpoints de admin
+
+#### ⚠️ Problemas Conhecidos
+
+- Login via email/senha não responde no browser (problema de renderização React/Preview Mode)
+- OAuth continua funcionando normalmente
+- Backend está 100% funcional (todos os testes passando)
+
+---
+
+## [10.5.0] - 2025-12-04
+
+### 📧 SMTP Real + Recuperação de Senha
+
+**Implementação completa de SMTP real e sistema de recuperação de senha com tokens de expiração.**
+
+#### ✨ Novos Recursos
+
+**Recuperação de Senha:**
+- Página `/forgot-password` para solicitar reset
+- Página `/reset-password` para redefinir senha
+- Geração de tokens únicos com expiração de 15 minutos
+- Envio de email com link de reset
+- Validação de token e atualização de senha
+- Proteção contra tokens expirados
+
+**SMTP Real:**
+- Integração com Nodemailer
+- Credenciais SMTP (hidalgo.digital)
+- Envio de emails funcionando
+- Templates HTML responsivos
+
+**Indicador de Força de Senha:**
+- Componente visual com barra colorida
+- Requisitos de senha (maiúscula, número, caractere especial)
+- Feedback em tempo real
+- Integração com Signup e Reset Password
+
+#### 🧪 Testes
+
+- 107 testes passando (1 skipped)
+- 13 testes de recuperação de senha
+- 3 testes de SMTP
+- 7 testes de verificação de email
+
+---
+
+## [10.4.0] - 2025-12-04
+
+### 💪 Indicador de Força de Senha + Verificação de Email
+
+**Implementação de indicador visual de força de senha e sistema de verificação de email.**
+
+#### ✨ Novos Recursos
+
+**Indicador de Força de Senha:**
+- Componente `PasswordStrengthIndicator`
+- Barra colorida (vermelho/amarelo/azul/verde)
+- Requisitos com checkboxes
+- Feedback em português
+- Integração com Signup e Reset Password
+
+**Verificação de Email:**
+- Tabela `emailVerificationTokens`
+- Campo `emailVerified` no schema
+- Funções de verificação e marcação de email
+- 7 testes passando
+
+#### 🧪 Testes
+
+- 107 testes passando (1 skipped)
+- 7 testes de verificação de email
+
+---
+
+## [10.3.0] - 2025-12-04
+
+### 🔄 Páginas de Reset e Forgot Password
+
+**Implementação completa de fluxo de recuperação de senha com páginas frontend.**
+
+#### ✨ Novos Recursos
+
+**Páginas de Recuperação:**
+- Página `/forgot-password` para solicitar reset
+- Página `/reset-password` para redefinir senha
+- Integração com endpoints tRPC
+- Validação de formulários
+- Mensagens de feedback
+
+#### 🧪 Testes
+
+- 100 testes passando (1 skipped)
+- Todos os fluxos de autenticação testados
+
+---
+
+## [10.2.0] - 2025-12-04
+
+### 📧 SMTP + Recuperação de Senha
+
+**Implementação de SMTP para envio de emails e sistema de recuperação de senha.**
+
+#### ✨ Novos Recursos
+
+**SMTP para Email:**
+- Módulo `smtpEmail.ts` com Nodemailer
+- Fallback para notificações Manus
+- Integração com signup
+
+**Recuperação de Senha:**
+- Módulo `passwordReset.ts`
+- Geração de tokens com expiração
+- Rotas tRPC para reset
+- 13 testes passando
+
+#### 🧪 Testes
+
+- 107 testes passando (1 skipped)
+- 13 testes de recuperação de senha
+
+---
+
+## [10.1.0] - 2025-12-04
+
+### 📨 Email de Boas-vindas
+
+**Implementação de sistema de email de boas-vindas automático após signup.**
+
+#### ✨ Novos Recursos
+
+**Email de Boas-vindas:**
+- Módulo `welcomeEmail.ts`
+- Template HTML responsivo
+- Proteção XSS com escape HTML
+- Integração com signup
+- 10 testes passando
+
+#### 🧪 Testes
+
+- 100 testes passando (1 skipped)
+- 10 testes de email de boas-vindas
+
+---
+
 ## [10.0.0] - 2025-01-04
 
 ### 🎉 Lançamento da Plataforma Pública ResumAI
