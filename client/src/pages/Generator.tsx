@@ -16,7 +16,9 @@ import { ResumeEditor } from "@/components/ResumeEditor";
 import { TemplateSelector } from "@/components/TemplateSelector";
 import { ResumePreview } from "@/components/ResumePreview";
 import { AutoSaveIndicator } from "@/components/AutoSaveIndicator";
-import { useAutoSave } from "@/hooks/useAutoSave";
+import { useAutoSave } from '@/hooks/useAutoSave';
+import { LimitReachedModal } from '@/components/LimitReachedModal';
+import DonationModal from '@/components/DonationModal';
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import ATSScoreBadge from "@/components/ATSScoreBadge";
 import GlobalNavigation from "@/components/GlobalNavigation";
@@ -43,6 +45,8 @@ export default function Generator() {
   const [generatedResume, setGeneratedResume] = useState<any>(null);
   const [resumeDraft, setResumeDraft, clearResumeDraft] = useLocalStorage<any>('resume-draft', null);
   const [draftMetadata, setDraftMetadata, clearDraftMetadata] = useLocalStorage<any>('resume-draft-metadata', null);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [showDonationModal, setShowDonationModal] = useState(false);
 
   const saveResumeMutation = trpc.history.saveResume.useMutation();
   const uploadFileMutation = trpc.resume.uploadFile.useMutation();
@@ -176,9 +180,13 @@ export default function Generator() {
         setCurrentStep('preview');
         toast.success("Currículo gerado com sucesso!");
       }
-    } catch (error) {
-      toast.error("Erro ao gerar currículo. Tente novamente.");
-      console.error(error);
+    } catch (error: any) {
+      if (error.message === 'LIMIT_REACHED') {
+        setShowLimitModal(true);
+      } else {
+        toast.error("Erro ao gerar currículo. Tente novamente.");
+        console.error(error);
+      }
     }
   };
 
@@ -691,6 +699,23 @@ export default function Generator() {
           </div>
         )}
       </div>
+      
+      {/* Modals */}
+      <LimitReachedModal
+        open={showLimitModal}
+        onClose={() => setShowLimitModal(false)}
+        onDonate={() => {
+          setShowLimitModal(false);
+          setShowDonationModal(true);
+        }}
+        remaining={0}
+        limit={5}
+      />
+      
+      <DonationModal
+        open={showDonationModal}
+        onOpenChange={setShowDonationModal}
+      />
     </div>
   );
 }

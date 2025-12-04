@@ -17,6 +17,7 @@ import Dashboard from "@/pages/Dashboard";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import DonationSuccess from "@/pages/DonationSuccess";
+import Profile from "@/pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -54,6 +55,9 @@ function Router() {
       </Route>
       <Route path="/dashboard">
         <ProtectedRoute><Dashboard /></ProtectedRoute>
+      </Route>
+      <Route path="/profile">
+        <ProtectedRoute><Profile /></ProtectedRoute>
       </Route>
       <Route path={"/404"} component={NotFound} />      <Route component={NotFound} />
     </Switch>

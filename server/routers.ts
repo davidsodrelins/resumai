@@ -16,6 +16,7 @@ import { generatePortfolio } from "./services/portfolioGenerator";
 import type { ResumeData } from "../shared/resumeTypes";
 import { signupUser, loginUser } from "./publicAuth";
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
+import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 
 export const appRouter = router({
   system: systemRouter,
@@ -149,17 +150,42 @@ export const appRouter = router({
         modelType: z.enum(['reduced', 'mixed', 'complete']),
         language: z.enum(['pt', 'en', 'es'])
       }))
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
         try {
+          if (!ctx.user.openId) {
+            throw new Error('User not authenticated');
+          }
+          
+          // Check if user has reached their monthly limit
+          const limitCheck = await checkResumeLimit(ctx.user.openId);
+          
+          if (!limitCheck.canCreate) {
+            throw new Error('LIMIT_REACHED');
+          }
+          
           const generatedResume = await generateResume(
             input.data,
             input.modelType,
             input.language
           );
           
-          return { success: true, resume: generatedResume };
-        } catch (error) {
+          // Increment resume count after successful generation
+          await incrementResumeCount(ctx.user.openId);
+          
+          return { 
+            success: true, 
+            resume: generatedResume,
+            usage: {
+              remaining: limitCheck.remaining - 1,
+              limit: limitCheck.limit,
+              isDonor: limitCheck.isDonor
+            }
+          };
+        } catch (error: any) {
           console.error('Error generating resume:', error);
+          if (error.message === 'LIMIT_REACHED') {
+            throw new Error('LIMIT_REACHED');
+          }
           throw new Error('Failed to generate resume');
         }
       }),
@@ -618,6 +644,20 @@ export const appRouter = router({
       const isDonor = await isUserDonor(ctx.user.openId);
 
       return { total, isDonor };
+    }),
+  }),
+
+  usage: router({
+    /**
+     * Get user's usage statistics
+     */
+    getStats: protectedProcedure.query(async ({ ctx }) => {
+      if (!ctx.user || !ctx.user.openId) {
+        throw new Error("User not authenticated");
+      }
+
+      const stats = await getUserUsageStats(ctx.user.openId);
+      return stats;
     }),
   }),
 });

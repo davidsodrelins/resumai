@@ -7,6 +7,97 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [10.0.0] - 2025-01-04
+
+### 🎉 Lançamento da Plataforma Pública ResumAI
+
+**Transformação completa em plataforma pública com sistema de doações e limites de uso.**
+
+#### ✨ Novos Recursos
+
+**Sistema de Autenticação Pública:**
+- Sistema completo de cadastro e login com email/senha
+- Autenticação JWT funcionando em paralelo com OAuth existente
+- Middleware de autenticação verificando tokens em cookies
+- Proteção de 9 rotas privadas com redirecionamento automático para login
+- Páginas de Login e Signup com validação de formulários
+
+**Landing Page Pública:**
+- Nova landing page para visitantes não autenticados
+- Seção hero com CTA "Criar Conta Grátis"
+- Seção de recursos principais (6 cards)
+- Seção "Por que doar?" com história e opções temáticas
+- Contador de usuários ajudados e estatísticas
+- Redirecionamento inteligente baseado em autenticação
+
+**Sistema de Doações Stripe:**
+- Integração completa com Stripe para pagamentos
+- Modal de doação com 3 opções temáticas:
+  - ☕ Me pague um café (R$ 5)
+  - 🍫 Chocolate pra Luluzinha (R$ 10)
+  - 🥪 Me pague um sanduíche (R$ 15)
+  - 💝 Valor personalizado
+- Botão "Apoiar" no GlobalNavigation com gradient rosa/vermelho
+- Página de sucesso após doação com agradecimento
+- Atualização automática de totalDonated e isDonor no banco
+- Badge "Apoiador ⭐" para doadores
+
+**Sistema de Limites de Uso:**
+- Limite de 5 currículos por mês para usuários gratuitos
+- Currículos ilimitados para apoiadores
+- Verificação automática antes de gerar currículo
+- Modal "Limite Atingido" com CTA para doar
+- Reset automático mensal do contador
+- Integração completa no endpoint generateResume
+
+**Página de Perfil do Usuário:**
+- Badge de apoiador com status visual
+- Estatísticas de uso mensal com barra de progresso
+- Contador de currículos criados (total e este mês)
+- Total doado exibido para apoiadores
+- Alertas de limite próximo ou atingido
+- Ações rápidas (Criar Currículo, Ver Histórico)
+- CTA para doação para não-apoiadores
+
+**Branding ResumAI:**
+- Logo "ResumAI" em todo o sistema
+- GlobalNavigation atualizado com novo branding
+- Cores e identidade visual consistentes
+
+#### 🔧 Melhorias Técnicas
+
+**Backend:**
+- Módulo `publicAuth.ts` com signup/login/verifyToken
+- Módulo `donations.ts` com integração Stripe completa
+- Módulo `usageLimits.ts` com verificação de limites
+- Endpoints tRPC para autenticação, doações e uso
+- Schema do banco atualizado com campos necessários
+- Middleware de contexto verificando JWT e OAuth
+
+**Frontend:**
+- Componente `ProtectedRoute` para proteção de rotas
+- Componente `DonationModal` reutilizável
+- Componente `LimitReachedModal` com UX clara
+- Página `Profile` completa com estatísticas
+- Integração de modais no Generator
+- Tratamento de erros LIMIT_REACHED
+
+#### 🐛 Correções de Bugs
+
+- Corrigido erro 414 (URI Too Long) na análise ATS mudando para POST
+- Corrigido auto-save de currículos salvando metadados no localStorage
+- Corrigido botões de exportação acionando submit do form
+- Corrigido carregamento de currículos na página de Análise
+- Corrigido menu de navegação desaparecido (Resources.tsx recriado)
+
+#### 📦 Dependências Adicionadas
+
+- `bcrypt` - Hash de senhas
+- `jsonwebtoken` - Autenticação JWT
+- `stripe` - Integração de pagamentos
+
+---
+
 ## [10.0.0-rc] - 2024-12-04
 
 ### 🎉 Plataforma Pública ResumAI Completa
