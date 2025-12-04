@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -12,6 +12,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [, setLocation] = useLocation();
   const utils = trpc.useUtils();
 
   const signupMutation = trpc.auth.signup.useMutation({
@@ -23,7 +24,7 @@ export default function Signup() {
       // Add delay to ensure cookie is propagated
       setTimeout(() => {
         console.log("➡️ Redirecionando para /dashboard");
-        window.location.replace("/dashboard");
+        setLocation("/dashboard");
       }, 500);
     },
     onError: (error) => {

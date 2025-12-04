@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -10,6 +10,7 @@ import { FileText, Loader2 } from "lucide-react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [, setLocation] = useLocation();
   const utils = trpc.useUtils();
 
   const loginMutation = trpc.auth.login.useMutation({
@@ -21,7 +22,7 @@ export default function Login() {
       // Add delay to ensure cookie is propagated
       setTimeout(() => {
         console.log("➡️ Redirecionando para /dashboard");
-        window.location.replace("/dashboard");
+        setLocation("/dashboard");
       }, 500);
     },
     onError: (error) => {

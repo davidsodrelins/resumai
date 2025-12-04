@@ -891,3 +891,17 @@
 - [x] Usar window.location.replace ao invés de window.location.href
 - [ ] Testar em desenvolvimento
 - [ ] Criar checkpoint e validar em produção
+
+
+## V10.13.4 - Usar useLocation do Wouter para Redirect
+
+### Problema Confirmado
+- [x] Logs mostram que window.location.replace("/dashboard") é chamado
+- [x] Mas redirect não acontece em produção
+- [ ] window.location pode estar sendo bloqueado pelo ambiente
+
+### Solução
+- [x] Usar useLocation do wouter ao invés de window.location
+- [x] setLocation("/dashboard") é a forma correta para SPAs
+- [ ] Testar em desenvolvimento
+- [ ] Criar checkpoint e validar em produção
