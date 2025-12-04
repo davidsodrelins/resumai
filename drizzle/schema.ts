@@ -108,3 +108,22 @@ export const resumeSessions = mysqlTable("resume_sessions", {
 
 export type ResumeSession = typeof resumeSessions.$inferSelect;
 export type InsertResumeSession = typeof resumeSessions.$inferInsert;
+
+/**
+ * Payments table for tracking donations via Stripe
+ */
+export const payments = mysqlTable("payments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull(),
+  stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 255 }).notNull().unique(),
+  amount: int("amount").notNull(), // Amount in cents (R$ 5.00 = 500)
+  currency: varchar("currency", { length: 3 }).default("brl").notNull(),
+  status: mysqlEnum("status", ["pending", "succeeded", "failed", "canceled"]).default("pending").notNull(),
+  paymentMethod: varchar("payment_method", { length: 50 }), // card, boleto, pix, etc
+  metadata: json("metadata").$type<Record<string, any>>(), // Additional Stripe metadata
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Payment = typeof payments.$inferSelect;
+export type InsertPayment = typeof payments.$inferInsert;

@@ -747,3 +747,55 @@
 - [x] Implementar correção no ProtectedRoute ou cookie handling
 - [x] Testar login completo end-to-end no site publicado
 - [x] Garantir que redirecionamento funciona após login
+
+
+## V10.12.0 - Melhorias de Pagamento e Recuperação de Senha
+
+### Webhook do Stripe
+- [ ] Criar endpoint /api/stripe/webhook
+- [ ] Implementar verificação de assinatura do Stripe
+- [ ] Processar evento payment_intent.succeeded
+- [ ] Atualizar isDonor e totalDonated no banco
+- [ ] Criar tabela de histórico de pagamentos (payments)
+- [ ] Testar webhook com Stripe CLI
+
+### Página de Histórico de Pagamentos
+- [ ] Criar página /payment-history
+- [ ] Listar todas as doações do usuário
+- [ ] Mostrar data, valor, status e método de pagamento
+- [ ] Adicionar filtros por data e status
+- [ ] Implementar paginação
+- [ ] Adicionar link no menu de navegação
+
+### Sistema de Recuperação de Senha
+- [ ] Criar página /forgot-password
+- [ ] Implementar envio de email com token
+- [ ] Criar página /reset-password/:token
+- [ ] Validar token e permitir reset
+- [ ] Adicionar link "Esqueci minha senha" no login
+- [ ] Testar fluxo completo
+
+
+## V10.12.0 - BUG CRÍTICO: Login não funciona no site publicado
+
+### Problema
+- [ ] Login funciona no desenvolvimento mas falha no site publicado (i2vbve.manus.space)
+- [ ] Usuário clica em "Entrar", tela pisca, volta para login
+- [ ] Cookie não está sendo reconhecido pelo ProtectedRoute após redirect
+- [ ] window.location.href não resolve o problema
+- [ ] Testado em aba anônima - mesmo problema
+
+### Investigação Necessária
+- [ ] Verificar se cookie está sendo setado no response (Network tab)
+- [ ] Verificar se cookie está sendo enviado nas requisições subsequentes
+- [ ] Verificar configuração de domínio do cookie (sameSite, secure, domain)
+- [ ] Testar com delay maior (2-3 segundos)
+- [ ] Considerar usar sessionStorage como fallback temporário
+- [ ] Verificar se há diferença entre dev e production no cookie handling
+
+### Soluções a Tentar
+- [ ] Aumentar delay para 2-3 segundos antes do redirect
+- [ ] Adicionar polling para verificar se auth.me retorna usuário antes de redirecionar
+- [ ] Usar sessionStorage para marcar "login bem-sucedido" e verificar na home
+- [ ] Forçar refetch do auth.me após redirect
+- [ ] Verificar se precisa configurar domain explicitamente no cookie

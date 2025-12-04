@@ -19,10 +19,12 @@ import { sendWelcomeEmail } from "./modules/welcomeEmail";
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 import { adminRouter } from "./routers/admin";
+import { paymentsRouter } from "./routers/payments";
 
 export const appRouter = router({
   system: systemRouter,
   admin: adminRouter,
+  payments: paymentsRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     

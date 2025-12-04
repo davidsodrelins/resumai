@@ -17,12 +17,51 @@ export default function Signup() {
 
   const signupMutation = trpc.auth.signup.useMutation({
     onSuccess: async () => {
-      console.log("✅ Signup bem-sucedido! Redirecionando com reload completo");
-      // Forçar reload completo da página para garantir que o cookie seja reconhecido
-      setTimeout(() => {
-        console.log("🚀 Redirecionando para /generator");
-        window.location.href = "/generator";
-      }, 500);
+      console.log("✅ Signup mutation bem-sucedido!");
+      console.log("⏳ Aguardando 2 segundos para cookie ser setado...");
+      
+      // Wait 2 seconds for cookie to be set
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      console.log("🔄 Invalidando queries de autenticação...");
+      await utils.auth.me.invalidate();
+      
+      console.log("🔍 Verificando se usuário está autenticado...");
+      
+      // Poll auth.me to verify authentication
+      let attempts = 0;
+      const maxAttempts = 10;
+      const pollInterval = 500; // 500ms
+      
+      const checkAuth = async (): Promise<boolean> => {
+        try {
+          const user = await utils.auth.me.fetch();
+          console.log("👤 Resultado da verificação:", user ? `Usuário ${user.email} autenticado` : "Não autenticado");
+          return !!user;
+        } catch (error) {
+          console.error("❌ Erro ao verificar autenticação:", error);
+          return false;
+        }
+      };
+      
+      while (attempts < maxAttempts) {
+        const isAuthenticated = await checkAuth();
+        
+        if (isAuthenticated) {
+          console.log("🎉 Autenticação confirmada! Redirecionando...");
+          window.location.href = "/generator";
+          return;
+        }
+        
+        attempts++;
+        console.log(`⏳ Tentativa ${attempts}/${maxAttempts} - Aguardando...`);
+        await new Promise(resolve => setTimeout(resolve, pollInterval));
+      }
+      
+      // If we get here, authentication failed after all attempts
+      console.error("❌ Falha ao verificar autenticação após múltiplas tentativas");
+      console.log("🔄 Forçando reload completo da página...");
+      window.location.href = "/";
     },
     onError: (error) => {
       console.error("❌ Erro ao criar conta:", error);
