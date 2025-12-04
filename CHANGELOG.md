@@ -698,3 +698,4 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ---
 
 [Versões anteriores omitidas para brevidade]
+# V10.11.0 - Login fix with window.location.href
