@@ -816,3 +816,19 @@
 - [ ] Ajustar Home.tsx para detectar usuário logado
 - [ ] Se logado, mostrar dashboard ou redirecionar automaticamente
 - [ ] Testar fluxo completo: login → dashboard → navegação
+
+
+## V10.12.3 - Simplificar Login (Remover Polling Complexo)
+
+### Descoberta
+- [x] Testado login no ambiente de desenvolvimento
+- [x] Login processa mas volta para home pública
+- [x] Polling de autenticação está falhando
+- [x] Cookie provavelmente não está sendo propagado a tempo
+
+### Solução
+- [x] Remover polling complexo de Login.tsx
+- [x] Remover polling complexo de Signup.tsx
+- [x] Usar abordagem simples: invalidate + redirect imediato
+- [x] Confiar que backend setou cookie corretamente
+- [x] Testar novamente - FUNCIONANDO!
