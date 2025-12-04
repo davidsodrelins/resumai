@@ -36,14 +36,20 @@ export const appRouter = router({
       }))
       .mutation(async ({ input, ctx }) => {
         try {
+          console.log("[Signup] Attempting signup for:", input.email);
           const result = await signupUser(input);
+          console.log("[Signup] Signup successful for:", input.email);
           
           // Set session cookie with JWT token
           const cookieOptions = getSessionCookieOptions(ctx.req);
+          console.log("[Signup] Setting cookie with options:", cookieOptions);
+          
           ctx.res.cookie(COOKIE_NAME, result.token, {
             ...cookieOptions,
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
           });
+          
+          console.log("[Signup] Cookie set successfully");
           
           // Send welcome email (async, don't block signup)
           sendWelcomeEmail(input.name, input.email).catch(err => {
@@ -66,14 +72,20 @@ export const appRouter = router({
       }))
       .mutation(async ({ input, ctx }) => {
         try {
+          console.log("[Login] Attempting login for:", input.email);
           const result = await loginUser(input);
+          console.log("[Login] Login successful for:", input.email);
           
           // Set session cookie with JWT token
           const cookieOptions = getSessionCookieOptions(ctx.req);
+          console.log("[Login] Setting cookie with options:", cookieOptions);
+          
           ctx.res.cookie(COOKIE_NAME, result.token, {
             ...cookieOptions,
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
           });
+          
+          console.log("[Login] Cookie set successfully");
           
           return {
             success: true,

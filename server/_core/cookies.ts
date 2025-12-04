@@ -39,10 +39,19 @@ export function getSessionCookieOptions(
   //       ? hostname
   //       : undefined;
 
+  const isSecure = isSecureRequest(req);
+  
+  console.log("[Cookie Config]", {
+    hostname: req.hostname,
+    protocol: req.protocol,
+    forwardedProto: req.headers["x-forwarded-proto"],
+    isSecure,
+  });
+
   return {
     httpOnly: true,
     path: "/",
-    sameSite: "none",
-    secure: isSecureRequest(req),
+    sameSite: "lax", // Changed from "none" to "lax" for same-domain cookies
+    secure: isSecure,
   };
 }

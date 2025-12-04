@@ -832,3 +832,23 @@
 - [x] Usar abordagem simples: invalidate + redirect imediato
 - [x] Confiar que backend setou cookie corretamente
 - [x] Testar novamente - FUNCIONANDO!
+
+
+## V10.13.1 - Corrigir Cookies em Produção
+
+### Problema
+- [x] Login funciona perfeitamente em desenvolvimento
+- [ ] Login falha no site publicado (fica na mesma tela)
+- [ ] Cookie não está sendo setado/reconhecido em produção
+
+### Possíveis Causas
+- [ ] Configuração de SameSite cookie
+- [ ] Domínio do cookie incorreto
+- [ ] Secure flag em ambiente HTTPS
+- [ ] Path do cookie
+
+### Solução
+- [x] Verificar server/_core/cookies.ts
+- [x] Ajustar configuração para produção (sameSite: lax)
+- [x] Adicionar logs detalhados em login/signup
+- [ ] Testar novamente em produção
