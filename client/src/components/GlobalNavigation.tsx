@@ -44,10 +44,10 @@ export default function GlobalNavigation() {
             <a className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <FileText className="h-6 w-6 text-blue-600" />
               <h1 className="text-xl font-bold text-slate-800 hidden sm:block">
-                Gerador de Currículos IA
+                ResumAI
               </h1>
               <h1 className="text-xl font-bold text-slate-800 sm:hidden">
-                Currículos IA
+                ResumAI
               </h1>
             </a>
           </Link>

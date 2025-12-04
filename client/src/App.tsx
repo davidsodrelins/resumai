@@ -16,6 +16,7 @@ import Resources from "@/pages/Resources";
 import Dashboard from "@/pages/Dashboard";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
   return (
@@ -23,14 +24,33 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/login"} component={Login} />
       <Route path={"/signup"} component={Signup} />
-      <Route path={"/history"} component={History} />
-      <Route path={"/generator"} component={Generator} />
-      <Route path={"/cover-letter"} component={CoverLetter} />      <Route path={"/compare"} component={Compare} />
-       <Route path="/analysis" component={Analysis} />
-      <Route path="/soft-skills" component={SoftSkills} />
-      <Route path="/portfolio" component={Portfolio} />
-      <Route path="/resources" component={Resources} />
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path={"/history"}>
+        <ProtectedRoute><History /></ProtectedRoute>
+      </Route>
+      <Route path={"/generator"}>
+        <ProtectedRoute><Generator /></ProtectedRoute>
+      </Route>
+      <Route path={"/cover-letter"}>
+        <ProtectedRoute><CoverLetter /></ProtectedRoute>
+      </Route>
+      <Route path={"/compare"}>
+        <ProtectedRoute><Compare /></ProtectedRoute>
+      </Route>
+      <Route path="/analysis">
+        <ProtectedRoute><Analysis /></ProtectedRoute>
+      </Route>
+      <Route path="/soft-skills">
+        <ProtectedRoute><SoftSkills /></ProtectedRoute>
+      </Route>
+      <Route path="/portfolio">
+        <ProtectedRoute><Portfolio /></ProtectedRoute>
+      </Route>
+      <Route path="/resources">
+        <ProtectedRoute><Resources /></ProtectedRoute>
+      </Route>
+      <Route path="/dashboard">
+        <ProtectedRoute><Dashboard /></ProtectedRoute>
+      </Route>
       <Route path={"/404"} component={NotFound} />      <Route component={NotFound} />
     </Switch>
   );

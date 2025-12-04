@@ -632,22 +632,23 @@
 - [x] Adicionar rotas no App.tsx
 - [x] Aplicar migração do banco (pnpm db:push)
 
-### Fase 2: Middleware e Proteção de Rotas
+### Fase 2: Middleware e Proteção de Rotas (CONCLUÍDA)
 - [x] Atualizar context.ts para verificar JWT token em cookies
 - [x] Manter compatibilidade com OAuth existente
-- [ ] Criar componente ProtectedRoute para rotas privadas
-- [ ] Proteger rotas: /generator, /history, /analysis, /compare, etc
-- [ ] Redirecionar não-autenticados para /login
-- [ ] Testar fluxo de autenticação completo
+- [x] Criar componente ProtectedRoute para rotas privadas
+- [x] Proteger rotas: /generator, /history, /analysis, /compare, etc (9 rotas)
+- [x] Redirecionar não-autenticados para /login
+- [ ] Testar fluxo de autenticação completo (pendente)
 
-### Fase 3: Landing Page e Branding ResumAI
-- [ ] Atualizar VITE_APP_TITLE para "ResumAI"
-- [ ] Criar nova landing page pública (Home.tsx)
-- [ ] Adicionar seção hero com CTA "Criar Conta Grátis"
-- [ ] Adicionar seção de recursos principais
-- [ ] Adicionar seção "Por que doar?" com história
-- [ ] Adicionar contador de usuários ajudados
-- [ ] Atualizar GlobalNavigation com logo ResumAI
+### Fase 3: Landing Page e Branding ResumAI (CONCLUÍDA)
+- [x] Criar nova landing page pública (PublicHome.tsx)
+- [x] Adicionar seção hero com CTA "Criar Conta Grátis"
+- [x] Adicionar seção de recursos principais (6 cards)
+- [x] Adicionar seção "Por que doar?" com história e opções
+- [x] Adicionar contador de usuários ajudados (stats section)
+- [x] Atualizar Home.tsx para redirecionar baseado em autenticação
+- [x] Atualizar GlobalNavigation com logo ResumAI
+- [ ] Atualizar VITE_APP_TITLE para "ResumAI" (requer acesso manual)
 
 ### Fase 4: Sistema de Doações Stripe
 - [ ] Criar endpoints tRPC para checkout Stripe

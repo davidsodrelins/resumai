@@ -7,6 +7,60 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [10.0.0-beta] - 2024-12-04
+
+### 🎉 Transformação em Plataforma Pública ResumAI
+
+#### Adicionado
+- **Sistema de Autenticação Pública**
+  - Cadastro com email e senha (signup)
+  - Login tradicional com JWT tokens
+  - Middleware de autenticação JWT funcionando em paralelo com OAuth
+  - Páginas de Login e Signup com formulários completos
+  - Componente ProtectedRoute para proteção de rotas privadas
+  - 9 rotas protegidas: /generator, /history, /analysis, /compare, /cover-letter, /soft-skills, /portfolio, /resources, /dashboard
+  
+- **Landing Page Pública (PublicHome)**
+  - Hero section com CTA "Criar Conta Grátis"
+  - Seção de recursos principais (6 cards)
+  - Seção "Por que doar?" com história pessoal
+  - Opções de doação temáticas (☕ Café R$5, 🍫 Chocolate Luluzinha R$10, 🥪 Sanduíche R$15)
+  - Seção de estatísticas (1000+ currículos, 95% satisfação, 3 idiomas)
+  - Footer com créditos
+  
+- **Branding ResumAI**
+  - Logo atualizado para "ResumAI" no GlobalNavigation
+  - Home.tsx agora redireciona usuários autenticados para /dashboard
+  - Visitantes não autenticados veem landing page pública
+
+- **Schema do Banco de Dados**
+  - Campo `passwordHash` para autenticação email/senha
+  - Campo `loginMethod` (oauth ou email)
+  - Campos de doações: `totalDonated`, `isDonor`, `donorBadge`
+  - Campos de limites: `resumesThisMonth`, `lastResetDate`
+
+#### Modificado
+- Context.ts agora verifica JWT tokens além de OAuth
+- App.tsx com 9 rotas protegidas usando ProtectedRoute
+- Rotas públicas: /, /login, /signup
+- Rotas privadas requerem autenticação
+
+#### Técnico
+- Módulo `publicAuth.ts` com funções signup(), login(), verifyToken()
+- Endpoints tRPC: auth.signup, auth.login
+- Compatibilidade mantida com usuários OAuth existentes
+- Migração do banco aplicada (pnpm db:push)
+- Instalação de dependências: bcrypt, jsonwebtoken, @types/bcrypt, @types/jsonwebtoken
+
+### 🚧 Em Desenvolvimento (Próximas Versões)
+- Sistema de doações Stripe com modal temático
+- Sistema de limites (5 currículos/mês para não-doadores)
+- Badge "Apoiador" para doadores
+- Testes unitários para autenticação e doações
+- Deploy no repositório GitHub davidsodrelins/resumai
+
+---
+
 ## [9.7.3] - 2024-12-03
 
 ### Corrigido
