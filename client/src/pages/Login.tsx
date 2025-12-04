@@ -10,12 +10,19 @@ import { FileText, Loader2 } from "lucide-react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const utils = trpc.useUtils();
 
   const loginMutation = trpc.auth.login.useMutation({
-    onSuccess: () => {
-      console.log("✅ Login bem-sucedido! Redirecionando...");
-      // Simple approach: just redirect, trust that cookie was set
-      window.location.href = "/dashboard";
+    onSuccess: async () => {
+      console.log("✅ Login bem-sucedido! Invalidando cache...");
+      // Invalidate auth cache to ensure fresh user data
+      await utils.auth.me.invalidate();
+      console.log("🔄 Cache invalidado, redirecionando em 500ms...");
+      // Add delay to ensure cookie is propagated
+      setTimeout(() => {
+        console.log("➡️ Redirecionando para /dashboard");
+        window.location.replace("/dashboard");
+      }, 500);
     },
     onError: (error) => {
       console.error("❌ Erro ao fazer login:", error);

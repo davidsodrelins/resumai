@@ -870,3 +870,24 @@
 - [ ] Reverter para sameSite: "none" com secure: true
 - [ ] Testar em produção
 - [ ] Se não funcionar, adicionar domain explícito
+
+
+## V10.13.3 - Corrigir Redirect Após Login
+
+### Problema Relatado pelo Usuário
+- [ ] Login não dá erro
+- [ ] Mas não redireciona para /dashboard
+- [ ] Fica na mesma tela de login
+- [ ] Cookie parece estar sendo setado (não há erro de autenticação)
+
+### Hipótese
+- window.location.href pode estar sendo bloqueado
+- Pode precisar de delay antes do redirect
+- Pode precisar invalidar cache do tRPC antes de redirecionar
+
+### Solução
+- [x] Adicionar invalidate do auth.me antes do redirect
+- [x] Adicionar delay de 500ms antes do redirect
+- [x] Usar window.location.replace ao invés de window.location.href
+- [ ] Testar em desenvolvimento
+- [ ] Criar checkpoint e validar em produção
