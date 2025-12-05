@@ -1087,3 +1087,74 @@
 - [x] Testar sistema de notificações (via browser)
 - [x] Testar exportação de relatórios (via browser)
 - [x] Validar permissões de acesso (apenas admins)
+
+
+## V11.5.0 - Melhorias no Header e Perfil de Usuário
+
+### Banco de Dados
+- [ ] Adicionar campos country, state, city na tabela users
+- [ ] Migração do banco de dados
+
+### Backend - Endpoints
+- [ ] Endpoint updateProfile para atualizar dados do usuário
+- [ ] Validação de campos de localização
+
+### Frontend - Header
+- [ ] Redesign do GlobalNavigation com layout melhorado
+- [ ] Tornar header fixo (sticky) no scroll
+- [ ] Melhorar disposição dos elementos (logo, nav, user menu)
+- [ ] Responsividade mobile aprimorada
+
+### Frontend - Página de Perfil
+- [ ] Criar página /profile completa
+- [ ] Formulário de edição com campos: nome, email, país, estado, cidade
+- [ ] Validação de formulário
+- [ ] Feedback visual de sucesso/erro
+- [ ] Link acessível no menu de usuário
+
+### Frontend - Signup
+- [ ] Adicionar campos de localização no formulário de cadastro
+- [ ] Campos: país (select), estado (input), cidade (input)
+- [ ] Validação dos novos campos
+
+### Testes
+- [ ] Testar atualização de perfil
+- [ ] Testar cadastro com localização
+- [ ] Validar header fixo em diferentes resoluções
+
+
+## V11.5.0 - Melhorias no Header e Perfil de Usuário
+
+### Banco de Dados
+- [x] Adicionar campos country, state, city na tabela users
+- [x] Migração do banco de dados
+
+### Backend - Endpoints
+- [x] Atualizar endpoint user.updateProfile para aceitar localização
+- [x] Atualizar endpoint auth.signup para aceitar localização
+- [x] Atualizar interface SignupData no publicAuth.ts
+
+### Frontend - GlobalNavigation
+- [x] Tornar header fixo (sticky) com position fixed
+- [x] Melhorar layout e espaçamento do header
+- [x] Garantir responsividade em mobile
+- [x] Adicionar sombra sutil para separar do conteúdo
+- [x] Corrigir prop onOpenChange do DonationModal
+
+### Frontend - Página de Perfil
+- [x] Adicionar card de Localização com campos país, estado, cidade
+- [x] Select de países com opções pré-definidas
+- [x] Inputs de texto para estado e cidade
+- [x] Botão Editar/Salvar/Cancelar
+- [x] Exibir localização formatada quando preenchida
+
+### Frontend - Formulário de Signup
+- [x] Adicionar seção de localização (opcional)
+- [x] Select de países
+- [x] Inputs de estado e cidade
+- [x] Enviar dados de localização no signup
+
+### Testes
+- [x] Testar edição de localização no perfil
+- [x] Testar cadastro com localização
+- [x] Verificar que localização é salva corretamente no banco

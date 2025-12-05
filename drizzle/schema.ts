@@ -13,6 +13,11 @@ export const users = mysqlTable("users", {
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
   isBlocked: int("is_blocked").default(0).notNull(), // 0 = active, 1 = blocked
   
+  // Location tracking
+  country: varchar("country", { length: 100 }),
+  state: varchar("state", { length: 100 }),
+  city: varchar("city", { length: 100 }),
+  
   // Donation tracking
   isDonor: int("is_donor").default(0).notNull(), // 0 = no, 1 = yes
   totalDonated: int("total_donated").default(0).notNull(), // Total em centavos (R$ 5 = 500)

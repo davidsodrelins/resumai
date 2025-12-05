@@ -30,6 +30,26 @@ export const appRouter = router({
   admin: adminRouter,
   payments: paymentsRouter,
   user: router({
+    updateProfile: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1).optional(),
+        country: z.string().optional(),
+        state: z.string().optional(),
+        city: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        const updateData: any = {};
+        if (input.name !== undefined) updateData.name = input.name;
+        if (input.country !== undefined) updateData.country = input.country;
+        if (input.state !== undefined) updateData.state = input.state;
+        if (input.city !== undefined) updateData.city = input.city;
+        
+        await db.update(users).set(updateData).where(eq(users.id, ctx.user!.id));
+        return { success: true };
+      }),
+    
     updateName: protectedProcedure
       .input(z.object({ name: z.string().min(1) }))
       .mutation(async ({ input, ctx }) => {
@@ -84,6 +104,9 @@ export const appRouter = router({
         email: z.string().email(),
         password: z.string().min(6),
         name: z.string(),
+        country: z.string().optional(),
+        state: z.string().optional(),
+        city: z.string().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
         try {

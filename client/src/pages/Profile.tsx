@@ -4,13 +4,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Mail, Lock, Activity, Save, Loader2 } from "lucide-react";
+import { User, Mail, Lock, Activity, Save, Loader2, MapPin } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import GlobalNavigation from "@/components/GlobalNavigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import PasswordStrengthIndicator from "@/components/PasswordStrengthIndicator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const COUNTRIES = [
+  { value: "BR", label: "Brasil" },
+  { value: "US", label: "Estados Unidos" },
+  { value: "PT", label: "Portugal" },
+  { value: "ES", label: "Espanha" },
+  { value: "AR", label: "Argentina" },
+  { value: "MX", label: "México" },
+  { value: "CO", label: "Colômbia" },
+  { value: "CL", label: "Chile" },
+  { value: "PE", label: "Peru" },
+  { value: "UY", label: "Uruguai" },
+  { value: "OTHER", label: "Outro" },
+];
 
 export default function Profile() {
   const { user } = useAuth();
@@ -28,6 +43,12 @@ export default function Profile() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  
+  // Location state
+  const [editingLocation, setEditingLocation] = useState(false);
+  const [newCountry, setNewCountry] = useState(user?.country || "");
+  const [newState, setNewState] = useState(user?.state || "");
+  const [newCity, setNewCity] = useState(user?.city || "");
 
   const { data: usageStats } = trpc.usage.getStats.useQuery();
 
@@ -73,6 +94,20 @@ export default function Profile() {
       });
     },
   });
+  
+  // Update location mutation
+  const updateLocationMutation = trpc.user.updateProfile.useMutation({
+    onSuccess: () => {
+      toast.success("Localização atualizada com sucesso!");
+      setEditingLocation(false);
+      utils.auth.me.invalidate();
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar localização", {
+        description: error.message,
+      });
+    },
+  });
 
   const handleSaveName = () => {
     if (!newName.trim()) {
@@ -109,6 +144,14 @@ export default function Profile() {
     changePasswordMutation.mutate({
       currentPassword,
       newPassword,
+    });
+  };
+  
+  const handleSaveLocation = () => {
+    updateLocationMutation.mutate({
+      country: newCountry || undefined,
+      state: newState || undefined,
+      city: newCity || undefined,
     });
   };
 
@@ -272,6 +315,110 @@ export default function Profile() {
                     </div>
                     <Button variant="outline" onClick={() => setEditingEmail(true)}>
                       Editar
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Edit Location */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  Localização
+                </CardTitle>
+                <CardDescription>
+                  Ajude-nos a entender de onde nossos usuários estão acessando
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {editingLocation ? (
+                  <div className="space-y-4">
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="country">País</Label>
+                        <Select value={newCountry} onValueChange={setNewCountry}>
+                          <SelectTrigger id="country">
+                            <SelectValue placeholder="Selecione o país" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {COUNTRIES.map((c) => (
+                              <SelectItem key={c.value} value={c.value}>
+                                {c.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="state">Estado/Província</Label>
+                        <Input
+                          id="state"
+                          value={newState}
+                          onChange={(e) => setNewState(e.target.value)}
+                          placeholder="Ex: São Paulo"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="city">Cidade</Label>
+                        <Input
+                          id="city"
+                          value={newCity}
+                          onChange={(e) => setNewCity(e.target.value)}
+                          placeholder="Ex: São Paulo"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleSaveLocation}
+                        disabled={updateLocationMutation.isPending}
+                      >
+                        {updateLocationMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Salvando...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="mr-2 h-4 w-4" />
+                            Salvar
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setEditingLocation(false);
+                          setNewCountry(user.country || "");
+                          setNewState(user.state || "");
+                          setNewCity(user.city || "");
+                        }}
+                      >
+                        Cancelar
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      {user.country || user.state || user.city ? (
+                        <>
+                          <p className="font-medium">
+                            {[user.city, user.state, COUNTRIES.find(c => c.value === user.country)?.label].filter(Boolean).join(", ") || "Não informado"}
+                          </p>
+                          <p className="text-sm text-muted-foreground">Localização atual</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="font-medium text-muted-foreground">Não informado</p>
+                          <p className="text-sm text-muted-foreground">Adicione sua localização</p>
+                        </>
+                      )}
+                    </div>
+                    <Button variant="outline" onClick={() => setEditingLocation(true)}>
+                      {user.country || user.state || user.city ? "Editar" : "Adicionar"}
                     </Button>
                   </div>
                 )}

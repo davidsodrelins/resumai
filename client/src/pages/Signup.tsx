@@ -8,12 +8,31 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import PasswordStrengthIndicator from "../components/PasswordStrengthIndicator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { MapPin } from "lucide-react";
+
+const COUNTRIES = [
+  { value: "BR", label: "Brasil" },
+  { value: "US", label: "Estados Unidos" },
+  { value: "PT", label: "Portugal" },
+  { value: "ES", label: "Espanha" },
+  { value: "AR", label: "Argentina" },
+  { value: "MX", label: "México" },
+  { value: "CO", label: "Colômbia" },
+  { value: "CL", label: "Chile" },
+  { value: "PE", label: "Peru" },
+  { value: "UY", label: "Uruguai" },
+  { value: "OTHER", label: "Outro" },
+];
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
 
   const signupMutation = trpc.auth.signup.useMutation({
     onSuccess: (data) => {
@@ -54,7 +73,14 @@ export default function Signup() {
       return;
     }
 
-    signupMutation.mutate({ name, email, password });
+    signupMutation.mutate({ 
+      name, 
+      email, 
+      password,
+      country: country || undefined,
+      state: state || undefined,
+      city: city || undefined,
+    });
   };
 
   return (
@@ -121,6 +147,53 @@ export default function Signup() {
                 disabled={signupMutation.isPending}
                 required
               />
+            </div>
+            
+            {/* Location Fields */}
+            <div className="space-y-3 pt-2 border-t">
+              <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                <MapPin className="h-4 w-4" />
+                Localização (opcional)
+              </div>
+              <div className="grid gap-3 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="country">País</Label>
+                  <Select value={country} onValueChange={setCountry} disabled={signupMutation.isPending}>
+                    <SelectTrigger id="country">
+                      <SelectValue placeholder="Selecione" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRIES.map((c) => (
+                        <SelectItem key={c.value} value={c.value}>
+                          {c.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">Estado</Label>
+                  <Input
+                    id="state"
+                    type="text"
+                    placeholder="Ex: SP"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    disabled={signupMutation.isPending}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input
+                    id="city"
+                    type="text"
+                    placeholder="Ex: São Paulo"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    disabled={signupMutation.isPending}
+                  />
+                </div>
+              </div>
             </div>
             
             <div className="text-xs text-muted-foreground bg-blue-50 p-3 rounded-md">

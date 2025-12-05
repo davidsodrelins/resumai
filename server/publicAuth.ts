@@ -13,6 +13,9 @@ export interface SignupData {
   email: string;
   password: string;
   name: string;
+  country?: string;
+  state?: string;
+  city?: string;
 }
 
 export interface LoginData {
@@ -25,7 +28,7 @@ export interface LoginData {
  * Register a new user with email/password
  */
 export async function signupUser(data: SignupData) {
-  const { email, password, name } = data;
+  const { email, password, name, country, state, city } = data;
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,6 +60,9 @@ export async function signupUser(data: SignupData) {
     email: email.toLowerCase(),
     passwordHash,
     name,
+    country: country || null,
+    state: state || null,
+    city: city || null,
     loginMethod: "email",
     role: "user",
     isDonor: 0,
