@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -10,23 +10,16 @@ import { FileText, Loader2 } from "lucide-react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [, setLocation] = useLocation();
-  const utils = trpc.useUtils();
 
   const loginMutation = trpc.auth.login.useMutation({
-    onSuccess: async () => {
-      console.log("✅ Login bem-sucedido! Invalidando cache...");
-      // Invalidate auth cache to ensure fresh user data
-      await utils.auth.me.invalidate();
-      console.log("🔄 Cache invalidado, redirecionando em 500ms...");
-      // Add delay to ensure cookie is propagated
-      setTimeout(() => {
-        console.log("➡️ Redirecionando para /dashboard");
-        setLocation("/dashboard");
-      }, 500);
+    onSuccess: (data) => {
+      // Save JWT token to localStorage
+      localStorage.setItem("auth_token", data.token);
+      
+      // Reload page to apply authentication
+      window.location.href = "/";
     },
     onError: (error) => {
-      console.error("❌ Erro ao fazer login:", error);
       alert(error.message || "Erro ao fazer login");
     },
   });
@@ -34,10 +27,8 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log("📝 Tentando fazer login com:", email);
-    
     if (!email || !password) {
-      alert("Por favor, preencha email e senha");
+      alert("Por favor, preencha todos os campos");
       return;
     }
 
@@ -100,12 +91,10 @@ export default function Login() {
                 "Entrar"
               )}
             </Button>
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-sm text-center text-muted-foreground">
               Não tem uma conta?{" "}
-              <Link href="/signup">
-                <a className="text-blue-600 hover:underline font-medium">
-                  Cadastre-se
-                </a>
+              <Link href="/signup" className="text-blue-600 hover:underline font-medium">
+                Cadastre-se
               </Link>
             </div>
           </CardFooter>

@@ -905,3 +905,60 @@
 - [x] setLocation("/dashboard") é a forma correta para SPAs
 - [ ] Testar em desenvolvimento
 - [ ] Criar checkpoint e validar em produção
+
+
+## V10.13.5 - Cookie Não Reconhecido pelo ProtectedRoute
+
+### Problema Identificado
+- [x] Login seta o cookie corretamente (sem erro)
+- [x] setLocation("/dashboard") é chamado
+- [x] Mas ao acessar /dashboard, ProtectedRoute redireciona para /login
+- [x] Isso significa que o cookie não está sendo lido/reconhecido
+
+### Investigação Necessária
+- [x] Verificar configuração de path do cookie - path: "/" está correto
+- [x] Verificar se sameSite/secure estão corretos - PROBLEMA ENCONTRADO!
+- [x] document.cookie está vazio - cookie não está sendo setado
+- [x] secure: true sempre, mas deveria usar isSecure
+
+### Solução Aplicada
+- [x] Mudar sameSite de "none" para "lax"
+- [x] Mudar secure de true para isSecure (baseado em detecção de HTTPS)
+- [ ] Testar em desenvolvimento
+- [ ] Criar checkpoint e validar em produção
+
+
+## V11.0.0 - SIMPLIFICAR: Usar Apenas Manus OAuth
+
+### Decisão
+- [x] Login customizado está com problemas complexos de cookies
+- [x] Manus OAuth já está funcionando no template
+- [x] Decisão: remover login customizado, usar apenas OAuth
+
+### Implementação
+- [ ] Remover rotas /login e /signup do App.tsx
+- [ ] Remover páginas Login.tsx e Signup.tsx
+- [ ] Remover procedures auth.login e auth.signup do backend
+- [ ] Atualizar Home.tsx para mostrar botão "Entrar com Manus"
+- [ ] Atualizar GlobalNavigation para usar getLoginUrl()
+- [ ] Testar fluxo completo
+- [ ] Criar checkpoint e validar em produção
+
+
+## V11.0.0 - ✅ IMPLEMENTADO: Autenticação com JWT (localStorage)
+
+### Decisão Final
+- [x] Cookies não funcionam bem em produção (problemas de sameSite/secure)
+- [x] JWT com localStorage é mais simples e confiável
+- [x] Solução: Backend retorna token, frontend salva no localStorage
+
+### Implementação Completa
+- [x] Backend: Modificar login/signup para retornar token ao invés de setar cookie
+- [x] Frontend: Salvar token no localStorage após login/signup
+- [x] tRPC Client: Enviar token via header Authorization: Bearer
+- [x] Backend Context: Ler token do header Authorization
+- [x] Logout: Limpar token do localStorage
+- [x] Testar em desenvolvimento - FUNCIONANDO 100%!
+- [x] Token salvo corretamente (199 caracteres)
+- [x] Dashboard carrega com dados do usuário
+- [x] Menu completo aparece após login

@@ -18,6 +18,8 @@ export default function GlobalNavigation() {
   const handleLogout = async () => {
     try {
       await logoutMutation.mutateAsync();
+      // Clear JWT token from localStorage
+      localStorage.removeItem("auth_token");
       toast.success("Logout realizado com sucesso!");
       window.location.href = "/";
     } catch (error) {

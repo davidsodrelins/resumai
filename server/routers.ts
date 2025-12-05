@@ -40,25 +40,16 @@ export const appRouter = router({
           const result = await signupUser(input);
           console.log("[Signup] Signup successful for:", input.email);
           
-          // Set session cookie with JWT token
-          const cookieOptions = getSessionCookieOptions(ctx.req);
-          console.log("[Signup] Setting cookie with options:", cookieOptions);
-          
-          ctx.res.cookie(COOKIE_NAME, result.token, {
-            ...cookieOptions,
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-          });
-          
-          console.log("[Signup] Cookie set successfully");
-          
           // Send welcome email (async, don't block signup)
           sendWelcomeEmail(input.name, input.email).catch(err => {
             console.error('[Signup] Failed to send welcome email:', err);
           });
           
+          // Return token to frontend (will be stored in localStorage)
           return {
             success: true,
             user: result.user,
+            token: result.token,
           };
         } catch (error: any) {
           throw new Error(error.message || "Erro ao criar conta");
@@ -76,29 +67,19 @@ export const appRouter = router({
           const result = await loginUser(input);
           console.log("[Login] Login successful for:", input.email);
           
-          // Set session cookie with JWT token
-          const cookieOptions = getSessionCookieOptions(ctx.req);
-          console.log("[Login] Setting cookie with options:", cookieOptions);
-          
-          ctx.res.cookie(COOKIE_NAME, result.token, {
-            ...cookieOptions,
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-          });
-          
-          console.log("[Login] Cookie set successfully");
-          
+          // Return token to frontend (will be stored in localStorage)
           return {
             success: true,
             user: result.user,
+            token: result.token,
           };
         } catch (error: any) {
           throw new Error(error.message || "Erro ao fazer login");
         }
       }),
     
-    logout: publicProcedure.mutation(({ ctx }) => {
-      const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
+    logout: publicProcedure.mutation(() => {
+      // Frontend will clear localStorage token
       return {
         success: true,
       } as const;

@@ -46,12 +46,14 @@ export function getSessionCookieOptions(
     protocol: req.protocol,
     forwardedProto: req.headers["x-forwarded-proto"],
     isSecure,
+    sameSite: "lax",
+    secure: isSecure,
   });
 
   return {
     httpOnly: true,
     path: "/",
-    sameSite: "none", // Using "none" for cross-site cookies in production
-    secure: true, // Always true for sameSite: "none"
+    sameSite: "lax", // Same-site cookies work when frontend and backend are on same domain
+    secure: isSecure, // Use secure only when HTTPS is detected
   };
 }

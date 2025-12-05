@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { trpc } from "../lib/trpc";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -12,31 +12,22 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [, setLocation] = useLocation();
-  const utils = trpc.useUtils();
 
   const signupMutation = trpc.auth.signup.useMutation({
-    onSuccess: async () => {
-      console.log("✅ Cadastro bem-sucedido! Invalidando cache...");
-      // Invalidate auth cache to ensure fresh user data
-      await utils.auth.me.invalidate();
-      console.log("🔄 Cache invalidado, redirecionando em 500ms...");
-      // Add delay to ensure cookie is propagated
-      setTimeout(() => {
-        console.log("➡️ Redirecionando para /dashboard");
-        setLocation("/dashboard");
-      }, 500);
+    onSuccess: (data) => {
+      // Save JWT token to localStorage
+      localStorage.setItem("auth_token", data.token);
+      
+      // Reload page to apply authentication
+      window.location.href = "/";
     },
     onError: (error) => {
-      console.error("❌ Erro ao criar conta:", error);
       alert(error.message || "Erro ao criar conta");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    console.log("📝 Tentando criar conta com:", email);
     
     if (!name || !email || !password || !confirmPassword) {
       alert("Por favor, preencha todos os campos");
