@@ -168,3 +168,21 @@ export const activityLogs = mysqlTable("activity_logs", {
 
 export type ActivityLog = typeof activityLogs.$inferSelect;
 export type InsertActivityLog = typeof activityLogs.$inferInsert;
+
+/**
+ * Referrals table for tracking user referrals and rewards
+ */
+export const referrals = mysqlTable("referrals", {
+  id: int("id").autoincrement().primaryKey(),
+  referrerId: int("referrer_id").notNull(), // User who shared the referral link
+  referredId: int("referred_id"), // User who signed up via referral (null until signup)
+  referralCode: varchar("referral_code", { length: 50 }).notNull().unique(), // Unique code for tracking
+  status: mysqlEnum("status", ["pending", "completed", "rewarded"]).default("pending").notNull(),
+  rewardCredits: int("reward_credits").default(0).notNull(), // Extra resumes granted
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"), // When referred user signed up
+  rewardedAt: timestamp("rewarded_at"), // When reward was granted
+});
+
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = typeof referrals.$inferInsert;

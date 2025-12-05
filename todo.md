@@ -1203,3 +1203,77 @@
 - [x] Testar persistência no localStorage (via browser)
 - [x] Verificar navegação traduzida em EN (via browser)
 - [x] Testar fallback (pt é o padrão)
+
+
+## V12.0.0 - SEO, Rebranding e Marketing Viral
+
+### SEO Técnico
+- [x] Adicionar meta tags otimizadas (title, description, keywords)
+- [x] Implementar Open Graph tags (Facebook, LinkedIn)
+- [x] Implementar Twitter Cards
+- [x] Criar sitemap.xml dinâmico
+- [x] Criar robots.txt
+- [x] Adicionar Schema.org markup (Organization, WebApplication)
+- [x] Configurar canonical URLs
+- [x] Adicionar hreflang para i18n SEO (via sitemap)
+- [ ] Otimizar performance (lazy loading, compressão) - a fazer
+
+### Rebranding (Manus → ResumAI)
+- [x] Atualizar referências "Manus" para "ResumAI" (ManusDialog, portfolioGenerator)
+- [x] Atualizar templates de portfolio (footer com link ResumAI)
+- [x] Atualizar meta tags com branding ResumAI
+- [ ] Criar favicon personalizado ResumAI (usar favicon.svg)
+- [ ] Atualizar templates de emails (boas-vindas, notificações) - a fazer
+- [ ] Revisar outros templates de currículos (PDF, DOCX, LaTeX) - a fazer
+
+### Landing Page Otimizada
+- [ ] Redesign da Home com foco em conversão
+- [ ] Seção Hero com CTA claro
+- [ ] Seção de benefícios (por que usar ResumAI)
+- [ ] Seção de templates (galeria visual)
+- [ ] Seção de depoimentos/testemunhos
+- [ ] Seção de FAQ
+- [ ] Seção de preços/planos
+- [ ] Footer com links importantes
+
+### Sistema de Referral
+- [x] Criar tabela referrals no banco
+- [ ] Gerar código de referral único por usuário (endpoint)
+- [ ] Endpoint para registrar referral
+- [ ] Página /referral com link de compartilhamento
+- [ ] Sistema de recompensas (créditos extras)
+- [ ] Dashboard de referrals (quantos indicou, recompensas)
+
+### Compartilhamento Social
+- [ ] Botões de compartilhar após criar currículo
+- [ ] Compartilhar no LinkedIn, Twitter, Facebook
+- [ ] Preview otimizado com Open Graph
+- [ ] Mensagem personalizada de compartilhamento
+
+### Blog Integrado
+- [ ] Criar estrutura de blog (/blog)
+- [ ] Tabela blog_posts no banco
+- [ ] CRUD de posts (admin only)
+- [ ] Página de listagem de posts
+- [ ] Página de post individual
+- [ ] SEO otimizado para posts (meta tags, schema)
+- [ ] Categorias e tags
+- [ ] Criar 5 posts iniciais (guias de currículo, dicas de carreira)
+
+### Email Marketing
+- [ ] Template de email de boas-vindas atualizado
+- [ ] Email de lembrete (7 dias sem usar)
+- [ ] Email de aniversário do usuário
+- [ ] Newsletter mensal (novos templates, dicas)
+
+### Analytics e Tracking
+- [ ] Configurar Google Analytics 4
+- [ ] Eventos de conversão (signup, create resume, donation)
+- [ ] Heatmaps (opcional - Hotjar/Microsoft Clarity)
+
+### Testes
+- [ ] Testar meta tags com Facebook Debugger
+- [ ] Testar Twitter Cards com Card Validator
+- [ ] Testar sitemap.xml
+- [ ] Testar performance com Lighthouse
+- [ ] Testar compartilhamento social
