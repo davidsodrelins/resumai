@@ -1010,3 +1010,34 @@
 - [x] Adicionar formulário de alteração de senha com PasswordStrengthIndicator
 - [x] Mostrar estatísticas detalhadas de uso em tabs
 - [x] Criar procedures no backend: updateName, updateEmail, changePassword
+
+
+## V11.3.0 - Painel Administrativo Completo
+
+### Backend - Endpoints tRPC
+- [x] Criar router admin.ts com adminProcedure (middleware que verifica isAdmin)
+- [x] Endpoint getGlobalStats (total users, resumes, donations, revenue)
+- [x] Endpoint getAllUsers com paginação e filtros
+- [x] Endpoint promoteToAdmin e demoteFromAdmin
+- [x] Endpoint blockUser e unblockUser
+- [x] Endpoint getActivityLogs (últimas ações importantes)
+- [x] Endpoint getGrowthData (novos usuários por dia/semana/mês)
+
+### Frontend - Página Admin
+- [x] Criar componente AdminStats com cards de estatísticas globais
+- [x] Criar componente UsersTable com filtros (role, status, busca)
+- [x] Adicionar ações em cada linha (promover, bloquear, ver detalhes)
+- [x] Criar gráfico de crescimento de usuários (Chart.js)
+- [x] Adicionar seção de logs de atividades recentes
+- [x] Implementar paginação na tabela de usuários
+- [x] Adicionar confirmação para ações críticas (bloquear, promover)
+
+### Banco de Dados
+- [x] Adicionar campo isBlocked na tabela users
+- [x] Criar tabela activity_logs para rastrear ações importantes
+- [x] Migração do banco de dados
+
+### Testes
+- [x] Escrever testes para adminProcedure (acesso negado para não-admin)
+- [x] Testar endpoints de estatísticas
+- [x] Testar ações de gerenciamento de usuários

@@ -11,6 +11,7 @@ export const users = mysqlTable("users", {
   name: text("name"),
   loginMethod: varchar("loginMethod", { length: 64 }).default("email"),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  isBlocked: int("is_blocked").default(0).notNull(), // 0 = active, 1 = blocked
   
   // Donation tracking
   isDonor: int("is_donor").default(0).notNull(), // 0 = no, 1 = yes
@@ -142,3 +143,20 @@ export const passwordResetTokens = mysqlTable("password_reset_tokens", {
 
 export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type InsertPasswordResetToken = typeof passwordResetTokens.$inferInsert;
+
+/**
+ * Activity logs table for tracking important admin actions
+ */
+export const activityLogs = mysqlTable("activity_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  adminId: int("admin_id").notNull(), // User ID of admin who performed action
+  targetUserId: int("target_user_id"), // User ID affected by action (optional)
+  action: varchar("action", { length: 100 }).notNull(), // promote, demote, block, unblock, etc
+  details: text("details"), // Additional context about the action
+  ipAddress: varchar("ip_address", { length: 45 }), // IPv4 or IPv6
+  userAgent: text("user_agent"), // Browser/device info
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ActivityLog = typeof activityLogs.$inferSelect;
+export type InsertActivityLog = typeof activityLogs.$inferInsert;
