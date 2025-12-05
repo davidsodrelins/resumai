@@ -25,6 +25,7 @@ import AdminMetrics from "@/pages/AdminMetrics";
 import AdminNotifications from "@/pages/AdminNotifications";
 import AdminReports from "@/pages/AdminReports";
 import PaymentHistory from "@/pages/PaymentHistory";
+import Referral from "@/pages/Referral";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -38,7 +39,9 @@ function Router() {
       <Route path={"/donation/success"}>
         <ProtectedRoute><DonationSuccess /></ProtectedRoute>
       </Route>
-      <Route path={"/history"}>
+      <Route path={"/referral"}>
+        <ProtectedRoute><Referral /></ProtectedRoute>
+      </Route>      <Route path={"/history"}>
         <ProtectedRoute><History /></ProtectedRoute>
       </Route>
       <Route path={"/generator"}>

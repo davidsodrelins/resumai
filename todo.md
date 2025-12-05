@@ -1277,3 +1277,72 @@
 - [ ] Testar sitemap.xml
 - [ ] Testar performance com Lighthouse
 - [ ] Testar compartilhamento social
+
+
+## V12.1.0 - Sistema de Referral, Blog SEO e Analytics
+
+### Sistema de Referral - Endpoints
+- [x] Criar router referral.ts
+- [x] Endpoint getMyReferralCode (gera/retorna código único por usuário)
+- [x] Endpoint getMyReferralStats (quantos indicou, recompensas ganhas)
+- [x] Endpoint registerReferral (registra quando alguém usa o código)
+- [x] Endpoint claimReward (concede créditos extras ao referrer)
+- [x] Endpoint validateCode (valida código no signup)
+- [x] Lógica de recompensa: +2 currículos extras por indicação bem-sucedida
+
+### Sistema de Referral - Frontend
+- [x] Criar página /referral
+- [x] Exibir código de referral único do usuário
+- [x] Link de compartilhamento (https://resumai.davidsodre.com/signup?ref=CODIGO)
+- [x] Botões de compartilhar no WhatsApp, Twitter, LinkedIn, Facebook
+- [x] Dashboard de referrals (quantos clicaram, quantos se cadastraram, recompensas)
+- [x] Adicionar link "Indique e Ganhe" no menu
+- [x] Cards de estatísticas (Total de Cliques, Cadastros, Recompensados, Créditos Ganhos)
+- [x] Seção "Como Funciona" com 3 passos
+- [x] Lista de indicações recentes
+
+### Blog SEO - Backend
+- [ ] Criar tabela blog_posts no banco
+- [ ] Criar router blog.ts
+- [ ] Endpoint createPost (admin only)
+- [ ] Endpoint updatePost (admin only)
+- [ ] Endpoint deletePost (admin only)
+- [ ] Endpoint getAllPosts (público, com paginação)
+- [ ] Endpoint getPostBySlug (público)
+- [ ] Campos: title, slug, content (markdown), excerpt, author, category, tags, publishedAt
+
+### Blog SEO - Frontend
+- [ ] Criar página /blog (listagem de posts)
+- [ ] Criar página /blog/[slug] (post individual)
+- [ ] Criar página /admin/blog (CRUD de posts, admin only)
+- [ ] Componente BlogPostCard
+- [ ] Componente BlogPostEditor (markdown editor)
+- [ ] Meta tags SEO por post (title, description, og:image)
+- [ ] Breadcrumbs e navegação entre posts
+
+### Blog SEO - Conteúdo
+- [ ] Artigo 1: "Como Criar um Currículo ATS-Friendly em 2025"
+- [ ] Artigo 2: "10 Erros Fatais no Currículo que Custam a Vaga"
+- [ ] Artigo 3: "Guia Completo: Currículo vs CV vs Resume - Diferenças"
+- [ ] Artigo 4: "Como Otimizar seu LinkedIn para Recrutadores"
+- [ ] Artigo 5: "Soft Skills Mais Valorizadas pelas Empresas em 2025"
+
+### Google Analytics 4
+- [ ] Adicionar script do GA4 no index.html
+- [ ] Configurar eventos de conversão (signup, create_resume, donation)
+- [ ] Configurar eventos de engajamento (view_template, download_resume)
+- [ ] Documentar ID de medição para o usuário configurar
+
+### Compartilhamento Social
+- [ ] Criar componente SocialShareButtons
+- [ ] Botões: LinkedIn, Twitter, Facebook, WhatsApp, copiar link
+- [ ] Adicionar após criar currículo (página de sucesso)
+- [ ] Mensagem personalizada: "Acabei de criar meu currículo profissional com IA no ResumAI! 🚀"
+- [ ] Tracking de compartilhamentos (evento GA4)
+
+### Testes
+- [x] Testar sistema de referral (gerar código, compartilhar, registrar) - via browser
+- [ ] Testar CRUD de blog posts
+- [ ] Testar SEO de posts individuais
+- [ ] Testar compartilhamento social
+- [ ] Verificar eventos do GA4

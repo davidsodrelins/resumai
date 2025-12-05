@@ -21,6 +21,7 @@ import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUs
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 import { adminRouter } from "./routers/admin";
 import { paymentsRouter } from "./routers/payments";
+import { referralRouter } from "./routers/referral";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -29,6 +30,7 @@ export const appRouter = router({
   system: systemRouter,
   admin: adminRouter,
   payments: paymentsRouter,
+  referral: referralRouter,
   user: router({
     updateProfile: protectedProcedure
       .input(z.object({
