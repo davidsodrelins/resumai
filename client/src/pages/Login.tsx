@@ -6,10 +6,12 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { FileText, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: (data) => {
@@ -20,7 +22,9 @@ export default function Login() {
       window.location.href = "/";
     },
     onError: (error) => {
-      alert(error.message || "Erro ao fazer login");
+      toast.error("Erro ao fazer login", {
+        description: error.message || "Verifique suas credenciais e tente novamente",
+      });
     },
   });
 
@@ -28,11 +32,13 @@ export default function Login() {
     e.preventDefault();
     
     if (!email || !password) {
-      alert("Por favor, preencha todos os campos");
+      toast.error("Campos obrigatórios", {
+        description: "Por favor, preencha email e senha",
+      });
       return;
     }
 
-    loginMutation.mutate({ email, password });
+    loginMutation.mutate({ email, password, rememberMe });
   };
 
   return (
@@ -75,6 +81,18 @@ export default function Login() {
                 required
               />
             </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="rememberMe" className="text-sm text-muted-foreground cursor-pointer">
+                Lembrar-me por 30 dias (padrão: 24 horas)
+              </label>
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button
@@ -91,11 +109,18 @@ export default function Login() {
                 "Entrar"
               )}
             </Button>
-            <div className="text-sm text-center text-muted-foreground">
-              Não tem uma conta?{" "}
-              <Link href="/signup" className="text-blue-600 hover:underline font-medium">
-                Cadastre-se
-              </Link>
+            <div className="text-sm text-center text-muted-foreground space-y-2">
+              <div>
+                Não tem uma conta?{" "}
+                <Link href="/signup" className="text-blue-600 hover:underline font-medium">
+                  Cadastre-se
+                </Link>
+              </div>
+              <div>
+                <Link href="/forgot-password" className="text-blue-600 hover:underline font-medium">
+                  Esqueci minha senha
+                </Link>
+              </div>
             </div>
           </CardFooter>
         </form>

@@ -14,7 +14,8 @@ import { generateLatexResume } from "./latexExporter";
 import { analyzeSoftSkills } from "./softSkillsAnalyzer";
 import { generatePortfolio } from "./services/portfolioGenerator";
 import type { ResumeData } from "../shared/resumeTypes";
-import { signupUser, loginUser } from "./publicAuth";
+import { loginUser, signupUser } from "./publicAuth";
+import { requestPasswordReset, resetPassword } from "./passwordReset";
 import { sendWelcomeEmail } from "./modules/welcomeEmail";
 import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUserDonor, DONATION_OPTIONS } from "./donations";
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
@@ -60,6 +61,7 @@ export const appRouter = router({
       .input(z.object({
         email: z.string().email(),
         password: z.string(),
+        rememberMe: z.boolean().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
         try {
@@ -84,6 +86,33 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+
+    forgotPassword: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const result = await requestPasswordReset(input.email);
+          return result;
+        } catch (error: any) {
+          throw new Error(error.message || "Erro ao solicitar recuperação de senha");
+        }
+      }),
+
+    resetPassword: publicProcedure
+      .input(z.object({
+        token: z.string(),
+        newPassword: z.string().min(6),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const result = await resetPassword(input.token, input.newPassword);
+          return result;
+        } catch (error: any) {
+          throw new Error(error.message || "Erro ao redefinir senha");
+        }
+      }),
   }),
 
   resume: router({

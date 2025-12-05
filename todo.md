@@ -962,3 +962,26 @@
 - [x] Token salvo corretamente (199 caracteres)
 - [x] Dashboard carrega com dados do usuário
 - [x] Menu completo aparece após login
+
+
+## V11.1.0 - Melhorias de UX
+
+### Toast Notifications
+- [x] Substituir alert() por toast do Sonner em Login.tsx
+- [x] Substituir alert() por toast do Sonner em Signup.tsx
+- [x] Verificar se Sonner já está instalado (shadcn/ui)
+
+### Checkbox "Lembrar-me"
+- [x] Adicionar checkbox no Login.tsx
+- [x] Modificar backend para aceitar expiresIn customizado
+- [x] Token padrão: 24h, com "Lembrar-me": 30 dias
+
+### Recuperação de Senha
+- [x] Criar tabela password_reset_tokens no schema
+- [x] Criar procedure forgotPassword (gera token, envia email)
+- [x] Criar procedure resetPassword (valida token, atualiza senha)
+- [x] Criar página ForgotPassword.tsx
+- [x] Criar página ResetPassword.tsx
+- [x] Adicionar link "Esqueci minha senha" no Login.tsx
+- [ ] Testar fluxo completo
+- [ ] Implementar envio de email via SMTP (TODO)

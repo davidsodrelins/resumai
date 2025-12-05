@@ -6,6 +6,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { FileText, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -22,7 +23,9 @@ export default function Signup() {
       window.location.href = "/";
     },
     onError: (error) => {
-      alert(error.message || "Erro ao criar conta");
+      toast.error("Erro ao criar conta", {
+        description: error.message || "Tente novamente mais tarde",
+      });
     },
   });
 
@@ -30,17 +33,23 @@ export default function Signup() {
     e.preventDefault();
     
     if (!name || !email || !password || !confirmPassword) {
-      alert("Por favor, preencha todos os campos");
+      toast.error("Campos obrigatórios", {
+        description: "Por favor, preencha todos os campos",
+      });
       return;
     }
 
     if (password.length < 6) {
-      alert("A senha deve ter no mínimo 6 caracteres");
+      toast.error("Senha muito curta", {
+        description: "A senha deve ter no mínimo 6 caracteres",
+      });
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("As senhas não coincidem");
+      toast.error("Senhas não coincidem", {
+        description: "As senhas digitadas são diferentes",
+      });
       return;
     }
 

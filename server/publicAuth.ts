@@ -18,6 +18,7 @@ export interface SignupData {
 export interface LoginData {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 /**
@@ -81,9 +82,10 @@ export async function signupUser(data: SignupData) {
 }
 
 /**
- * Login user with email/password
+ * Authenticate user with email/password
  */
 export async function loginUser(data: LoginData) {
+  const expiresIn = data.rememberMe ? "30d" : "24h";
   const { email, password } = data;
 
   // Find user by email
@@ -118,7 +120,7 @@ export async function loginUser(data: LoginData) {
   const token = jwt.sign(
     { userId: user.id, email: user.email },
     JWT_SECRET,
-    { expiresIn: JWT_EXPIRES_IN }
+    { expiresIn }
   );
 
   return {
