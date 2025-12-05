@@ -23,25 +23,17 @@ export default function Portfolio() {
 
   // Queries
   const { data: resumes, isLoading: loadingResumes } = trpc.history.listResumes.useQuery();
-  
-  // Changed from useQuery to useMutation to avoid 414 URI Too Long error
-  const previewMutation = trpc.portfolio.preview.useMutation({
-    onSuccess: (data) => {
-      // Combine HTML, CSS, and JS into a single document
-      const fullHtml = data.html.replace(
-        '<link rel="stylesheet" href="styles.css">',
-        `<style>${data.css}</style>`
-      ).replace(
-        '<script src="script.js"></script>',
-        `<script>${data.js}</script>`
-      );
-      setPreviewHtml(fullHtml);
+  const { data: previewData, isLoading: loadingPreview, refetch: refetchPreview } = trpc.portfolio.preview.useQuery(
+    {
+      resumeData: resumes?.find((r: any) => r.id === selectedResumeId)?.resumeData || {},
+      template,
+      theme,
+      primaryColor,
     },
-    onError: (error) => {
-      console.error("Error loading preview:", error);
-      setPreviewHtml("");
-    },
-  });
+    {
+      enabled: !!selectedResumeId && !!resumes,
+    }
+  );
 
   // Mutations
   const generateMutation = trpc.portfolio.generate.useMutation({
@@ -54,20 +46,20 @@ export default function Portfolio() {
     },
   });
 
-  // Trigger preview update when resume, template, theme, or color changes
+  // Update preview when data changes
   useEffect(() => {
-    if (selectedResumeId && resumes) {
-      const resumeData = resumes.find((r: any) => r.id === selectedResumeId)?.resumeData;
-      if (resumeData) {
-        previewMutation.mutate({
-          resumeData,
-          template,
-          theme,
-          primaryColor,
-        });
-      }
+    if (previewData) {
+      // Combine HTML, CSS, and JS into a single document
+      const fullHtml = previewData.html.replace(
+        '<link rel="stylesheet" href="styles.css">',
+        `<style>${previewData.css}</style>`
+      ).replace(
+        '<script src="script.js"></script>',
+        `<script>${previewData.js}</script>`
+      );
+      setPreviewHtml(fullHtml);
     }
-  }, [selectedResumeId, template, theme, primaryColor, resumes]);
+  }, [previewData]);
 
   // Handlers
   const handleGenerate = () => {
@@ -336,17 +328,10 @@ export default function Portfolio() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    if (selectedResumeId && resumes) {
-                      const resumeData = resumes.find((r: any) => r.id === selectedResumeId)?.resumeData;
-                      if (resumeData) {
-                        previewMutation.mutate({ resumeData, template, theme, primaryColor });
-                      }
-                    }
-                  }}
-                  disabled={!selectedResumeId || previewMutation.isPending}
+                  onClick={() => refetchPreview()}
+                  disabled={!selectedResumeId || loadingPreview}
                 >
-                  {previewMutation.isPending ? (
+                  {loadingPreview ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <Eye className="w-4 h-4" />
@@ -355,7 +340,7 @@ export default function Portfolio() {
               </div>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
-              {previewMutation.isPending ? (
+              {loadingPreview ? (
                 <div className="flex items-center justify-center h-full">
                   <Loader2 className="w-8 h-8 animate-spin text-primary" />
                 </div>

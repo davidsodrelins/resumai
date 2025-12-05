@@ -7,7 +7,6 @@ import superjson from "superjson";
 import App from "./App";
 import { getLoginUrl } from "./const";
 import "./index.css";
-import "./lib/i18n"; // Initialize i18n
 
 const queryClient = new QueryClient();
 

@@ -13,8 +13,7 @@
     "profile": "Profile",
     "history": "History",
     "logout": "Logout",
-    "donate": "Donate",
-    "user": "User"
+    "donate": "Donate"
   },
   "auth": {
     "login": "Login",

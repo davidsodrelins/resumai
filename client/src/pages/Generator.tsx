@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { trackResumeCreated, trackResumeDownload } from "../lib/analytics";
 import { FileText, Upload, Loader2, Download, ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -179,10 +178,6 @@ export default function Generator() {
           template: selectedTemplate
         });
         setCurrentStep('preview');
-        
-        // Track resume creation
-        trackResumeCreated(selectedModel, selectedLanguage);
-        
         toast.success("Currículo gerado com sucesso!");
       }
     } catch (error: any) {

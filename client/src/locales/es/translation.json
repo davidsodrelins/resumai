@@ -13,8 +13,7 @@
     "profile": "Perfil",
     "history": "Historial",
     "logout": "Salir",
-    "donate": "Apoyar",
-    "user": "Usuario"
+    "donate": "Apoyar"
   },
   "auth": {
     "login": "Iniciar sesión",

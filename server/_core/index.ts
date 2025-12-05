@@ -8,7 +8,6 @@ import { registerWebhookRoute } from "./webhookRoute";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
-import { generateSitemap } from "../sitemap";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -40,10 +39,6 @@ async function startServer() {
   
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
-  
-  // Sitemap for SEO
-  app.get("/sitemap.xml", generateSitemap);
-  
   // tRPC API
   app.use(
     "/api/trpc",

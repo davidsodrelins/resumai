@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 import { ENV } from "./_core/env";
 
@@ -16,7 +16,6 @@ export interface SignupData {
   country?: string;
   state?: string;
   city?: string;
-  referralCode?: string;
 }
 
 export interface LoginData {
@@ -29,7 +28,7 @@ export interface LoginData {
  * Register a new user with email/password
  */
 export async function signupUser(data: SignupData) {
-  const { email, password, name, country, state, city, referralCode } = data;
+  const { email, password, name, country, state, city } = data;
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,21 +52,6 @@ export async function signupUser(data: SignupData) {
     throw new Error("Email já cadastrado");
   }
 
-  // Validar código de referral se fornecido
-  let referrerId: number | null = null;
-  if (referralCode) {
-    const { referrals } = await import("../drizzle/schema");
-    const [referral] = await db
-      .select()
-      .from(referrals)
-      .where(eq(referrals.referralCode, referralCode))
-      .limit(1);
-
-    if (referral) {
-      referrerId = referral.referrerId;
-    }
-  }
-
   // Hash password
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
@@ -85,37 +69,6 @@ export async function signupUser(data: SignupData) {
     totalDonated: 0,
     resumesThisMonth: 0,
   });
-
-  // Registrar referral se código foi fornecido
-  if (referralCode && referrerId) {
-    const { referrals } = await import("../drizzle/schema");
-    await db
-      .update(referrals)
-      .set({
-        referredId: newUser.insertId,
-        status: "completed",
-        completedAt: new Date(),
-      })
-      .where(eq(referrals.referralCode, referralCode));
-
-    // Conceder recompensa ao referrer (+2 currículos)
-    await db
-      .update(users)
-      .set({
-        resumesThisMonth: sql`${users.resumesThisMonth} + 2`,
-      })
-      .where(eq(users.id, referrerId));
-
-    // Marcar como recompensado
-    await db
-      .update(referrals)
-      .set({
-        status: "rewarded",
-        rewardCredits: 2,
-        rewardedAt: new Date(),
-      })
-      .where(eq(referrals.referralCode, referralCode));
-  }
 
   // Generate JWT token
   const token = jwt.sign(

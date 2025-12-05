@@ -1,15 +1,13 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown, User, Settings, Gift } from "lucide-react";
+import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown, User, Settings } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { useTranslation } from "react-i18next";
 
 import DonationModal from "./DonationModal";
-import { LanguageSelector } from "./LanguageSelector";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +18,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function GlobalNavigation() {
-  const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const logoutMutation = trpc.auth.logout.useMutation();
@@ -31,29 +28,26 @@ export default function GlobalNavigation() {
       await logoutMutation.mutateAsync();
       // Clear JWT token from localStorage
       localStorage.removeItem("auth_token");
-      toast.success(t("messages.logoutSuccess"));
+      toast.success("Logout realizado com sucesso!");
       window.location.href = "/";
     } catch (error) {
-      toast.error(t("common.error"));
+      toast.error("Erro ao fazer logout");
     }
   };
 
   const navItems = [
-    { path: "/", label: t("nav.home"), icon: Home },
-    { path: "/generator", label: t("nav.create"), icon: FileText },
-    { path: "/blog", label: "Blog", icon: FileText },
-    { path: "/resources", label: t("nav.resources"), icon: LayoutGrid },
-    { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3 },
-    { path: "/referral", label: "Indique e Ganhe", icon: Gift },
-    { path: "/payment-history", label: t("nav.payments"), icon: CreditCard },
+    { path: "/", label: "Início", icon: Home },
+    { path: "/generator", label: "Criar", icon: FileText },
+    { path: "/resources", label: "Recursos", icon: LayoutGrid },
+    { path: "/dashboard", label: "Dashboard", icon: BarChart3 },
+    { path: "/payment-history", label: "Pagamentos", icon: CreditCard },
   ];
 
   const adminItems = [
-    { path: "/admin", label: t("nav.panel"), icon: Shield },
-    { path: "/admin/metrics", label: t("nav.metrics"), icon: TrendingUp },
-    { path: "/admin/notifications", label: t("nav.notifications"), icon: Bell },
-    { path: "/admin/reports", label: t("nav.reports"), icon: FileDown },
-    { path: "/admin/blog", label: "Gerenciar Blog", icon: FileText },
+    { path: "/admin", label: "Painel", icon: Shield },
+    { path: "/admin/metrics", label: "Métricas", icon: TrendingUp },
+    { path: "/admin/notifications", label: "Notificações", icon: Bell },
+    { path: "/admin/reports", label: "Relatórios", icon: FileDown },
   ];
 
   const isActive = (path: string) => {
@@ -144,10 +138,8 @@ export default function GlobalNavigation() {
               </nav>
             )}
 
-            {/* Right Side - Language + User Menu */}
+            {/* Right Side - User Menu */}
             <div className="flex items-center gap-3">
-              {/* Language Selector */}
-              <LanguageSelector />
               {isAuthenticated ? (
                 <>
                   {/* Donation Button */}
@@ -158,7 +150,7 @@ export default function GlobalNavigation() {
                     className="gap-2 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white shadow-md hidden sm:flex"
                   >
                     <Heart className="h-4 w-4" />
-                    <span className="hidden md:inline">{t("nav.donate")}</span>
+                    <span className="hidden md:inline">Apoiar</span>
                   </Button>
 
                   {/* User Dropdown */}
@@ -172,10 +164,10 @@ export default function GlobalNavigation() {
                         </Avatar>
                         <div className="hidden md:flex flex-col items-start">
                           <span className="text-sm font-medium leading-none">
-                            {user?.name?.split(" ")[0] || t("nav.user")}
+                            {user?.name?.split(" ")[0] || "Usuário"}
                           </span>
                           <span className="text-xs text-muted-foreground leading-none mt-0.5">
-                            {user?.role === "admin" ? t("admin.admin") : t("nav.user")}
+                            {user?.role === "admin" ? "Admin" : "Usuário"}
                           </span>
                         </div>
                         <ChevronDown className="h-4 w-4 text-muted-foreground hidden md:block" />
@@ -191,7 +183,7 @@ export default function GlobalNavigation() {
                         <Link href="/profile">
                           <a className="flex items-center gap-2 w-full cursor-pointer">
                             <User className="h-4 w-4" />
-                            {t("nav.profile")}
+                            Meu Perfil
                           </a>
                         </Link>
                       </DropdownMenuItem>
@@ -199,7 +191,7 @@ export default function GlobalNavigation() {
                         <Link href="/dashboard">
                           <a className="flex items-center gap-2 w-full cursor-pointer">
                             <BarChart3 className="h-4 w-4" />
-                            {t("nav.dashboard")}
+                            Dashboard
                           </a>
                         </Link>
                       </DropdownMenuItem>

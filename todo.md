@@ -1163,285 +1163,60 @@
 ## V11.6.0 - Sistema de Internacionalização (i18n)
 
 ### Infraestrutura
-- [x] Instalar i18next, react-i18next e i18next-browser-languagedetector
-- [x] Configurar i18next no projeto
-- [x] Criar estrutura de pastas para traduções (/locales/pt, /locales/en, /locales/es)
-- [x] Configurar provider I18nextProvider no App.tsx (via import no main.tsx)
+- [ ] Instalar i18next, react-i18next e i18next-browser-languagedetector
+- [ ] Configurar i18next no projeto
+- [ ] Criar estrutura de pastas para traduções (/locales/pt, /locales/en, /locales/es)
+- [ ] Configurar provider I18nextProvider no App.tsx
 
 ### Banco de Dados
-- [x] Adicionar campo preferredLanguage na tabela users (enum: 'pt', 'en', 'es')
-- [x] Migração do banco de dados
+- [ ] Adicionar campo preferredLanguage na tabela users (enum: 'pt', 'en', 'es')
+- [ ] Migração do banco de dados
 
 ### Backend - Endpoints
-- [x] Criar endpoint user.updateLanguage para salvar preferência
-- [x] Endpoint auth.me já retorna preferredLanguage (campo no schema)
+- [ ] Criar endpoint user.updateLanguage para salvar preferência
+- [ ] Atualizar endpoint auth.me para retornar preferredLanguage
 
 ### Arquivos de Tradução
-- [x] Criar /locales/pt/translation.json (português)
-- [x] Criar /locales/en/translation.json (inglês)
-- [x] Criar /locales/es/translation.json (espanhol)
-- [x] Traduzir navegação (header, menus, links)
-- [x] Criar estrutura base de traduções (nav, auth, profile, admin, dashboard, common, messages)
-- [ ] Traduzir páginas restantes (Home, Signup, Login, CreateResume, etc.) - a fazer conforme necessidade
-- [x] Traduzir mensagens de erro e validação básicas
+- [ ] Criar /locales/pt/translation.json (português)
+- [ ] Criar /locales/en/translation.json (inglês)
+- [ ] Criar /locales/es/translation.json (espanhol)
+- [ ] Traduzir navegação (header, menus, links)
+- [ ] Traduzir páginas principais (Home, Dashboard, Profile, Admin)
+- [ ] Traduzir formulários (Signup, Login, Create Resume)
+- [ ] Traduzir mensagens de erro e validação
+- [ ] Traduzir tooltips e labels
 
 ### Frontend - Componentes
-- [x] Criar componente LanguageSelector (dropdown no header)
-- [x] Implementar detecção automática de idioma do navegador
-- [x] Implementar lógica de fallback (navegador → localStorage → pt)
-- [x] Persistir preferência no localStorage
-- [x] Sincronizar com banco de dados ao mudar idioma
-- [x] Adicionar LanguageSelector no GlobalNavigation
+- [ ] Criar componente LanguageSelector (dropdown no header)
+- [ ] Implementar detecção automática de idioma do navegador
+- [ ] Implementar lógica de fallback (navegador → localização → pt)
+- [ ] Persistir preferência no localStorage
+- [ ] Sincronizar com banco de dados ao mudar idioma
+- [ ] Adicionar LanguageSelector no GlobalNavigation
 
 ### Tradução de Páginas
-- [x] Traduzir GlobalNavigation.tsx (completo)
-- [ ] Traduzir demais páginas conforme necessidade (estrutura pronta, basta usar t() hook)
+- [ ] Traduzir Home.tsx
+- [ ] Traduzir Dashboard.tsx
+- [ ] Traduzir Profile.tsx
+- [ ] Traduzir Admin.tsx
+- [ ] Traduzir AdminMetrics.tsx
+- [ ] Traduzir AdminNotifications.tsx
+- [ ] Traduzir AdminReports.tsx
+- [ ] Traduzir Signup.tsx e Login.tsx
+- [ ] Traduzir CreateResume.tsx
+- [ ] Traduzir History.tsx
 
 ### Testes
-- [x] Testar detecção automática de idioma (via browser)
-- [x] Testar mudança manual de idioma (via browser)
-- [x] Testar persistência no localStorage (via browser)
-- [x] Verificar navegação traduzida em EN (via browser)
-- [x] Testar fallback (pt é o padrão)
+- [ ] Testar detecção automática de idioma
+- [ ] Testar mudança manual de idioma
+- [ ] Testar persistência no banco de dados
+- [ ] Verificar todas as páginas em PT, EN e ES
+- [ ] Testar fallback quando tradução não existe
 
 
-## V12.0.0 - SEO, Rebranding e Marketing Viral
+## Script de Deploy
 
-### SEO Técnico
-- [x] Adicionar meta tags otimizadas (title, description, keywords)
-- [x] Implementar Open Graph tags (Facebook, LinkedIn)
-- [x] Implementar Twitter Cards
-- [x] Criar sitemap.xml dinâmico
-- [x] Criar robots.txt
-- [x] Adicionar Schema.org markup (Organization, WebApplication)
-- [x] Configurar canonical URLs
-- [x] Adicionar hreflang para i18n SEO (via sitemap)
-- [ ] Otimizar performance (lazy loading, compressão) - a fazer
-
-### Rebranding (Manus → ResumAI)
-- [x] Atualizar referências "Manus" para "ResumAI" (ManusDialog, portfolioGenerator)
-- [x] Atualizar templates de portfolio (footer com link ResumAI)
-- [x] Atualizar meta tags com branding ResumAI
-- [ ] Criar favicon personalizado ResumAI (usar favicon.svg)
-- [ ] Atualizar templates de emails (boas-vindas, notificações) - a fazer
-- [ ] Revisar outros templates de currículos (PDF, DOCX, LaTeX) - a fazer
-
-### Landing Page Otimizada
-- [ ] Redesign da Home com foco em conversão
-- [ ] Seção Hero com CTA claro
-- [ ] Seção de benefícios (por que usar ResumAI)
-- [ ] Seção de templates (galeria visual)
-- [ ] Seção de depoimentos/testemunhos
-- [ ] Seção de FAQ
-- [ ] Seção de preços/planos
-- [ ] Footer com links importantes
-
-### Sistema de Referral
-- [x] Criar tabela referrals no banco
-- [ ] Gerar código de referral único por usuário (endpoint)
-- [ ] Endpoint para registrar referral
-- [ ] Página /referral com link de compartilhamento
-- [ ] Sistema de recompensas (créditos extras)
-- [ ] Dashboard de referrals (quantos indicou, recompensas)
-
-### Compartilhamento Social
-- [ ] Botões de compartilhar após criar currículo
-- [ ] Compartilhar no LinkedIn, Twitter, Facebook
-- [ ] Preview otimizado com Open Graph
-- [ ] Mensagem personalizada de compartilhamento
-
-### Blog Integrado
-- [ ] Criar estrutura de blog (/blog)
-- [ ] Tabela blog_posts no banco
-- [ ] CRUD de posts (admin only)
-- [ ] Página de listagem de posts
-- [ ] Página de post individual
-- [ ] SEO otimizado para posts (meta tags, schema)
-- [ ] Categorias e tags
-- [ ] Criar 5 posts iniciais (guias de currículo, dicas de carreira)
-
-### Email Marketing
-- [ ] Template de email de boas-vindas atualizado
-- [ ] Email de lembrete (7 dias sem usar)
-- [ ] Email de aniversário do usuário
-- [ ] Newsletter mensal (novos templates, dicas)
-
-### Analytics e Tracking
-- [ ] Configurar Google Analytics 4
-- [ ] Eventos de conversão (signup, create resume, donation)
-- [ ] Heatmaps (opcional - Hotjar/Microsoft Clarity)
-
-### Testes
-- [ ] Testar meta tags com Facebook Debugger
-- [ ] Testar Twitter Cards com Card Validator
-- [ ] Testar sitemap.xml
-- [ ] Testar performance com Lighthouse
-- [ ] Testar compartilhamento social
-
-
-## V12.1.0 - Sistema de Referral, Blog SEO e Analytics
-
-### Sistema de Referral - Endpoints
-- [x] Criar router referral.ts
-- [x] Endpoint getMyReferralCode (gera/retorna código único por usuário)
-- [x] Endpoint getMyReferralStats (quantos indicou, recompensas ganhas)
-- [x] Endpoint registerReferral (registra quando alguém usa o código)
-- [x] Endpoint claimReward (concede créditos extras ao referrer)
-- [x] Endpoint validateCode (valida código no signup)
-- [x] Lógica de recompensa: +2 currículos extras por indicação bem-sucedida
-
-### Sistema de Referral - Frontend
-- [x] Criar página /referral
-- [x] Exibir código de referral único do usuário
-- [x] Link de compartilhamento (https://resumai.davidsodre.com/signup?ref=CODIGO)
-- [x] Botões de compartilhar no WhatsApp, Twitter, LinkedIn, Facebook
-- [x] Dashboard de referrals (quantos clicaram, quantos se cadastraram, recompensas)
-- [x] Adicionar link "Indique e Ganhe" no menu
-- [x] Cards de estatísticas (Total de Cliques, Cadastros, Recompensados, Créditos Ganhos)
-- [x] Seção "Como Funciona" com 3 passos
-- [x] Lista de indicações recentes
-
-### Blog SEO - Backend
-- [ ] Criar tabela blog_posts no banco (em progresso)
-- [ ] Criar router blog.ts
-- [ ] Endpoint createPost (admin only)
-- [ ] Endpoint updatePost (admin only)
-- [ ] Endpoint deletePost (admin only)
-- [ ] Endpoint getAllPosts (público, com paginação)
-- [ ] Endpoint getPostBySlug (público)
-- [ ] Campos: title, slug, content (markdown), excerpt, author, category, tags, publishedAt
-
-### Blog SEO - Frontend
-- [ ] Criar página /blog (listagem de posts)
-- [ ] Criar página /blog/[slug] (post individual)
-- [ ] Criar página /admin/blog (CRUD de posts, admin only)
-- [ ] Componente BlogPostCard
-- [ ] Componente BlogPostEditor (markdown editor)
-- [ ] Meta tags SEO por post (title, description, og:image)
-- [ ] Breadcrumbs e navegação entre posts
-
-### Blog SEO - Conteúdo
-- [ ] Artigo 1: "Como Criar um Currículo ATS-Friendly em 2025"
-- [ ] Artigo 2: "10 Erros Fatais no Currículo que Custam a Vaga"
-- [ ] Artigo 3: "Guia Completo: Currículo vs CV vs Resume - Diferenças"
-- [ ] Artigo 4: "Como Otimizar seu LinkedIn para Recrutadores"
-- [ ] Artigo 5: "Soft Skills Mais Valorizadas pelas Empresas em 2025"
-
-### Google Analytics 4
-- [ ] Adicionar script do GA4 no index.html
-- [ ] Configurar eventos de conversão (signup, create_resume, donation)
-- [ ] Configurar eventos de engajamento (view_template, download_resume)
-- [ ] Documentar ID de medição para o usuário configurar
-
-### Compartilhamento Social
-- [ ] Criar componente SocialShareButtons
-- [ ] Botões: LinkedIn, Twitter, Facebook, WhatsApp, copiar link
-- [ ] Adicionar após criar currículo (página de sucesso)
-- [ ] Mensagem personalizada: "Acabei de criar meu currículo profissional com IA no ResumAI! 🚀"
-- [ ] Tracking de compartilhamentos (evento GA4)
-
-### Testes
-- [x] Testar sistema de referral (gerar código, compartilhar, registrar) - via browser
-- [ ] Testar CRUD de blog posts
-- [ ] Testar SEO de posts individuais
-- [ ] Testar compartilhamento social
-- [ ] Verificar eventos do GA4
-
-
-## V12.2.0 - Frontend do Blog e Compartilhamento Social
-
-### Páginas Frontend do Blog
-- [x] Criar página /blog (listagem de posts)
-- [x] Criar página /blog/[slug] (post individual)
-- [x] Implementar paginação na listagem
-- [x] Filtros por categoria
-- [x] Busca de posts
-- [x] SEO otimizado (meta tags dinâmicas)
-- [x] Breadcrumbs (voltar ao blog)
-- [x] CTA para criar currículo no final do post
-
-### Admin CRUD de Blog
-- [ ] Criar página /admin/blog (listagem de posts admin)
-- [ ] Criar página /admin/blog/new (criar novo post)
-- [ ] Criar página /admin/blog/edit/[id] (editar post)
-- [ ] Editor Markdown com preview
-- [ ] Upload de imagem destacada
-- [ ] Gerenciar categorias e tags
-- [ ] Publicar/despublicar posts
-
-### Compartilhamento Social
-- [x] Criar componente SocialShareButtons
-- [x] Botões: LinkedIn, Twitter, Facebook, WhatsApp, Copiar Link
-- [x] Mensagem personalizada
-- [x] Tracking de compartilhamentos (GA4)
-- [ ] Adicionar após criar currículo (a fazer quando necessário)
-
-### Integração GA4
-- [x] Criar helper completo de analytics com todas as funções
-- [x] Adicionar trackBlogPostView na página de post
-- [x] Adicionar trackShare no componente SocialShareButtons
-- [ ] Adicionar trackSignup no Signup.tsx (a fazer)
-- [ ] Adicionar trackResumeCreated após gerar currículo (a fazer)
-- [ ] Adicionar trackDonation após pagamento (a fazer)
-
-### Testes
-- [x] Testar listagem de blog (via browser)
-- [x] Testar post individual (via browser)
-- [x] Testar SEO de posts individuais (meta tags, tags, CTA)
-- [x] Verificar componente SocialShareButtons (criado)
-- [ ] Testar CRUD de blog posts (admin) - a fazer quando necessário
-- [ ] Testar compartilhamento social em produção - a fazer
-- [ ] Verificar eventos do GA4 em produção - a fazer
-
-## V12.3.0 - Admin CRUD Blog, GA4 e Preparação para Publicação
-
-### Admin CRUD de Blog
-- [x] Criar página /admin/blog (listagem de posts)
-- [x] Criar página /admin/blog/new (criar novo post)
-- [x] Criar página /admin/blog/edit/[id] (editar post)
-- [x] Editor Markdown com preview
-- [x] Campos: título, slug, excerpt, conteúdo, categoria, tags
-- [x] Publicar/despublicar posts
-- [x] Deletar posts
-- [x] Adicionar link "Gerenciar Blog" no menu Admin
-
-### Integração GA4
-- [x] Adicionar trackSignup() no Signup.tsx após cadastro bem-sucedido
-- [x] Adicionar trackResumeCreated() após gerar currículo
-- [x] Adicionar trackDonation() após pagamento Stripe
-- [ ] Testar eventos no console do navegador (a fazer em produção)
-
-### Otimizações Finais
-- [x] Criar arquivo DEPLOY.md com instruções de deploy
-- [x] Documentar como configurar Google Analytics ID
-- [x] Documentar como configurar domínio customizado
-- [x] Verificar todas as referências "Manus" removidas (feito anteriormente)
-- [ ] Testar responsividade mobile (a fazer)
-
-### Testes
-- [ ] Testar CRUD de blog (criar, editar, publicar, deletar) - via browser
-- [ ] Testar eventos GA4 no console - em produção
-- [x] Testar fluxo completo de signup com referral (testado anteriormente)
-- [x] Testar criação de currículo end-to-end (funcionalidade existente)
-
-## Bug Reportado - Preview do Portfolio
-
-- [x] Preview do gerador de portfolio não aparece na página /portfolio (RESOLVIDO: Convertido de query para mutation para evitar erro 414 URI Too Long)
-
-
-## Melhoria de Layout - Página de Post do Blog
-
-- [x] Melhorar tipografia e hierarquia visual do conteúdo do post
-- [x] Adicionar espaçamento adequado entre seções
-- [x] Implementar formatação de listas e parágrafos
-- [x] Melhorar header do post com metadados (data, autor, visualizações)
-- [x] Adicionar imagem de capa/hero opcional (já existia)
-- [x] Implementar botão "Voltar ao Blog" mais visível (já existia)
-- [x] Garantir responsividade mobile (Tailwind Typography é responsivo por padrão)
-
-
-## Configuração de Produção
-
-- [x] Configurar credenciais SMTP do servidor de email (resumai.davidsodre.com:465)
-- [x] Criar arquivo .env.production com todas as variáveis necessárias
-- [x] Documentar configurações de produção (GUIA_DEPLOY_PRODUCAO.md, CONFIGURACAO_SMTP.md)
+- [x] Criar script deploy.sh na raiz do projeto
+- [x] Configurar credenciais MySQL e SMTP no script
+- [x] Atualizar porta para 3010 em produção
+- [x] Commit local criado (aguardando push manual para GitHub)
