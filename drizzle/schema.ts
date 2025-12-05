@@ -186,3 +186,27 @@ export const referrals = mysqlTable("referrals", {
 
 export type Referral = typeof referrals.$inferSelect;
 export type InsertReferral = typeof referrals.$inferInsert;
+
+/**
+ * Blog posts table for SEO content
+ */
+export const blogPosts = mysqlTable("blog_posts", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(), // URL-friendly version of title
+  content: text("content").notNull(), // Markdown content
+  excerpt: text("excerpt"), // Short summary for listing pages
+  authorId: int("author_id").notNull(), // User ID of author (admin)
+  category: varchar("category", { length: 100 }), // e.g., "Dicas de Currículo", "Carreira"
+  tags: text("tags"), // Comma-separated tags for filtering
+  metaDescription: varchar("meta_description", { length: 160 }), // SEO meta description
+  featuredImage: text("featured_image"), // URL to featured image
+  status: mysqlEnum("status", ["draft", "published", "archived"]).default("draft").notNull(),
+  publishedAt: timestamp("published_at"), // When post was published
+  viewCount: int("view_count").default(0).notNull(), // Track popularity
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPost = typeof blogPosts.$inferInsert;

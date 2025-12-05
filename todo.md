@@ -1302,7 +1302,7 @@
 - [x] Lista de indicações recentes
 
 ### Blog SEO - Backend
-- [ ] Criar tabela blog_posts no banco
+- [ ] Criar tabela blog_posts no banco (em progresso)
 - [ ] Criar router blog.ts
 - [ ] Endpoint createPost (admin only)
 - [ ] Endpoint updatePost (admin only)

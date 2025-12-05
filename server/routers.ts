@@ -22,6 +22,7 @@ import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usa
 import { adminRouter } from "./routers/admin";
 import { paymentsRouter } from "./routers/payments";
 import { referralRouter } from "./routers/referral";
+import { blogRouter } from "./routers/blog";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -31,6 +32,7 @@ export const appRouter = router({
   admin: adminRouter,
   payments: paymentsRouter,
   referral: referralRouter,
+  blog: blogRouter,
   user: router({
     updateProfile: protectedProcedure
       .input(z.object({
@@ -114,12 +116,13 @@ export const appRouter = router({
     
     signup: publicProcedure
       .input(z.object({
-        email: z.string().email(),
-        password: z.string().min(6),
-        name: z.string(),
-        country: z.string().optional(),
-        state: z.string().optional(),
-        city: z.string().optional(),
+      email: z.string().email(),
+      password: z.string().min(6),
+      name: z.string().min(1),
+      country: z.string().optional(),
+      state: z.string().optional(),
+      city: z.string().optional(),
+      referralCode: z.string().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
         try {

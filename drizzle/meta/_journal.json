@@ -71,6 +71,13 @@
       "when": 1764899066918,
       "tag": "0009_nebulous_azazel",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1764900043876,
+      "tag": "0010_glorious_psynapse",
+      "breakpoints": true
     }
   ]
 }
