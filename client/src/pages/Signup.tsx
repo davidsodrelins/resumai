@@ -53,8 +53,8 @@ export default function Signup() {
       // Save JWT token to localStorage
       localStorage.setItem("auth_token", data.token);
       
-      // Reload page to apply authentication
-      window.location.href = "/";
+      // Redirect to dashboard after successful signup
+      window.location.href = "/home";
     },
     onError: (error) => {
       toast.error("Erro ao criar conta", {

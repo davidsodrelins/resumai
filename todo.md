@@ -1471,3 +1471,10 @@
 - [x] Criar página de analytics para admin (/admin/referral-analytics)
 - [x] Métricas: taxa de conversão, níveis mais atingidos, ROI do programa
 - [x] Gráficos de crescimento de indicações por mês
+
+
+## 🐛 Bugs Críticos
+
+- [x] Corrigir erro de login - usuário não é redirecionado para dashboard após login bem-sucedido
+- [x] Investigar se token está sendo salvo corretamente
+- [x] Verificar fluxo de redirecionamento após autenticação
