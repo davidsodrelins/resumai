@@ -1485,3 +1485,28 @@
 - [x] Adicionar link "Analytics de Indicações" no dropdown do menu Admin
 - [x] Implementar toast de boas-vindas após primeiro login
 - [x] Melhorar visibilidade do sistema de recompensas no dashboard
+
+
+## 🚀 Melhorias Avançadas - Fase 2
+
+### Sistema de Emails de Level-Up
+- [x] Criar template HTML de email de level-up
+- [x] Integrar com módulo smtpEmail.ts
+- [x] Ativar envio automático em levelUpNotifications.ts
+- [ ] Testar envio de email ao subir de nível
+
+### Badge de Nível no Header
+- [x] Adicionar função para obter emoji do nível (🥉🥈🥇💎)
+- [x] Exibir badge ao lado do nome do usuário no GlobalNavigation
+- [x] Adicionar tooltip explicativo ao passar mouse
+- [ ] Testar visibilidade em diferentes níveis
+
+### Página de FAQ/Ajuda
+- [x] Criar componente FAQ.tsx
+- [x] Adicionar seção sobre criação de currículos
+- [x] Adicionar seção sobre sistema de indicações
+- [x] Adicionar seção sobre limites mensais
+- [x] Adicionar rota /faq no App.tsx
+- [x] Adicionar link no menu de navegação
+- [x] Implementar busca de perguntas
+- [x] Adicionar accordion para perguntas/respostas

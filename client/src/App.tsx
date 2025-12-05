@@ -33,6 +33,7 @@ import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import ReferralProgram from "@/pages/ReferralProgram";
 import PublicHome from "@/pages/PublicHome";
+import FAQ from "@/pages/FAQ";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import FloatingCTA from "@/components/FloatingCTA";
@@ -58,6 +59,7 @@ function Router() {
       </Route>
       <Route path={"/blog"} component={Blog} />
       <Route path={"/blog/:slug"} component={BlogPost} />
+      <Route path={"/faq"} component={FAQ} />
       <Route path={"/admin/blog"}>
         <ProtectedRoute><AdminBlog /></ProtectedRoute>
       </Route>

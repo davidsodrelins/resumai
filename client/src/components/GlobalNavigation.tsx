@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown, User, Settings, Gift } from "lucide-react";
+import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown, User, Settings, Gift, HelpCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -46,6 +46,7 @@ export default function GlobalNavigation() {
     { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3, dataTour: "dashboard" },
     { path: "/referral", label: "Indique e Ganhe", icon: Gift, dataTour: "referral" },
     { path: "/payment-history", label: t("nav.payments"), icon: CreditCard, dataTour: "payments" },
+    { path: "/faq", label: "Ajuda", icon: HelpCircle, dataTour: "faq" },
   ];
 
   const adminItems = [
@@ -72,6 +73,30 @@ export default function GlobalNavigation() {
       return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
     }
     return user.name.substring(0, 2).toUpperCase();
+  };
+
+  // Get level emoji based on referral level
+  const getLevelEmoji = (level: string | null | undefined): string => {
+    if (!level) return "";
+    const emojiMap: Record<string, string> = {
+      bronze: "🥉",
+      silver: "🥈",
+      gold: "🥇",
+      platinum: "💎",
+    };
+    return emojiMap[level] || "";
+  };
+
+  // Get level name in Portuguese
+  const getLevelName = (level: string | null | undefined): string => {
+    if (!level) return "";
+    const nameMap: Record<string, string> = {
+      bronze: "Bronze",
+      silver: "Prata",
+      gold: "Ouro",
+      platinum: "Platina",
+    };
+    return nameMap[level] || "";
   };
 
   return (
@@ -186,8 +211,16 @@ export default function GlobalNavigation() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="hidden md:flex flex-col items-start">
-                          <span className="text-sm font-medium leading-none">
+                          <span className="text-sm font-medium leading-none flex items-center gap-1">
                             {user?.name?.split(" ")[0] || t("nav.user")}
+                            {getLevelEmoji((user as any)?.referralLevel) && (
+                              <span
+                                className="text-base"
+                                title={`Nível ${getLevelName((user as any)?.referralLevel)} - ${(user as any)?.totalReferrals || 0} indicações`}
+                              >
+                                {getLevelEmoji((user as any)?.referralLevel)}
+                              </span>
+                            )}
                           </span>
                           <span className="text-xs text-muted-foreground leading-none mt-0.5">
                             {user?.role === "admin" ? t("admin.admin") : t("nav.user")}
