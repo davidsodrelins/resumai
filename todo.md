@@ -1346,3 +1346,49 @@
 - [ ] Testar SEO de posts individuais
 - [ ] Testar compartilhamento social
 - [ ] Verificar eventos do GA4
+
+
+## V12.2.0 - Frontend do Blog e Compartilhamento Social
+
+### Páginas Frontend do Blog
+- [x] Criar página /blog (listagem de posts)
+- [x] Criar página /blog/[slug] (post individual)
+- [x] Implementar paginação na listagem
+- [x] Filtros por categoria
+- [x] Busca de posts
+- [x] SEO otimizado (meta tags dinâmicas)
+- [x] Breadcrumbs (voltar ao blog)
+- [x] CTA para criar currículo no final do post
+
+### Admin CRUD de Blog
+- [ ] Criar página /admin/blog (listagem de posts admin)
+- [ ] Criar página /admin/blog/new (criar novo post)
+- [ ] Criar página /admin/blog/edit/[id] (editar post)
+- [ ] Editor Markdown com preview
+- [ ] Upload de imagem destacada
+- [ ] Gerenciar categorias e tags
+- [ ] Publicar/despublicar posts
+
+### Compartilhamento Social
+- [x] Criar componente SocialShareButtons
+- [x] Botões: LinkedIn, Twitter, Facebook, WhatsApp, Copiar Link
+- [x] Mensagem personalizada
+- [x] Tracking de compartilhamentos (GA4)
+- [ ] Adicionar após criar currículo (a fazer quando necessário)
+
+### Integração GA4
+- [x] Criar helper completo de analytics com todas as funções
+- [x] Adicionar trackBlogPostView na página de post
+- [x] Adicionar trackShare no componente SocialShareButtons
+- [ ] Adicionar trackSignup no Signup.tsx (a fazer)
+- [ ] Adicionar trackResumeCreated após gerar currículo (a fazer)
+- [ ] Adicionar trackDonation após pagamento (a fazer)
+
+### Testes
+- [x] Testar listagem de blog (via browser)
+- [x] Testar post individual (via browser)
+- [x] Testar SEO de posts individuais (meta tags, tags, CTA)
+- [x] Verificar componente SocialShareButtons (criado)
+- [ ] Testar CRUD de blog posts (admin) - a fazer quando necessário
+- [ ] Testar compartilhamento social em produção - a fazer
+- [ ] Verificar eventos do GA4 em produção - a fazer

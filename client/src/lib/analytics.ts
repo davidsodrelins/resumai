@@ -122,3 +122,12 @@ export function trackSearch(searchTerm: string) {
     search_term: searchTerm,
   });
 }
+
+/**
+ * Rastreia compartilhamento social
+ */
+export function trackShare(platform: string) {
+  trackEvent("share", {
+    method: platform,
+  });
+}

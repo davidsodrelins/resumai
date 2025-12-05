@@ -41,6 +41,7 @@ export default function GlobalNavigation() {
   const navItems = [
     { path: "/", label: t("nav.home"), icon: Home },
     { path: "/generator", label: t("nav.create"), icon: FileText },
+    { path: "/blog", label: "Blog", icon: FileText },
     { path: "/resources", label: t("nav.resources"), icon: LayoutGrid },
     { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3 },
     { path: "/referral", label: "Indique e Ganhe", icon: Gift },

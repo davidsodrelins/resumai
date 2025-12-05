@@ -26,6 +26,8 @@ import AdminNotifications from "@/pages/AdminNotifications";
 import AdminReports from "@/pages/AdminReports";
 import PaymentHistory from "@/pages/PaymentHistory";
 import Referral from "@/pages/Referral";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Router() {
@@ -41,7 +43,9 @@ function Router() {
       </Route>
       <Route path={"/referral"}>
         <ProtectedRoute><Referral /></ProtectedRoute>
-      </Route>      <Route path={"/history"}>
+      </Route>
+      <Route path={"/blog"} component={Blog} />
+      <Route path={"/blog/:slug"} component={BlogPost} />      <Route path={"/history"}>
         <ProtectedRoute><History /></ProtectedRoute>
       </Route>
       <Route path={"/generator"}>
