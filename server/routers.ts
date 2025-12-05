@@ -94,6 +94,17 @@ export const appRouter = router({
         await db.update(users).set({ passwordHash: hashedPassword }).where(eq(users.id, ctx.user!.id));
         return { success: true };
       }),
+    
+    updateLanguage: protectedProcedure
+      .input(z.object({
+        language: z.enum(["pt", "en", "es"]),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        await db.update(users).set({ preferredLanguage: input.language }).where(eq(users.id, ctx.user!.id));
+        return { success: true };
+      }),
   }),
   
   auth: router({

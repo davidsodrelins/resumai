@@ -18,6 +18,9 @@ export const users = mysqlTable("users", {
   state: varchar("state", { length: 100 }),
   city: varchar("city", { length: 100 }),
   
+  // Language preference
+  preferredLanguage: mysqlEnum("preferred_language", ["pt", "en", "es"]).default("pt").notNull(),
+  
   // Donation tracking
   isDonor: int("is_donor").default(0).notNull(), // 0 = no, 1 = yes
   totalDonated: int("total_donated").default(0).notNull(), // Total em centavos (R$ 5 = 500)

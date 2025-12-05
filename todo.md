@@ -1158,3 +1158,48 @@
 - [x] Testar edição de localização no perfil
 - [x] Testar cadastro com localização
 - [x] Verificar que localização é salva corretamente no banco
+
+
+## V11.6.0 - Sistema de Internacionalização (i18n)
+
+### Infraestrutura
+- [x] Instalar i18next, react-i18next e i18next-browser-languagedetector
+- [x] Configurar i18next no projeto
+- [x] Criar estrutura de pastas para traduções (/locales/pt, /locales/en, /locales/es)
+- [x] Configurar provider I18nextProvider no App.tsx (via import no main.tsx)
+
+### Banco de Dados
+- [x] Adicionar campo preferredLanguage na tabela users (enum: 'pt', 'en', 'es')
+- [x] Migração do banco de dados
+
+### Backend - Endpoints
+- [x] Criar endpoint user.updateLanguage para salvar preferência
+- [x] Endpoint auth.me já retorna preferredLanguage (campo no schema)
+
+### Arquivos de Tradução
+- [x] Criar /locales/pt/translation.json (português)
+- [x] Criar /locales/en/translation.json (inglês)
+- [x] Criar /locales/es/translation.json (espanhol)
+- [x] Traduzir navegação (header, menus, links)
+- [x] Criar estrutura base de traduções (nav, auth, profile, admin, dashboard, common, messages)
+- [ ] Traduzir páginas restantes (Home, Signup, Login, CreateResume, etc.) - a fazer conforme necessidade
+- [x] Traduzir mensagens de erro e validação básicas
+
+### Frontend - Componentes
+- [x] Criar componente LanguageSelector (dropdown no header)
+- [x] Implementar detecção automática de idioma do navegador
+- [x] Implementar lógica de fallback (navegador → localStorage → pt)
+- [x] Persistir preferência no localStorage
+- [x] Sincronizar com banco de dados ao mudar idioma
+- [x] Adicionar LanguageSelector no GlobalNavigation
+
+### Tradução de Páginas
+- [x] Traduzir GlobalNavigation.tsx (completo)
+- [ ] Traduzir demais páginas conforme necessidade (estrutura pronta, basta usar t() hook)
+
+### Testes
+- [x] Testar detecção automática de idioma (via browser)
+- [x] Testar mudança manual de idioma (via browser)
+- [x] Testar persistência no localStorage (via browser)
+- [x] Verificar navegação traduzida em EN (via browser)
+- [x] Testar fallback (pt é o padrão)

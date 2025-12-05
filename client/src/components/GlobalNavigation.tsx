@@ -6,8 +6,10 @@ import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import DonationModal from "./DonationModal";
+import { LanguageSelector } from "./LanguageSelector";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +20,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function GlobalNavigation() {
+  const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const logoutMutation = trpc.auth.logout.useMutation();
@@ -28,26 +31,26 @@ export default function GlobalNavigation() {
       await logoutMutation.mutateAsync();
       // Clear JWT token from localStorage
       localStorage.removeItem("auth_token");
-      toast.success("Logout realizado com sucesso!");
+      toast.success(t("messages.logoutSuccess"));
       window.location.href = "/";
     } catch (error) {
-      toast.error("Erro ao fazer logout");
+      toast.error(t("common.error"));
     }
   };
 
   const navItems = [
-    { path: "/", label: "Início", icon: Home },
-    { path: "/generator", label: "Criar", icon: FileText },
-    { path: "/resources", label: "Recursos", icon: LayoutGrid },
-    { path: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { path: "/payment-history", label: "Pagamentos", icon: CreditCard },
+    { path: "/", label: t("nav.home"), icon: Home },
+    { path: "/generator", label: t("nav.create"), icon: FileText },
+    { path: "/resources", label: t("nav.resources"), icon: LayoutGrid },
+    { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3 },
+    { path: "/payment-history", label: t("nav.payments"), icon: CreditCard },
   ];
 
   const adminItems = [
-    { path: "/admin", label: "Painel", icon: Shield },
-    { path: "/admin/metrics", label: "Métricas", icon: TrendingUp },
-    { path: "/admin/notifications", label: "Notificações", icon: Bell },
-    { path: "/admin/reports", label: "Relatórios", icon: FileDown },
+    { path: "/admin", label: t("nav.panel"), icon: Shield },
+    { path: "/admin/metrics", label: t("nav.metrics"), icon: TrendingUp },
+    { path: "/admin/notifications", label: t("nav.notifications"), icon: Bell },
+    { path: "/admin/reports", label: t("nav.reports"), icon: FileDown },
   ];
 
   const isActive = (path: string) => {
@@ -138,8 +141,10 @@ export default function GlobalNavigation() {
               </nav>
             )}
 
-            {/* Right Side - User Menu */}
+            {/* Right Side - Language + User Menu */}
             <div className="flex items-center gap-3">
+              {/* Language Selector */}
+              <LanguageSelector />
               {isAuthenticated ? (
                 <>
                   {/* Donation Button */}
@@ -150,7 +155,7 @@ export default function GlobalNavigation() {
                     className="gap-2 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white shadow-md hidden sm:flex"
                   >
                     <Heart className="h-4 w-4" />
-                    <span className="hidden md:inline">Apoiar</span>
+                    <span className="hidden md:inline">{t("nav.donate")}</span>
                   </Button>
 
                   {/* User Dropdown */}
@@ -164,10 +169,10 @@ export default function GlobalNavigation() {
                         </Avatar>
                         <div className="hidden md:flex flex-col items-start">
                           <span className="text-sm font-medium leading-none">
-                            {user?.name?.split(" ")[0] || "Usuário"}
+                            {user?.name?.split(" ")[0] || t("nav.user")}
                           </span>
                           <span className="text-xs text-muted-foreground leading-none mt-0.5">
-                            {user?.role === "admin" ? "Admin" : "Usuário"}
+                            {user?.role === "admin" ? t("admin.admin") : t("nav.user")}
                           </span>
                         </div>
                         <ChevronDown className="h-4 w-4 text-muted-foreground hidden md:block" />
@@ -183,7 +188,7 @@ export default function GlobalNavigation() {
                         <Link href="/profile">
                           <a className="flex items-center gap-2 w-full cursor-pointer">
                             <User className="h-4 w-4" />
-                            Meu Perfil
+                            {t("nav.profile")}
                           </a>
                         </Link>
                       </DropdownMenuItem>
@@ -191,7 +196,7 @@ export default function GlobalNavigation() {
                         <Link href="/dashboard">
                           <a className="flex items-center gap-2 w-full cursor-pointer">
                             <BarChart3 className="h-4 w-4" />
-                            Dashboard
+                            {t("nav.dashboard")}
                           </a>
                         </Link>
                       </DropdownMenuItem>
