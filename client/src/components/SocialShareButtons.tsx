@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
-import { Share2 } from "lucide-react";
+import { Share2, Copy, Check } from "lucide-react";
+import { useState } from "react";
 import { trackShare } from "../lib/analytics";
 
 interface SocialShareButtonsProps {
@@ -9,6 +10,7 @@ interface SocialShareButtonsProps {
 }
 
 export function SocialShareButtons({ title, description, url }: SocialShareButtonsProps) {
+  const [copied, setCopied] = useState(false);
   const shareUrl = url || window.location.href;
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedTitle = encodeURIComponent(title);
@@ -26,10 +28,21 @@ export function SocialShareButtons({ title, description, url }: SocialShareButto
     whatsapp: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareUrl);
-    trackShare("copy_link");
-    alert("Link copiado para a área de transferência!");
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      trackShare("copy_link");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      // Usar toast se disponível, senão alert
+      if (typeof window !== "undefined" && (window as any).toast) {
+        (window as any).toast.success("Link copiado!");
+      } else {
+        alert("Link copiado para a área de transferência!");
+      }
+    } catch (error) {
+      alert("Erro ao copiar link");
+    }
   };
 
   return (
@@ -89,8 +102,17 @@ export function SocialShareButtons({ title, description, url }: SocialShareButto
           variant="outline"
           size="sm"
         >
-          <Share2 className="h-4 w-4 mr-2" />
-          Copiar Link
+          {copied ? (
+            <>
+              <Check className="h-4 w-4 mr-2 text-green-600" />
+              Copiado!
+            </>
+          ) : (
+            <>
+              <Copy className="h-4 w-4 mr-2" />
+              Copiar Link
+            </>
+          )}
         </Button>
       </div>
 
