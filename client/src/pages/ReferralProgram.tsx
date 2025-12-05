@@ -21,13 +21,14 @@ import { trpc } from "@/lib/trpc";
 
 export default function ReferralProgram() {
   const [copied, setCopied] = useState(false);
-  const { data: referralStats } = trpc.referral.getStats.useQuery();
+  const { data: referralStats } = trpc.referral.getRewardStats.useQuery();
   const { data: leaderboard } = trpc.referral.getLeaderboard.useQuery();
 
-  const referralCode = referralStats?.referralCode || "LOADING";
+  const { data: codeData } = trpc.referral.getMyReferralCode.useQuery();
+  const referralCode = codeData?.code || "LOADING";
   const referralLink = `https://resumai.davidsodre.com/signup?ref=${referralCode}`;
   const totalReferrals = referralStats?.totalReferrals || 0;
-  const activeReferrals = referralStats?.activeReferrals || 0;
+  const activeReferrals = totalReferrals; // Todas as indicações são ativas
 
   // Definir nível atual baseado em indicações
   const getCurrentLevel = (count: number) => {
@@ -302,7 +303,7 @@ export default function ReferralProgram() {
         <CardContent>
           {leaderboard && leaderboard.length > 0 ? (
             <div className="space-y-3">
-              {leaderboard.map((user, index) => (
+                {leaderboard.map((user: any, index: number) => (
                 <div
                   key={user.id}
                   className={`flex items-center gap-4 p-3 rounded-lg ${
@@ -317,10 +318,10 @@ export default function ReferralProgram() {
                   </div>
                   <div className="flex-1">
                     <p className="font-semibold">{user.name}</p>
-                    <p className="text-sm text-gray-600">{user.referralCount} indicações</p>
+                    <p className="text-sm text-gray-600">{user.totalReferrals} indicações</p>
                   </div>
                   <Badge variant="secondary">
-                    {getCurrentLevel(user.referralCount).name}
+                    {getCurrentLevel(user.totalReferrals).name}
                   </Badge>
                 </div>
               ))}

@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, desc } from "drizzle-orm";
 import { getDb } from "../db";
 import { referrals, users } from "../../drizzle/schema";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
+import { processReferralReward, calculateAvailableResumes, REFERRAL_LEVELS } from "../referralRewards";
 
 /**
  * Gera um código de referral único
@@ -278,4 +279,67 @@ export const referralRouter = router({
         referrerName: referralRecord[0].referrerName || "Um usuário",
       };
     }),
+
+  /**
+   * Retorna estatísticas de recompensas do usuário
+   */
+  getRewardStats: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
+
+    const [user] = await db.select().from(users).where(eq(users.id, ctx.user.id));
+    if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+    const availableResumes = calculateAvailableResumes(user);
+    const currentLevel = user.referralLevel;
+    const levelConfig = REFERRAL_LEVELS[currentLevel];
+    
+    // Calcular próximo nível
+    let nextLevel: string | null = null;
+    let resumesToNextLevel = 0;
+    
+    if (currentLevel === "bronze") {
+      nextLevel = "silver";
+      resumesToNextLevel = REFERRAL_LEVELS.silver.minReferrals - user.totalReferrals;
+    } else if (currentLevel === "silver") {
+      nextLevel = "gold";
+      resumesToNextLevel = REFERRAL_LEVELS.gold.minReferrals - user.totalReferrals;
+    } else if (currentLevel === "gold") {
+      nextLevel = "platinum";
+      resumesToNextLevel = REFERRAL_LEVELS.platinum.minReferrals - user.totalReferrals;
+    }
+
+    return {
+      currentLevel,
+      levelName: levelConfig.name,
+      totalReferrals: user.totalReferrals,
+      bonusResumes: user.bonusResumes,
+      unlimitedUntil: user.unlimitedUntil,
+      availableResumes,
+      nextLevel,
+      resumesToNextLevel,
+    };
+  }),
+
+  /**
+   * Retorna leaderboard de indicadores
+   */
+  getLeaderboard: publicProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
+
+    const topReferrers = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        totalReferrals: users.totalReferrals,
+        referralLevel: users.referralLevel,
+      })
+      .from(users)
+      .where(sql`${users.totalReferrals} > 0`)
+      .orderBy(desc(users.totalReferrals))
+      .limit(10);
+
+    return topReferrers;
+  }),
 });

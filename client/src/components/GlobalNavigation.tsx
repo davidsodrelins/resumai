@@ -39,13 +39,13 @@ export default function GlobalNavigation() {
   };
 
   const navItems = [
-    { path: "/", label: t("nav.home"), icon: Home },
-    { path: "/generator", label: t("nav.create"), icon: FileText },
-    { path: "/blog", label: "Blog", icon: FileText },
-    { path: "/resources", label: t("nav.resources"), icon: LayoutGrid },
-    { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3 },
-    { path: "/referral", label: "Indique e Ganhe", icon: Gift },
-    { path: "/payment-history", label: t("nav.payments"), icon: CreditCard },
+    { path: "/", label: t("nav.home"), icon: Home, dataTour: "home" },
+    { path: "/generator", label: t("nav.create"), icon: FileText, dataTour: "create-resume" },
+    { path: "/blog", label: "Blog", icon: FileText, dataTour: "blog" },
+    { path: "/resources", label: t("nav.resources"), icon: LayoutGrid, dataTour: "resources" },
+    { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3, dataTour: "dashboard" },
+    { path: "/referral", label: "Indique e Ganhe", icon: Gift, dataTour: "referral" },
+    { path: "/payment-history", label: t("nav.payments"), icon: CreditCard, dataTour: "payments" },
   ];
 
   const adminItems = [
@@ -102,6 +102,7 @@ export default function GlobalNavigation() {
                         variant={active ? "default" : "ghost"}
                         size="sm"
                         className={`gap-2 ${active ? "shadow-sm" : ""}`}
+                        data-tour={item.dataTour}
                       >
                         <Icon className="h-4 w-4" />
                         <span className="hidden xl:inline">{item.label}</span>
@@ -150,6 +151,19 @@ export default function GlobalNavigation() {
               <LanguageSelector />
               {isAuthenticated ? (
                 <>
+                  {/* Referral Button - Destacado */}
+                  <Link href="/referral">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-lg animate-pulse hidden sm:flex"
+                      data-tour="referral"
+                    >
+                      <Gift className="h-4 w-4" />
+                      <span className="hidden md:inline font-semibold">Indique e Ganhe</span>
+                    </Button>
+                  </Link>
+
                   {/* Donation Button */}
                   <Button
                     variant="default"
@@ -164,7 +178,7 @@ export default function GlobalNavigation() {
                   {/* User Dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="gap-2 h-10">
+                      <Button variant="ghost" size="sm" className="gap-2 h-10" data-tour="profile">
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
                             {getUserInitials()}

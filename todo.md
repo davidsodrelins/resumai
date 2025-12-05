@@ -1445,3 +1445,15 @@
 - [x] Configurar credenciais SMTP do servidor de email (resumai.davidsodre.com:465)
 - [x] Criar arquivo .env.production com todas as variáveis necessárias
 - [x] Documentar configurações de produção (GUIA_DEPLOY_PRODUCAO.md, CONFIGURACAO_SMTP.md)
+
+
+## 🎯 Onboarding e Sistema de Recompensas (Fase Atual)
+
+- [x] Sistema de onboarding para novos usuários (tour guiado na primeira visita)
+- [x] Backend do sistema de recompensas (tabela referral_rewards no schema)
+- [x] Rastreamento automático de indicações convertidas
+- [x] Concessão automática de benefícios por nível (Bronze, Prata, Ouro, Platina)
+- [x] Notificações quando usuário sobe de nível
+- [x] Dashboard de recompensas no frontend
+- [x] Botão "Indique e Ganhe" destacado no header
+- [x] Integração com sistema de limites de currículos

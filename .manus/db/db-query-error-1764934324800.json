@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE users \nADD COLUMN referral_level ENUM('bronze', 'silver', 'gold', 'platinum') DEFAULT 'bronze' NOT NULL AFTER last_reset_at,\nADD COLUMN total_referrals INT DEFAULT 0 NOT NULL AFTER referral_level,\nADD COLUMN bonus_resumes INT DEFAULT 0 NOT NULL AFTER total_referrals,\nADD COLUMN unlimited_until TIMESTAMP NULL AFTER bonus_resumes;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user N3BSNFzQVoSPgJB.d9d9b09b46ec --database Xun2VBVEnEvhLzMTzmVwM7 --execute ALTER TABLE users \nADD COLUMN referral_level ENUM('bronze', 'silver', 'gold', 'platinum') DEFAULT 'bronze' NOT NULL AFTER last_reset_at,\nADD COLUMN total_referrals INT DEFAULT 0 NOT NULL AFTER referral_level,\nADD COLUMN bonus_resumes INT DEFAULT 0 NOT NULL AFTER total_referrals,\nADD COLUMN unlimited_until TIMESTAMP NULL AFTER bonus_resumes;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'referral_level' in 'users'"
+  ]
+}

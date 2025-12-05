@@ -35,6 +35,7 @@ import PublicHome from "@/pages/PublicHome";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import FloatingCTA from "@/components/FloatingCTA";
+import Onboarding from "@/components/Onboarding";
 
 function Router() {
   return (
@@ -121,6 +122,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <Onboarding />
           <ExitIntentPopup />
           <FloatingCTA />
         </TooltipProvider>

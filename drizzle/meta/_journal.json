@@ -43,6 +43,13 @@
       "when": 1764909008999,
       "tag": "0005_mighty_tarot",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1764934309867,
+      "tag": "0006_talented_lady_ursula",
+      "breakpoints": true
     }
   ]
 }

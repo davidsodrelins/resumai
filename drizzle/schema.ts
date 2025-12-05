@@ -31,6 +31,12 @@ export const users = mysqlTable("users", {
   resumesThisMonth: int("resumes_this_month").default(0).notNull(),
   lastResetAt: timestamp("last_reset_at").defaultNow().notNull(),
   
+  // Referral rewards
+  referralLevel: mysqlEnum("referral_level", ["bronze", "silver", "gold", "platinum"]).default("bronze").notNull(),
+  totalReferrals: int("total_referrals").default(0).notNull(), // Total de indicações convertidas
+  bonusResumes: int("bonus_resumes").default(0).notNull(), // Currículos bônus acumulados
+  unlimitedUntil: timestamp("unlimited_until"), // Data até quando tem acesso ilimitado (null = sem acesso)
+  
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
