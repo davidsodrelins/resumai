@@ -1423,3 +1423,7 @@
 - [ ] Testar eventos GA4 no console - em produção
 - [x] Testar fluxo completo de signup com referral (testado anteriormente)
 - [x] Testar criação de currículo end-to-end (funcionalidade existente)
+
+## Bug Reportado - Preview do Portfolio
+
+- [x] Preview do gerador de portfolio não aparece na página /portfolio (RESOLVIDO: Convertido de query para mutation para evitar erro 414 URI Too Long)

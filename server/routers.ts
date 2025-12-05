@@ -677,6 +677,7 @@ export const appRouter = router({
 
     /**
      * Get portfolio preview (without saving to S3)
+     * Changed from query to mutation to avoid 414 URI Too Long error
      */
     preview: protectedProcedure
       .input(
@@ -687,7 +688,7 @@ export const appRouter = router({
           primaryColor: z.string().optional(),
         })
       )
-      .query(async ({ input }) => {
+      .mutation(async ({ input }) => {
         const portfolioData = await generatePortfolio(
           input.resumeData as ResumeData,
           {
