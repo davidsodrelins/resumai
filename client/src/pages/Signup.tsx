@@ -7,6 +7,7 @@ import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import PasswordStrengthIndicator from "../components/PasswordStrengthIndicator";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -107,6 +108,7 @@ export default function Signup() {
                 disabled={signupMutation.isPending}
                 required
               />
+              <PasswordStrengthIndicator password={password} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirmar Senha</Label>

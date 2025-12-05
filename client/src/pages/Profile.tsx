@@ -1,279 +1,396 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Star, FileText, Calendar, Heart, TrendingUp, Award } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { User, Mail, Lock, Activity, Save, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import GlobalNavigation from "@/components/GlobalNavigation";
 import { useState } from "react";
-import DonationModal from "@/components/DonationModal";
+import { toast } from "sonner";
+import PasswordStrengthIndicator from "@/components/PasswordStrengthIndicator";
 
 export default function Profile() {
   const { user } = useAuth();
-  const [showDonationModal, setShowDonationModal] = useState(false);
+  const utils = trpc.useUtils();
   
-  const { data: usageStats, isLoading: loadingUsage } = trpc.usage.getStats.useQuery();
-  const { data: donationTotal, isLoading: loadingDonations } = trpc.donation.getTotal.useQuery();
-  // isDonor is included in donationTotal response
+  // Edit name state
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState(user?.name || "");
+  
+  // Edit email state
+  const [editingEmail, setEditingEmail] = useState(false);
+  const [newEmail, setNewEmail] = useState(user?.email || "");
+  
+  // Change password state
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const { data: usageStats } = trpc.usage.getStats.useQuery();
+
+  // Update name mutation
+  const updateNameMutation = trpc.user.updateName.useMutation({
+    onSuccess: () => {
+      toast.success("Nome atualizado com sucesso!");
+      setEditingName(false);
+      utils.auth.me.invalidate();
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar nome", {
+        description: error.message,
+      });
+    },
+  });
+
+  // Update email mutation
+  const updateEmailMutation = trpc.user.updateEmail.useMutation({
+    onSuccess: () => {
+      toast.success("Email atualizado com sucesso!");
+      setEditingEmail(false);
+      utils.auth.me.invalidate();
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar email", {
+        description: error.message,
+      });
+    },
+  });
+
+  // Change password mutation
+  const changePasswordMutation = trpc.user.changePassword.useMutation({
+    onSuccess: () => {
+      toast.success("Senha alterada com sucesso!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+    },
+    onError: (error) => {
+      toast.error("Erro ao alterar senha", {
+        description: error.message,
+      });
+    },
+  });
+
+  const handleSaveName = () => {
+    if (!newName.trim()) {
+      toast.error("Nome não pode estar vazio");
+      return;
+    }
+    updateNameMutation.mutate({ name: newName });
+  };
+
+  const handleSaveEmail = () => {
+    if (!newEmail.trim()) {
+      toast.error("Email não pode estar vazio");
+      return;
+    }
+    updateEmailMutation.mutate({ email: newEmail });
+  };
+
+  const handleChangePassword = () => {
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      toast.error("Preencha todos os campos");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error("A nova senha deve ter no mínimo 6 caracteres");
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      toast.error("As senhas não coincidem");
+      return;
+    }
+
+    changePasswordMutation.mutate({
+      currentPassword,
+      newPassword,
+    });
+  };
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <GlobalNavigation />
         <div className="container mx-auto py-20 text-center">
-          <p className="text-xl text-gray-600 dark:text-gray-400">Você precisa estar logado para ver seu perfil.</p>
+          <p className="text-xl text-gray-600">Você precisa estar logado para ver seu perfil.</p>
         </div>
       </div>
     );
   }
 
-  const usagePercentage = usageStats ? (usageStats.resumesThisMonth / usageStats.limit) * 100 : 0;
-  const remaining = usageStats ? usageStats.limit - usageStats.resumesThisMonth : 0;
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <GlobalNavigation />
       
-      <div className="container mx-auto py-8 px-4">
-        {/* Header */}
+      <div className="container mx-auto py-8 px-4 max-w-4xl">
         <div className="mb-8">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-              {(user.name || 'U').charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                {user.name}
-                {donationTotal && donationTotal.isDonor && (
-                  <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none">
-                    <Star className="w-3 h-3 mr-1 fill-current" />
-                    Apoiador
-                  </Badge>
-                )}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">{user.email || 'Usuário do ResumAI'}</p>
-            </div>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">Meu Perfil</h1>
+          <p className="text-gray-600">Gerencie suas informações pessoais e configurações</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Stats */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Usage Stats */}
+        <Tabs defaultValue="account" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="account">
+              <User className="w-4 h-4 mr-2" />
+              Conta
+            </TabsTrigger>
+            <TabsTrigger value="activity">
+              <Activity className="w-4 h-4 mr-2" />
+              Atividade
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Account Tab */}
+          <TabsContent value="account" className="space-y-6">
+            {/* Edit Name */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5" />
-                  Uso Mensal
+                  <User className="w-5 h-5" />
+                  Nome
                 </CardTitle>
                 <CardDescription>
-                  Acompanhe quantos currículos você criou este mês
+                  Seu nome será exibido nos currículos gerados
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {loadingUsage ? "Carregando..." : `${usageStats?.resumesThisMonth || 0} de ${usageStats?.limit || 5} currículos`}
-                    </span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {remaining} restantes
-                    </span>
+                {editingName ? (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Novo Nome</Label>
+                      <Input
+                        id="name"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        placeholder="Seu nome completo"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleSaveName}
+                        disabled={updateNameMutation.isPending}
+                      >
+                        {updateNameMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Salvando...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="mr-2 h-4 w-4" />
+                            Salvar
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setEditingName(false);
+                          setNewName(user.name || "");
+                        }}
+                      >
+                        Cancelar
+                      </Button>
+                    </div>
                   </div>
-                  <Progress value={usagePercentage} className="h-3" />
-                </div>
-
-                {(!donationTotal || !donationTotal.isDonor) && remaining <= 2 && remaining > 0 && (
-                  <div className="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <p className="text-sm text-amber-900 dark:text-amber-100">
-                      <strong>⚠️ Atenção:</strong> Você está próximo do limite mensal. 
-                      Considere apoiar o projeto para ter acesso ilimitado!
-                    </p>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{user.name}</p>
+                      <p className="text-sm text-muted-foreground">Nome atual</p>
+                    </div>
+                    <Button variant="outline" onClick={() => setEditingName(true)}>
+                      Editar
+                    </Button>
                   </div>
                 )}
-
-                {(!donationTotal || !donationTotal.isDonor) && remaining === 0 && (
-                  <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
-                    <p className="text-sm text-red-900 dark:text-red-100">
-                      <strong>🚫 Limite atingido:</strong> Você não pode criar mais currículos este mês. 
-                      Apoie o projeto para ter acesso ilimitado!
-                    </p>
-                  </div>
-                )}
-
-                {donationTotal && donationTotal.isDonor && (
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <p className="text-sm text-gray-900 dark:text-gray-100">
-                      <strong>✨ Apoiador:</strong> Você tem acesso ilimitado a todos os recursos do ResumAI. Obrigado pelo apoio!
-                    </p>
-                  </div>
-                )}
-
-                <div className="text-xs text-gray-500 dark:text-gray-400">
-                  <Calendar className="w-3 h-3 inline mr-1" />
-                  Seu limite será resetado automaticamente no próximo mês
-                </div>
               </CardContent>
             </Card>
 
-            {/* Activity Overview */}
+            {/* Edit Email */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Resumo de Atividade
+                  <Mail className="w-5 h-5" />
+                  Email
                 </CardTitle>
+                <CardDescription>
+                  Usado para login e recuperação de senha
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {editingEmail ? (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Novo Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder="seu@email.com"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleSaveEmail}
+                        disabled={updateEmailMutation.isPending}
+                      >
+                        {updateEmailMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Salvando...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="mr-2 h-4 w-4" />
+                            Salvar
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setEditingEmail(false);
+                          setNewEmail(user.email || "");
+                        }}
+                      >
+                        Cancelar
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{user.email}</p>
+                      <p className="text-sm text-muted-foreground">Email atual</p>
+                    </div>
+                    <Button variant="outline" onClick={() => setEditingEmail(true)}>
+                      Editar
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Change Password */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lock className="w-5 h-5" />
+                  Alterar Senha
+                </CardTitle>
+                <CardDescription>
+                  Mantenha sua conta segura com uma senha forte
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword">Senha Atual</Label>
+                  <Input
+                    id="currentPassword"
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="Digite sua senha atual"
+                  />
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">Nova Senha</Label>
+                  <Input
+                    id="newPassword"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Digite sua nova senha"
+                  />
+                  <PasswordStrengthIndicator password={newPassword} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmNewPassword">Confirmar Nova Senha</Label>
+                  <Input
+                    id="confirmNewPassword"
+                    type="password"
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    placeholder="Digite novamente a nova senha"
+                  />
+                </div>
+                <Button
+                  onClick={handleChangePassword}
+                  disabled={changePasswordMutation.isPending}
+                  className="w-full"
+                >
+                  {changePasswordMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Alterando...
+                    </>
+                  ) : (
+                    "Alterar Senha"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Activity Tab */}
+          <TabsContent value="activity" className="space-y-6">
+            {/* Usage Stats */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Estatísticas de Uso</CardTitle>
+                <CardDescription>
+                  Resumo da sua atividade na plataforma
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                    {usageStats?.resumesThisMonth || 0}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Currículos Criados
-                  </div>
-                  </div>
-                  <div className="bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg">
-                    <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <div className="text-3xl font-bold text-blue-600">
                       {usageStats?.resumesThisMonth || 0}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Este Mês
+                    <div className="text-sm text-gray-600">
+                      Currículos este mês
+                    </div>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <div className="text-3xl font-bold text-purple-600">
+                      {usageStats?.limit || 5}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Limite mensal
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Right Column - Donation Info */}
-          <div className="space-y-6">
-            {/* Donor Badge */}
-            {donationTotal && donationTotal.isDonor ? (
-              <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 border-yellow-200 dark:border-yellow-800">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-yellow-900 dark:text-yellow-100">
-                    <Award className="w-5 h-5" />
-                    Status de Apoiador
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="text-center py-6">
-                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4">
-                      <Star className="w-10 h-10 text-white fill-current" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                      Apoiador Ativo
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Obrigado por apoiar o ResumAI!
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700 dark:text-gray-300">Currículos ilimitados</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700 dark:text-gray-300">Badge exclusivo</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700 dark:text-gray-300">Prioridade no suporte</span>
-                    </div>
-                  </div>
-
-                  {donationTotal && donationTotal.total > 0 && (
-                    <>
-                      <Separator />
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                          R$ {(donationTotal.total / 100).toFixed(2)}
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          Total doado
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="border-2 border-dashed border-gray-300 dark:border-gray-700">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-pink-500" />
-                    Apoie o ResumAI
-                  </CardTitle>
-                  <CardDescription>
-                    Ajude a manter a plataforma gratuita para todos
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Ao apoiar o projeto, você ganha:
-                  </p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
-                      <span>✨ Currículos ilimitados</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
-                      <span>⭐ Badge de Apoiador</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
-                      <span>❤️ Ajude a comunidade</span>
-                    </li>
-                  </ul>
-                  <Button
-                    onClick={() => setShowDonationModal(true)}
-                    className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white"
-                  >
-                    <Heart className="mr-2 h-4 w-4" />
-                    Fazer Doação
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Quick Actions */}
+            {/* Recent Activity */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Ações Rápidas</CardTitle>
+                <CardTitle>Atividade Recente</CardTitle>
+                <CardDescription>
+                  Acesse seu histórico completo de currículos
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <Button variant="outline" className="w-full justify-start" asChild>
-                  <a href="/generator">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Criar Novo Currículo
-                  </a>
-                </Button>
-                <Button variant="outline" className="w-full justify-start" asChild>
-                  <a href="/history">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Ver Histórico
-                  </a>
-                </Button>
+              <CardContent>
+                <div className="text-center py-8">
+                  <Button variant="outline" asChild>
+                    <a href="/history">Ver Histórico Completo</a>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
-
-      {/* Donation Modal */}
-      <DonationModal
-        open={showDonationModal}
-        onOpenChange={setShowDonationModal}
-      />
     </div>
   );
 }

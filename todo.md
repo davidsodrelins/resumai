@@ -985,3 +985,28 @@
 - [x] Adicionar link "Esqueci minha senha" no Login.tsx
 - [ ] Testar fluxo completo
 - [ ] Implementar envio de email via SMTP (TODO)
+
+
+## V11.2.0 - Melhorias Avançadas
+
+### Tornar Usuário Admin
+- [x] Atualizar role do usuário davidsodre_ba@hotmail.com para 'admin' no banco
+
+### Envio de Email SMTP
+- [x] Implementar função sendEmail usando SMTP (nodemailer)
+- [x] Configurar transporter com credenciais SMTP do ENV
+- [x] Integrar com passwordReset.ts para enviar emails reais
+- [ ] Testar envio de email de recuperação (requer SMTP configurado)
+
+### Validação de Força de Senha
+- [x] Criar componente PasswordStrengthIndicator
+- [x] Adicionar indicador em Signup.tsx
+- [x] Adicionar indicador em ResetPassword.tsx
+- [x] Mostrar requisitos: mínimo 6 caracteres, maiúscula, número, caractere especial
+
+### Página de Perfil Completa
+- [x] Adicionar formulário de edição de nome
+- [x] Adicionar formulário de edição de email
+- [x] Adicionar formulário de alteração de senha com PasswordStrengthIndicator
+- [x] Mostrar estatísticas detalhadas de uso em tabs
+- [x] Criar procedures no backend: updateName, updateEmail, changePassword

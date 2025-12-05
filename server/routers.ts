@@ -21,11 +21,61 @@ import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUs
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 import { adminRouter } from "./routers/admin";
 import { paymentsRouter } from "./routers/payments";
+import { getDb } from "./db";
+import { users } from "../drizzle/schema";
+import { eq } from "drizzle-orm";
 
 export const appRouter = router({
   system: systemRouter,
   admin: adminRouter,
   payments: paymentsRouter,
+  user: router({
+    updateName: protectedProcedure
+      .input(z.object({ name: z.string().min(1) }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        await db.update(users).set({ name: input.name }).where(eq(users.id, ctx.user!.id));
+        return { success: true };
+      }),
+    
+    updateEmail: protectedProcedure
+      .input(z.object({ email: z.string().email() }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        // Check if email already exists
+        const existing = await db.select().from(users).where(eq(users.email, input.email));
+        if (existing.length > 0 && existing[0].id !== ctx.user!.id) {
+          throw new Error("Este email já está em uso");
+        }
+        await db.update(users).set({ email: input.email }).where(eq(users.id, ctx.user!.id));
+        return { success: true };
+      }),
+    
+    changePassword: protectedProcedure
+      .input(z.object({
+        currentPassword: z.string(),
+        newPassword: z.string().min(6),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        const user = await db.select().from(users).where(eq(users.id, ctx.user!.id));
+        if (!user[0]) throw new Error("Usuário não encontrado");
+        
+        // Verify current password
+        const bcrypt = await import("bcryptjs");
+        const isValid = await bcrypt.compare(input.currentPassword, user[0].passwordHash || "");
+        if (!isValid) throw new Error("Senha atual incorreta");
+        
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(input.newPassword, 10);
+        await db.update(users).set({ passwordHash: hashedPassword }).where(eq(users.id, ctx.user!.id));
+        return { success: true };
+      }),
+  }),
+  
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     

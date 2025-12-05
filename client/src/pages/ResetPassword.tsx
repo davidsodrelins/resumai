@@ -7,6 +7,7 @@ import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { FileText, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import PasswordStrengthIndicator from "../components/PasswordStrengthIndicator";
 
 export default function ResetPassword() {
   const [, setLocation] = useLocation();
@@ -135,6 +136,7 @@ export default function ResetPassword() {
                 disabled={resetPasswordMutation.isPending}
                 required
               />
+              <PasswordStrengthIndicator password={newPassword} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>

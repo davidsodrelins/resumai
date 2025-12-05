@@ -3,7 +3,7 @@ import { users, passwordResetTokens } from "../drizzle/schema";
 import { eq, and, gt } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-// Email sending will be implemented via SMTP
+import { sendEmail } from "./_core/email";
 import { ENV } from "./_core/env";
 
 const SALT_ROUNDS = 10;
@@ -46,9 +46,25 @@ export async function requestPasswordReset(email: string) {
   // Send email with reset link
   const resetUrl = `https://curriculumia-xun2vbve.manus.space/reset-password?token=${token}`;
   
-  // TODO: Implement email sending via SMTP
-  console.log("[Password Reset] Reset URL:", resetUrl);
-  console.log("[Password Reset] Send email to:", user.email);
+  await sendEmail({
+    to: user.email,
+    subject: "Recuperação de Senha - ResumAI",
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #3b82f6;">Recuperação de Senha</h2>
+        <p>Olá, <strong>${user.name || 'usuário'}</strong>!</p>
+        <p>Você solicitou a recuperação de senha da sua conta no ResumAI.</p>
+        <p>Clique no botão abaixo para criar uma nova senha:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background-color: #3b82f6; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">Redefinir Senha</a>
+        </div>
+        <p style="color: #666; font-size: 14px;">Este link expira em ${RESET_TOKEN_EXPIRY_HOURS} hora.</p>
+        <p style="color: #666; font-size: 14px;">Se você não solicitou esta recuperação, ignore este email.</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+        <p style="color: #999; font-size: 12px;">Atenciosamente,<br>Equipe ResumAI</p>
+      </div>
+    `,
+  });
 
   return {
     success: true,
