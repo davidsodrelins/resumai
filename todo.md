@@ -1427,3 +1427,14 @@
 ## Bug Reportado - Preview do Portfolio
 
 - [x] Preview do gerador de portfolio não aparece na página /portfolio (RESOLVIDO: Convertido de query para mutation para evitar erro 414 URI Too Long)
+
+
+## Melhoria de Layout - Página de Post do Blog
+
+- [x] Melhorar tipografia e hierarquia visual do conteúdo do post
+- [x] Adicionar espaçamento adequado entre seções
+- [x] Implementar formatação de listas e parágrafos
+- [x] Melhorar header do post com metadados (data, autor, visualizações)
+- [x] Adicionar imagem de capa/hero opcional (já existia)
+- [x] Implementar botão "Voltar ao Blog" mais visível (já existia)
+- [x] Garantir responsividade mobile (Tailwind Typography é responsivo por padrão)
