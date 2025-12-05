@@ -131,3 +131,68 @@ export function trackShare(platform: string) {
     method: platform,
   });
 }
+
+/**
+ * Rastreia abertura do modal de sucesso
+ */
+export function trackSuccessModalOpen() {
+  trackEvent("success_modal_open", {
+    event_category: "engagement",
+  });
+}
+
+/**
+ * Rastreia compartilhamento após criar currículo
+ */
+export function trackResumeShare(platform: string) {
+  trackEvent("share_resume", {
+    method: platform,
+    content_type: "resume_success",
+  });
+}
+
+/**
+ * Rastreia abertura do exit-intent popup
+ */
+export function trackExitIntentPopup() {
+  trackEvent("exit_intent_popup", {
+    event_category: "conversion",
+  });
+}
+
+/**
+ * Rastreia clique no CTA flutuante
+ */
+export function trackFloatingCTAClick() {
+  trackEvent("floating_cta_click", {
+    event_category: "conversion",
+  });
+}
+
+/**
+ * Rastreia visualização da página de indicação
+ */
+export function trackReferralProgramView() {
+  trackEvent("view_referral_program", {
+    event_category: "engagement",
+  });
+}
+
+/**
+ * Rastreia cópia do link de indicação
+ */
+export function trackReferralLinkCopy() {
+  trackEvent("copy_referral_link", {
+    event_category: "engagement",
+  });
+}
+
+/**
+ * Rastreia compartilhamento do link de indicação
+ */
+export function trackReferralLinkShare(platform: string) {
+  trackEvent("share_referral_link", {
+    method: platform,
+    event_category: "viral",
+  });
+}

@@ -20,6 +20,7 @@ import { AutoSaveIndicator } from "@/components/AutoSaveIndicator";
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { LimitReachedModal } from '@/components/LimitReachedModal';
 import DonationModal from '@/components/DonationModal';
+import ResumeSuccessModal from '@/components/ResumeSuccessModal';
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import ATSScoreBadge from "@/components/ATSScoreBadge";
 import GlobalNavigation from "@/components/GlobalNavigation";
@@ -48,6 +49,7 @@ export default function Generator() {
   const [draftMetadata, setDraftMetadata, clearDraftMetadata] = useLocalStorage<any>('resume-draft-metadata', null);
   const [showLimitModal, setShowLimitModal] = useState(false);
   const [showDonationModal, setShowDonationModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const saveResumeMutation = trpc.history.saveResume.useMutation();
   const uploadFileMutation = trpc.resume.uploadFile.useMutation();
@@ -183,7 +185,8 @@ export default function Generator() {
         // Track resume creation
         trackResumeCreated(selectedModel, selectedLanguage);
         
-        toast.success("Currículo gerado com sucesso!");
+        // Show success modal with sharing options
+        setShowSuccessModal(true);
       }
     } catch (error: any) {
       if (error.message === 'LIMIT_REACHED') {
@@ -720,6 +723,11 @@ export default function Generator() {
       <DonationModal
         open={showDonationModal}
         onOpenChange={setShowDonationModal}
+      />
+      
+      <ResumeSuccessModal
+        open={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
       />
     </div>
   );

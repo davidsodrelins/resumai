@@ -30,12 +30,17 @@ import { AdminBlogEditor } from "@/pages/AdminBlogEditor";
 import Referral from "@/pages/Referral";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import ReferralProgram from "@/pages/ReferralProgram";
+import PublicHome from "@/pages/PublicHome";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
+import FloatingCTA from "@/components/FloatingCTA";
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={PublicHome} />
+      <Route path={"/home"} component={Home} />
       <Route path={"/login"} component={Login} />
       <Route path={"/signup"} component={Signup} />
       <Route path={"/forgot-password"} component={ForgotPassword} />
@@ -45,6 +50,9 @@ function Router() {
       </Route>
       <Route path={"/referral"}>
         <ProtectedRoute><Referral /></ProtectedRoute>
+      </Route>
+      <Route path={"/indique-e-ganhe"}>
+        <ProtectedRoute><ReferralProgram /></ProtectedRoute>
       </Route>
       <Route path={"/blog"} component={Blog} />
       <Route path={"/blog/:slug"} component={BlogPost} />
@@ -113,6 +121,8 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <ExitIntentPopup />
+          <FloatingCTA />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
