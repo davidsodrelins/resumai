@@ -1438,3 +1438,10 @@
 - [x] Adicionar imagem de capa/hero opcional (já existia)
 - [x] Implementar botão "Voltar ao Blog" mais visível (já existia)
 - [x] Garantir responsividade mobile (Tailwind Typography é responsivo por padrão)
+
+
+## Configuração de Produção
+
+- [x] Configurar credenciais SMTP do servidor de email (resumai.davidsodre.com:465)
+- [x] Criar arquivo .env.production com todas as variáveis necessárias
+- [x] Documentar configurações de produção (GUIA_DEPLOY_PRODUCAO.md, CONFIGURACAO_SMTP.md)
