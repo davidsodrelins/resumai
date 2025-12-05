@@ -1563,3 +1563,32 @@
 - [x] Criar arquivo .npmrc com configurações de produção
 - [x] Documentar processo de deploy correto no README
 - [x] Testar build de produção localmente antes de deploy
+
+
+## 🎉 Melhorias de UX - Conquistas Interativas
+
+### Animação de Desbloqueio
+- [ ] Instalar biblioteca canvas-confetti para efeito de confete
+- [ ] Criar componente AchievementUnlockedModal
+- [ ] Implementar animação de entrada do modal (scale + fade)
+- [ ] Adicionar efeito de confete colorido
+- [ ] Mostrar emoji grande da conquista + nome + descrição
+- [ ] Botão "Compartilhar" e "Ver Todas"
+- [ ] Toast de notificação quando conquista é desbloqueada
+
+### Integração Automática
+- [ ] Adicionar checkAchievements após salvar currículo
+- [ ] Adicionar checkAchievements após criar carta de apresentação
+- [ ] Adicionar checkAchievements após fazer doação
+- [ ] Adicionar checkAchievements após confirmar indicação
+- [ ] Mostrar modal de conquista automaticamente quando desbloqueada
+- [ ] Armazenar conquistas não notificadas no banco
+
+### Compartilhamento Social
+- [ ] Criar função para gerar card visual de conquista (canvas)
+- [ ] Implementar botão "Compartilhar no LinkedIn"
+- [ ] Implementar botão "Compartilhar no Twitter/X"
+- [ ] Implementar botão "Copiar Link"
+- [ ] Gerar texto pré-formatado para compartilhamento
+- [ ] Adicionar tracking de compartilhamentos (analytics)
+- [ ] Criar página pública /conquista/:id para preview social
