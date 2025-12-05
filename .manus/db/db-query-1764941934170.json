@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `user_achievements` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `user_id` int NOT NULL,\n  `achievement_id` varchar(100) NOT NULL,\n  `unlocked_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `notified` int NOT NULL DEFAULT 0,\n  CONSTRAINT `user_achievements_id` PRIMARY KEY(`id`)\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user N3BSNFzQVoSPgJB.d9d9b09b46ec --database Xun2VBVEnEvhLzMTzmVwM7 --execute CREATE TABLE IF NOT EXISTS `user_achievements` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `user_id` int NOT NULL,\n  `achievement_id` varchar(100) NOT NULL,\n  `unlocked_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `notified` int NOT NULL DEFAULT 0,\n  CONSTRAINT `user_achievements_id` PRIMARY KEY(`id`)\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 187
+}

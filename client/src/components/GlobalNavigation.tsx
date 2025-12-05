@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown, User, Settings, Gift, HelpCircle } from "lucide-react";
+import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown, User, Settings, Gift, HelpCircle, Trophy } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -46,6 +46,7 @@ export default function GlobalNavigation() {
     { path: "/dashboard", label: t("nav.dashboard"), icon: BarChart3, dataTour: "dashboard" },
     { path: "/referral", label: "Indique e Ganhe", icon: Gift, dataTour: "referral" },
     { path: "/payment-history", label: t("nav.payments"), icon: CreditCard, dataTour: "payments" },
+    { path: "/conquistas", label: "Conquistas", icon: Trophy, dataTour: "achievements" },
     { path: "/faq", label: "Ajuda", icon: HelpCircle, dataTour: "faq" },
   ];
 

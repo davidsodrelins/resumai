@@ -24,6 +24,7 @@ import { paymentsRouter } from "./routers/payments";
 import { referralRouter } from "./routers/referral";
 import { referralAnalyticsRouter } from "./routers/referralAnalytics";
 import { blogRouter } from "./routers/blog";
+import { achievementsRouter } from "./routers/achievements";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -35,6 +36,7 @@ export const appRouter = router({
   referral: referralRouter,
   referralAnalytics: referralAnalyticsRouter,
   blog: blogRouter,
+  achievements: achievementsRouter,
   user: router({
     updateProfile: protectedProcedure
       .input(z.object({

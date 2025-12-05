@@ -1510,3 +1510,56 @@
 - [x] Adicionar link no menu de navegação
 - [x] Implementar busca de perguntas
 - [x] Adicionar accordion para perguntas/respostas
+
+
+## 🏆 Sistema de Conquistas/Badges - Fase 3
+
+### Backend - Schema e Lógica
+- [x] Criar tabela user_achievements no schema
+- [x] Definir lista de conquistas disponíveis (achievements.ts)
+- [x] Implementar sistema de verificação automática de conquistas
+- [x] Criar endpoints tRPC para listar conquistas do usuário
+- [x] Implementar notificação quando conquista é desbloqueada
+- [x] Adicionar hook para verificar conquistas após ações (criar currículo, indicar, etc)
+
+### Frontend - Interface
+- [x] Criar página /conquistas para exibir todas as conquistas
+- [x] Implementar grid de badges (desbloqueados e bloqueados)
+- [ ] Adicionar animação de desbloqueio de conquista
+- [ ] Criar toast especial quando conquista é desbloqueada
+- [ ] Adicionar contador de conquistas no dashboard
+- [x] Mostrar progresso para próximas conquistas
+- [x] Adicionar link "Conquistas" no menu de navegação
+
+### Conquistas Planejadas
+- [ ] "Primeiro Passo" - Criar primeiro currículo
+- [ ] "Poliglota" - Gerar currículos em 3 idiomas diferentes
+- [ ] "Colecionador" - Criar 10 currículos
+- [ ] "Mestre dos Currículos" - Criar 50 currículos
+- [ ] "Indicador Bronze" - 1 indicação confirmada
+- [ ] "Indicador Prata" - 5 indicações confirmadas
+- [ ] "Indicador Ouro" - 10 indicações confirmadas
+- [ ] "Influencer" - 20 indicações confirmadas
+- [ ] "Apoiador" - Fazer primeira doação
+- [ ] "Generoso" - Doar mais de R$ 50
+- [ ] "Otimizador" - Atingir 90+ no ATS Score
+- [ ] "Perfeição" - Atingir 100 no ATS Score
+- [ ] "Escritor" - Gerar 5 cartas de apresentação
+- [ ] "Web Developer" - Criar primeiro portfolio web
+- [ ] "Maratonista" - Criar 5 currículos em 1 dia
+- [ ] "Semana Produtiva" - Criar 10 currículos em 7 dias
+
+## 🚀 Correção de Deploy em Produção
+
+### Problemas Identificados
+- [ ] Conflito de dependências do Vite (v7 vs v5)
+- [ ] Plugin @builder.io/vite-plugin-jsx-loc incompatível com Vite 7
+- [ ] Script deploy.sh usando npm ao invés de pnpm
+
+### Soluções a Implementar
+- [x] Remover @builder.io/vite-plugin-jsx-loc do package.json (não essencial)
+- [x] Atualizar deploy.sh para usar pnpm ao invés de npm
+- [x] Adicionar flag --legacy-peer-deps como fallback
+- [x] Criar arquivo .npmrc com configurações de produção
+- [x] Documentar processo de deploy correto no README
+- [x] Testar build de produção localmente antes de deploy

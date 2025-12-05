@@ -216,3 +216,17 @@ export const blogPosts = mysqlTable("blog_posts", {
 
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPost = typeof blogPosts.$inferInsert;
+
+/**
+ * User achievements table - tracks unlocked achievements/badges
+ */
+export const userAchievements = mysqlTable("user_achievements", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull(),
+  achievementId: varchar("achievement_id", { length: 100 }).notNull(), // e.g., "first_resume", "polyglot"
+  unlockedAt: timestamp("unlocked_at").defaultNow().notNull(),
+  notified: int("notified").default(0).notNull(), // 0 = not notified, 1 = notified
+});
+
+export type UserAchievement = typeof userAchievements.$inferSelect;
+export type InsertUserAchievement = typeof userAchievements.$inferInsert;
