@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Heart, CheckCircle, Home } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { trackDonation } from "@/lib/analytics";
 import GlobalNavigation from "@/components/GlobalNavigation";
 
 export default function DonationSuccess() {
@@ -11,8 +12,11 @@ export default function DonationSuccess() {
   const [confirmed, setConfirmed] = useState(false);
 
   const confirmPaymentMutation = trpc.donation.confirmPayment.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       setConfirmed(true);
+      
+      // Track donation event (use default amount as we don't have it in response)
+      trackDonation(10, "BRL"); // Default tracking value
     },
     onError: (error) => {
       console.error("Error confirming payment:", error);

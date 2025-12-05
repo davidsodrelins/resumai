@@ -25,6 +25,8 @@ import AdminMetrics from "@/pages/AdminMetrics";
 import AdminNotifications from "@/pages/AdminNotifications";
 import AdminReports from "@/pages/AdminReports";
 import PaymentHistory from "@/pages/PaymentHistory";
+import { AdminBlog } from "@/pages/AdminBlog";
+import { AdminBlogEditor } from "@/pages/AdminBlogEditor";
 import Referral from "@/pages/Referral";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
@@ -45,7 +47,16 @@ function Router() {
         <ProtectedRoute><Referral /></ProtectedRoute>
       </Route>
       <Route path={"/blog"} component={Blog} />
-      <Route path={"/blog/:slug"} component={BlogPost} />      <Route path={"/history"}>
+      <Route path={"/blog/:slug"} component={BlogPost} />
+      <Route path={"/admin/blog"}>
+        <ProtectedRoute><AdminBlog /></ProtectedRoute>
+      </Route>
+      <Route path={"/admin/blog/new"}>
+        <ProtectedRoute><AdminBlogEditor /></ProtectedRoute>
+      </Route>
+      <Route path={"/admin/blog/edit/:id"}>
+        <ProtectedRoute><AdminBlogEditor /></ProtectedRoute>
+      </Route>      <Route path={"/history"}>
         <ProtectedRoute><History /></ProtectedRoute>
       </Route>
       <Route path={"/generator"}>

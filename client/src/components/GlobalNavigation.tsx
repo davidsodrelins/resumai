@@ -53,6 +53,7 @@ export default function GlobalNavigation() {
     { path: "/admin/metrics", label: t("nav.metrics"), icon: TrendingUp },
     { path: "/admin/notifications", label: t("nav.notifications"), icon: Bell },
     { path: "/admin/reports", label: t("nav.reports"), icon: FileDown },
+    { path: "/admin/blog", label: "Gerenciar Blog", icon: FileText },
   ];
 
   const isActive = (path: string) => {

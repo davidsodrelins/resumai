@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import PasswordStrengthIndicator from "../components/PasswordStrengthIndicator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { MapPin } from "lucide-react";
+import { trackSignup } from "../lib/analytics";
 
 const COUNTRIES = [
   { value: "BR", label: "Brasil" },
@@ -46,6 +47,9 @@ export default function Signup() {
 
   const signupMutation = trpc.auth.signup.useMutation({
     onSuccess: (data) => {
+      // Track signup event
+      trackSignup("email");
+      
       // Save JWT token to localStorage
       localStorage.setItem("auth_token", data.token);
       

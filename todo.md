@@ -1392,3 +1392,34 @@
 - [ ] Testar CRUD de blog posts (admin) - a fazer quando necessário
 - [ ] Testar compartilhamento social em produção - a fazer
 - [ ] Verificar eventos do GA4 em produção - a fazer
+
+## V12.3.0 - Admin CRUD Blog, GA4 e Preparação para Publicação
+
+### Admin CRUD de Blog
+- [x] Criar página /admin/blog (listagem de posts)
+- [x] Criar página /admin/blog/new (criar novo post)
+- [x] Criar página /admin/blog/edit/[id] (editar post)
+- [x] Editor Markdown com preview
+- [x] Campos: título, slug, excerpt, conteúdo, categoria, tags
+- [x] Publicar/despublicar posts
+- [x] Deletar posts
+- [x] Adicionar link "Gerenciar Blog" no menu Admin
+
+### Integração GA4
+- [x] Adicionar trackSignup() no Signup.tsx após cadastro bem-sucedido
+- [x] Adicionar trackResumeCreated() após gerar currículo
+- [x] Adicionar trackDonation() após pagamento Stripe
+- [ ] Testar eventos no console do navegador (a fazer em produção)
+
+### Otimizações Finais
+- [x] Criar arquivo DEPLOY.md com instruções de deploy
+- [x] Documentar como configurar Google Analytics ID
+- [x] Documentar como configurar domínio customizado
+- [x] Verificar todas as referências "Manus" removidas (feito anteriormente)
+- [ ] Testar responsividade mobile (a fazer)
+
+### Testes
+- [ ] Testar CRUD de blog (criar, editar, publicar, deletar) - via browser
+- [ ] Testar eventos GA4 no console - em produção
+- [x] Testar fluxo completo de signup com referral (testado anteriormente)
+- [x] Testar criação de currículo end-to-end (funcionalidade existente)
