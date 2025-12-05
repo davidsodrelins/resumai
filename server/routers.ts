@@ -21,6 +21,8 @@ import { createDonationCheckout, handleSuccessfulPayment, getUserDonations, isUs
 import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usageLimits";
 import { adminRouter } from "./routers/admin";
 import { paymentsRouter } from "./routers/payments";
+import { referralRouter } from "./routers/referral";
+import { blogRouter } from "./routers/blog";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -29,6 +31,8 @@ export const appRouter = router({
   system: systemRouter,
   admin: adminRouter,
   payments: paymentsRouter,
+  referral: referralRouter,
+  blog: blogRouter,
   user: router({
     updateProfile: protectedProcedure
       .input(z.object({
@@ -112,12 +116,13 @@ export const appRouter = router({
     
     signup: publicProcedure
       .input(z.object({
-        email: z.string().email(),
-        password: z.string().min(6),
-        name: z.string(),
-        country: z.string().optional(),
-        state: z.string().optional(),
-        city: z.string().optional(),
+      email: z.string().email(),
+      password: z.string().min(6),
+      name: z.string().min(1),
+      country: z.string().optional(),
+      state: z.string().optional(),
+      city: z.string().optional(),
+      referralCode: z.string().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
         try {
@@ -672,6 +677,7 @@ export const appRouter = router({
 
     /**
      * Get portfolio preview (without saving to S3)
+     * Changed from query to mutation to avoid 414 URI Too Long error
      */
     preview: protectedProcedure
       .input(
@@ -682,7 +688,7 @@ export const appRouter = router({
           primaryColor: z.string().optional(),
         })
       )
-      .query(async ({ input }) => {
+      .mutation(async ({ input }) => {
         const portfolioData = await generatePortfolio(
           input.resumeData as ResumeData,
           {
