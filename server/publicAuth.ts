@@ -86,9 +86,13 @@ export async function signupUser(data: SignupData) {
     resumesThisMonth: 0,
   });
 
-  // Registrar referral se código foi fornecido
+  // Registrar referral se código foi fornecido e processar recompensas
   if (referralCode && referrerId) {
     const { referrals } = await import("../drizzle/schema");
+    const { processReferralReward } = await import("./referralRewards");
+    const { notifyLevelUp } = await import("./levelUpNotifications");
+    
+    // Atualizar referral com o ID do novo usuário
     await db
       .update(referrals)
       .set({
@@ -98,23 +102,38 @@ export async function signupUser(data: SignupData) {
       })
       .where(eq(referrals.referralCode, referralCode));
 
-    // Conceder recompensa ao referrer (+2 currículos)
-    await db
-      .update(users)
-      .set({
-        resumesThisMonth: sql`${users.resumesThisMonth} + 2`,
-      })
-      .where(eq(users.id, referrerId));
-
-    // Marcar como recompensado
-    await db
-      .update(referrals)
-      .set({
-        status: "rewarded",
-        rewardCredits: 2,
-        rewardedAt: new Date(),
-      })
-      .where(eq(referrals.referralCode, referralCode));
+    // Processar recompensa automática (sistema de níveis)
+    try {
+      const rewardResult = await processReferralReward(referrerId, newUser.insertId);
+      console.log(`[Signup] Recompensa processada para referrer ${referrerId}:`, rewardResult);
+      
+      // Se houve level up, enviar notificação
+      if (rewardResult.levelUp) {
+        console.log(`[Signup] Referrer subiu de nível: ${rewardResult.oldLevel} → ${rewardResult.newLevel}`);
+        
+        // Buscar dados do referrer para notificação
+        const [referrerUser] = await db.select().from(users).where(eq(users.id, referrerId));
+        if (referrerUser) {
+          try {
+            await notifyLevelUp({
+              userId: referrerId,
+              userName: referrerUser.name || "Usuário",
+              userEmail: referrerUser.email,
+              oldLevel: rewardResult.oldLevel,
+              newLevel: rewardResult.newLevel,
+              totalReferrals: referrerUser.totalReferrals + 1, // +1 porque acabou de converter
+              unlimitedUntil: rewardResult.unlimitedUntil,
+            });
+            console.log(`[Signup] Notificação de level up enviada para ${referrerUser.email}`);
+          } catch (notifError) {
+            console.error(`[Signup] Erro ao enviar notificação de level up:`, notifError);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`[Signup] Erro ao processar recompensa:`, error);
+      // Não bloquear o signup se houver erro na recompensa
+    }
   }
 
   // Generate JWT token

@@ -22,6 +22,7 @@ import { checkResumeLimit, incrementResumeCount, getUserUsageStats } from "./usa
 import { adminRouter } from "./routers/admin";
 import { paymentsRouter } from "./routers/payments";
 import { referralRouter } from "./routers/referral";
+import { referralAnalyticsRouter } from "./routers/referralAnalytics";
 import { blogRouter } from "./routers/blog";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
@@ -32,6 +33,7 @@ export const appRouter = router({
   admin: adminRouter,
   payments: paymentsRouter,
   referral: referralRouter,
+  referralAnalytics: referralAnalyticsRouter,
   blog: blogRouter,
   user: router({
     updateProfile: protectedProcedure

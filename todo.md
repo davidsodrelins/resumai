@@ -1457,3 +1457,17 @@
 - [x] Dashboard de recompensas no frontend
 - [x] Botão "Indique e Ganhe" destacado no header
 - [x] Integração com sistema de limites de currículos
+
+
+## 🔧 Melhorias no Sistema de Recompensas e Onboarding
+
+- [x] Traduzir botões do onboarding para português (Previous → Anterior, Next → Próximo, Done → Concluir)
+- [x] Melhorar tour guiado com mais detalhes e interatividade
+- [x] Integrar processamento automático de recompensas no signup
+- [x] Detectar código de indicação durante cadastro
+- [x] Disparar processReferralReward() automaticamente após signup
+- [x] Adicionar notificações toast quando usuário sobe de nível
+- [x] Enviar email automático informando novo nível e benefícios
+- [x] Criar página de analytics para admin (/admin/referral-analytics)
+- [x] Métricas: taxa de conversão, níveis mais atingidos, ROI do programa
+- [x] Gráficos de crescimento de indicações por mês

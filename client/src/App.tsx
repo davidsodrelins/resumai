@@ -24,6 +24,7 @@ import Admin from "@/pages/Admin";
 import AdminMetrics from "@/pages/AdminMetrics";
 import AdminNotifications from "@/pages/AdminNotifications";
 import AdminReports from "@/pages/AdminReports";
+import ReferralAnalytics from "@/pages/admin/ReferralAnalytics";
 import PaymentHistory from "@/pages/PaymentHistory";
 import { AdminBlog } from "@/pages/AdminBlog";
 import { AdminBlogEditor } from "@/pages/AdminBlogEditor";
@@ -106,6 +107,9 @@ function Router() {
       </Route>
       <Route path="/admin/reports">
         <ProtectedRoute><AdminReports /></ProtectedRoute>
+      </Route>
+      <Route path="/admin/referral-analytics">
+        <ProtectedRoute><ReferralAnalytics /></ProtectedRoute>
       </Route>
       <Route path="/payment-history">
         <ProtectedRoute><PaymentHistory /></ProtectedRoute>
