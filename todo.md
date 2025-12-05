@@ -1478,3 +1478,10 @@
 - [x] Corrigir erro de login - usuário não é redirecionado para dashboard após login bem-sucedido
 - [x] Investigar se token está sendo salvo corretamente
 - [x] Verificar fluxo de redirecionamento após autenticação
+
+
+## 🎨 Melhorias Finais de UX
+
+- [x] Adicionar link "Analytics de Indicações" no dropdown do menu Admin
+- [x] Implementar toast de boas-vindas após primeiro login
+- [x] Melhorar visibilidade do sistema de recompensas no dashboard

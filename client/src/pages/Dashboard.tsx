@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { getLoginUrl } from "@/const";
 import GlobalNavigation from "@/components/GlobalNavigation";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 export default function Dashboard() {
   const { isAuthenticated, loading: authLoading, user } = useAuth();
@@ -26,6 +28,22 @@ export default function Dashboard() {
 
   // Load user's resumes
   const { data: resumes, isLoading: resumesLoading } = trpc.history.listResumes.useQuery();
+
+  // Show welcome toast on first visit
+  useEffect(() => {
+    if (user && !authLoading) {
+      const hasSeenWelcome = localStorage.getItem("welcome_toast_shown");
+      if (!hasSeenWelcome) {
+        const limit = user.isDonor ? 999 : 5;
+        const remaining = Math.max(0, limit - (user.resumesThisMonth || 0));
+        toast.success("🎉 Bem-vindo ao ResumAI!", {
+          description: `Você tem ${remaining} currículos grátis este mês. Comece criando seu primeiro currículo agora!`,
+          duration: 5000,
+        });
+        localStorage.setItem("welcome_toast_shown", "true");
+      }
+    }
+  }, [user, authLoading]);
 
   // Redirect if not authenticated
   if (!authLoading && !isAuthenticated) {
