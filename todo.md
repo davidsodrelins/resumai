@@ -1041,3 +1041,49 @@
 - [x] Escrever testes para adminProcedure (acesso negado para não-admin)
 - [x] Testar endpoints de estatísticas
 - [x] Testar ações de gerenciamento de usuários
+
+
+## V11.4.0 - Funcionalidades Avançadas do Painel Admin
+
+### Backend - Endpoints tRPC
+- [x] Endpoint getAdvancedMetrics (distribuição de currículos, taxa de conversão, heatmap)
+- [x] Endpoint getAdminNotifications (alertas de atividades suspeitas)
+- [ ] Endpoint markNotificationAsRead (não implementado - notificações são geradas dinamicamente)
+- [x] Endpoint exportReport (gerar PDF/Excel com estatísticas)
+- [x] Sistema de detecção de atividades suspeitas (múltiplos logins, uso excessivo)
+
+### Frontend - Dashboard de Métricas Avançadas
+- [x] Criar página /admin/metrics
+- [x] Gráfico de pizza: distribuição de currículos por template
+- [x] Gráfico de barras: atividade por horário (heatmap)
+- [x] Cards com métricas adicionais (taxa de conversão, tempo médio de sessão, taxa de retorno)
+- [x] Insights automáticos baseados nas métricas
+- [x] Adicionar link na navegação admin
+
+### Frontend - Sistema de Notificações Admin
+- [x] Criar página /admin/notifications
+- [x] Contadores de notificações por tipo (todas, avisos, info, erros)
+- [x] Lista de notificações com filtros por tipo
+- [x] Auto-refresh a cada 30 segundos
+- [x] Alertas automáticos para atividades suspeitas (uso excessivo, usuários bloqueados, doações)
+- [x] Adicionar link na navegação admin
+
+### Frontend - Exportação de Relatórios
+- [x] Criar página /admin/reports
+- [x] Seleção de tipo de relatório (Mensal, Usuários, Crescimento)
+- [x] Opções: Relatório Mensal, Lista de Usuários, Análise de Crescimento
+- [x] Botões de exportação: JSON, CSV/Excel, PDF (em desenvolvimento)
+- [x] Preview do relatório em tempo real com resumo e dados detalhados
+- [x] Adicionar link na navegação admin
+
+### Navegação
+- [x] Adicionar submenu "Admin" no GlobalNavigation (dropdown)
+- [x] Links: Painel, Métricas, Notificações, Relatórios
+- [x] Garantir que apenas admins vejam o menu
+- [x] Adicionar ícones apropriados para cada link
+
+### Testes
+- [x] Testar endpoints de métricas avançadas (via browser)
+- [x] Testar sistema de notificações (via browser)
+- [x] Testar exportação de relatórios (via browser)
+- [x] Validar permissões de acesso (apenas admins)

@@ -562,4 +562,283 @@ export const adminRouter = router({
       await db.delete(users).where(eq(users.id, input.userId));
       return { success: true };
     }),
+
+  /**
+   * Get advanced metrics for admin dashboard
+   */
+  getAdvancedMetrics: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    // Distribution of resumes by template
+    const templateDistribution = await db
+      .select({
+        template: savedResumes.template,
+        count: sql<number>`count(*)`,
+      })
+      .from(savedResumes)
+      .groupBy(savedResumes.template);
+
+    // Donor conversion rate
+    const totalUsersResult = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(users);
+    const totalUsers = Number(totalUsersResult[0]?.count || 0);
+
+    const totalDonorsResult = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(eq(users.isDonor, 1));
+    const totalDonors = Number(totalDonorsResult[0]?.count || 0);
+
+    const conversionRate = totalUsers > 0 ? (totalDonors / totalUsers) * 100 : 0;
+
+    // Activity heatmap (users created by hour of day)
+    const allUsers = await db.select({ createdAt: users.createdAt }).from(users);
+    const hourlyActivity = Array(24).fill(0);
+    
+    allUsers.forEach((user) => {
+      const hour = new Date(user.createdAt).getHours();
+      hourlyActivity[hour]++;
+    });
+
+    // Average session metrics (mock data for now - would need session tracking)
+    const avgSessionTime = 0; // TODO: Implement session tracking
+    const returnRate = 0; // TODO: Implement return tracking
+
+    return {
+      templateDistribution: templateDistribution.map((t) => ({
+        template: t.template,
+        count: Number(t.count),
+      })),
+      conversionRate,
+      hourlyActivity,
+      avgSessionTime,
+      returnRate,
+    };
+  }),
+
+  /**
+   * Get admin notifications (suspicious activities)
+   */
+  getAdminNotifications: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new Error("Database connection failed");
+
+    const notifications: Array<{
+      id: string;
+      type: "warning" | "info" | "error";
+      title: string;
+      message: string;
+      userId?: number;
+      userEmail?: string;
+      createdAt: Date;
+      isRead: boolean;
+    }> = [];
+
+    // Check for users with excessive resume creation this month
+    const heavyUsers = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        resumesThisMonth: users.resumesThisMonth,
+      })
+      .from(users)
+      .where(gte(users.resumesThisMonth, 10)); // 10+ resumes this month
+
+    heavyUsers.forEach((user) => {
+      notifications.push({
+        id: `heavy-usage-${user.id}`,
+        type: "warning",
+        title: "Uso Excessivo Detectado",
+        message: `Usuário ${user.email} criou ${user.resumesThisMonth} currículos este mês`,
+        userId: user.id,
+        userEmail: user.email,
+        createdAt: new Date(),
+        isRead: false,
+      });
+    });
+
+    // Check for blocked users
+    const blockedUsers = await db
+      .select({
+        id: users.id,
+        email: users.email,
+      })
+      .from(users)
+      .where(eq(users.isBlocked, 1));
+
+    if (blockedUsers.length > 0) {
+      notifications.push({
+        id: "blocked-users",
+        type: "info",
+        title: "Usuários Bloqueados",
+        message: `${blockedUsers.length} usuário(s) bloqueado(s) no sistema`,
+        createdAt: new Date(),
+        isRead: false,
+      });
+    }
+
+    // Check for recent donations
+    const recentPayments = await db
+      .select({
+        userId: payments.userId,
+        amount: payments.amount,
+        createdAt: payments.createdAt,
+      })
+      .from(payments)
+      .where(
+        and(
+          eq(payments.status, "succeeded"),
+          gte(payments.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)) // Last 24h
+        )
+      );
+
+    if (recentPayments.length > 0) {
+      const totalAmount = recentPayments.reduce((sum, p) => sum + p.amount, 0);
+      notifications.push({
+        id: "recent-donations",
+        type: "info",
+        title: "Novas Doações",
+        message: `${recentPayments.length} doação(ões) nas últimas 24h (R$ ${(totalAmount / 100).toFixed(2)})`,
+        createdAt: new Date(),
+        isRead: false,
+      });
+    }
+
+    return notifications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }),
+
+  /**
+   * Export report data
+   */
+  exportReport: adminProcedure
+    .input(
+      z.object({
+        type: z.enum(["monthly", "users", "growth"]),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database connection failed");
+
+      const { type, startDate, endDate } = input;
+
+      if (type === "monthly") {
+        // Monthly report: stats for the current month
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const newUsers = await db
+          .select()
+          .from(users)
+          .where(gte(users.createdAt, startOfMonth));
+
+        const newResumes = await db
+          .select()
+          .from(savedResumes)
+          .where(gte(savedResumes.createdAt, startOfMonth));
+
+        const newPayments = await db
+          .select()
+          .from(payments)
+          .where(
+            and(
+              eq(payments.status, "succeeded"),
+              gte(payments.createdAt, startOfMonth)
+            )
+          );
+
+        const totalRevenue = newPayments.reduce((sum, p) => sum + p.amount, 0);
+
+        return {
+          type: "monthly",
+          period: `${startOfMonth.toLocaleDateString("pt-BR")} - ${new Date().toLocaleDateString("pt-BR")}`,
+          data: {
+            newUsers: newUsers.length,
+            newResumes: newResumes.length,
+            newDonations: newPayments.length,
+            totalRevenue: totalRevenue / 100,
+            users: newUsers.map((u) => ({
+              email: u.email,
+              name: u.name,
+              createdAt: u.createdAt,
+            })),
+            resumes: newResumes.map((r) => ({
+              title: r.title,
+              template: r.template,
+              language: r.language,
+              createdAt: r.createdAt,
+            })),
+          },
+        };
+      } else if (type === "users") {
+        // Users report: all users with their stats
+        const allUsers = await db.select().from(users);
+
+        return {
+          type: "users",
+          period: "Todos os tempos",
+          data: {
+            totalUsers: allUsers.length,
+            users: allUsers.map((u) => ({
+              id: u.id,
+              email: u.email,
+              name: u.name,
+              role: u.role,
+              isDonor: u.isDonor === 1,
+              totalDonated: u.totalDonated / 100,
+              resumesThisMonth: u.resumesThisMonth,
+              createdAt: u.createdAt,
+              lastSignedIn: u.lastSignedIn,
+            })),
+          },
+        };
+      } else if (type === "growth") {
+        // Growth report: user growth over time
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const recentUsers = await db
+          .select({ createdAt: users.createdAt })
+          .from(users)
+          .where(gte(users.createdAt, thirtyDaysAgo));
+
+        const dailyCounts: Record<string, number> = {};
+        for (let i = 0; i < 30; i++) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dateStr = date.toISOString().split("T")[0];
+          dailyCounts[dateStr] = 0;
+        }
+
+        recentUsers.forEach((user) => {
+          const dateStr = user.createdAt.toISOString().split("T")[0];
+          if (dailyCounts[dateStr] !== undefined) {
+            dailyCounts[dateStr]++;
+          }
+        });
+
+        const growthData = Object.entries(dailyCounts)
+          .map(([date, count]) => ({ date, count }))
+          .sort((a, b) => a.date.localeCompare(b.date));
+
+        return {
+          type: "growth",
+          period: "Últimos 30 dias",
+          data: {
+            growthData,
+            totalNewUsers: recentUsers.length,
+          },
+        };
+      }
+
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Tipo de relatório inválido",
+      });
+    }),
 });

@@ -1,13 +1,19 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard } from "lucide-react";
+import { FileText, Home, LayoutGrid, BarChart3, LogOut, Heart, Shield, CreditCard, Bell, TrendingUp, FileDown, ChevronDown } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
 import DonationModal from "./DonationModal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function GlobalNavigation() {
   const { user, isAuthenticated } = useAuth();
@@ -33,7 +39,13 @@ export default function GlobalNavigation() {
     { path: "/resources", label: "Recursos", icon: LayoutGrid },
     { path: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { path: "/payment-history", label: "Pagamentos", icon: CreditCard },
-    ...(user?.role === "admin" ? [{ path: "/admin", label: "Admin", icon: Shield }] : []),
+  ];
+
+  const adminItems = [
+    { path: "/admin", label: "Painel", icon: Shield },
+    { path: "/admin/metrics", label: "Métricas", icon: TrendingUp },
+    { path: "/admin/notifications", label: "Notificações", icon: Bell },
+    { path: "/admin/reports", label: "Relatórios", icon: FileDown },
   ];
 
   const isActive = (path: string) => {
@@ -79,6 +91,38 @@ export default function GlobalNavigation() {
                   </Link>
                 );
               })}
+              
+              {/* Admin Dropdown Menu */}
+              {user?.role === "admin" && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant={location.startsWith("/admin") ? "default" : "ghost"}
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Shield className="h-4 w-4" />
+                      Admin
+                      <ChevronDown className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {adminItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <DropdownMenuItem key={item.path} asChild>
+                          <Link href={item.path}>
+                            <a className="flex items-center gap-2 w-full cursor-pointer">
+                              <Icon className="h-4 w-4" />
+                              {item.label}
+                            </a>
+                          </Link>
+                        </DropdownMenuItem>
+                      );
+                    })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </nav>
           )}
 
