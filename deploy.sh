@@ -42,7 +42,7 @@ pnpm run build
 
 # Iniciar com PM2
 echo "🚀 Iniciando aplicação..."
-pm2 start dist/index.js --name resumai --time
+pm2 start dist/server/index.js --name resumai --time
 
 echo ""
 echo "✅ Deploy concluído com sucesso!"
